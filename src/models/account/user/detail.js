@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from '../../services/user'
+import { query } from '../../../services/account/user'
 
 export default {
 
@@ -12,7 +12,7 @@ export default {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(() => {
-        const match = pathToRegexp('/user/:id').exec(location.pathname)
+        const match = pathToRegexp('/account/user/:id').exec(location.pathname)
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
         }

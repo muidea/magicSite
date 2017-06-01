@@ -1,5 +1,5 @@
-import { create, remove, update } from '../services/user'
-import { query } from '../services/users'
+import { create, remove, update } from '../../services/account/user'
+import { query } from '../../services/account/users'
 import { parse } from 'qs'
 
 export default {
@@ -24,7 +24,7 @@ export default {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === '/user') {
+        if (location.pathname === '/account/user') {
           dispatch({
             type: 'query',
             payload: location.query,
