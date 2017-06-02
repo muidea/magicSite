@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'AntD Admin',
+  name: 'MagicWeb Center',
   prefix: 'antdAdmin',
   footerText: 'Ant Design Admin  © 2017 zuiidea',
   logo: '/logo.png',

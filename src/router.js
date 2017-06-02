@@ -8,7 +8,7 @@ const registerModel = (app, model) => {
     app.model(model)
   }
 }
-
+ 
 const Routers = function ({ history, app }) {
   const routes = [
     {
