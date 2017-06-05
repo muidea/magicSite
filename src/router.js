@@ -54,6 +54,14 @@ const Routers = function ({ history, app }) {
             }, 'group')
           },
         }, {
+          path: 'account/group/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/account/group/detail'))
+              cb(null, require('./routes/account/group/detail/'))
+            }, 'group-detail')
+          },
+        }, {
           path: 'login',
           getComponent (nextState, cb) {
             require.ensure([], require => {

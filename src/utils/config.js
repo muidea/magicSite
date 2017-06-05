@@ -16,6 +16,8 @@ module.exports = {
     userInfo: '/userInfo',
     users: '/users',
     user: '/user/:id',
+    groups: '/groups',
+    group: '/group/:id',    
     dashboard: '/dashboard',
   },
 }

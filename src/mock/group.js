@@ -8,7 +8,7 @@ let groupsListData = Mock.mock({
     {
       id: '@id',
       name: '@name',
-      description: '@description',
+      'description|2-10':'abcdefg',
       'catalog|0-2':1,
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
@@ -45,31 +45,6 @@ const NOTFOUND = {
 }
 
 module.exports = {
-
-  [`GET ${apiPrefix}/group`] (req, res) {
-    const cookie = req.headers.cookie || ''
-    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
-    const response = {}
-    const group = {}
-    if (!cookies.token) {
-      res.status(200).send({ message: 'Not Login' })
-      return
-    }
-    const token = JSON.parse(cookies.token)
-    if (token) {
-      response.success = token.deadline > new Date().getTime()
-    }
-    if (response.success) {
-      const groupItem = adminUsers.filter(_ => _.id === token.id)
-      if (groupItem.length > 0) {
-        group.permissions = groupItem[0].permissions
-        group.groupname = groupItem[0].groupname
-        group.id = groupItem[0].id
-      }
-    }
-    response.group = group
-    res.json(response)
-  },
 
   [`GET ${apiPrefix}/groups`] (req, res) {
     const { query } = req
@@ -109,8 +84,7 @@ module.exports = {
 
   [`POST ${apiPrefix}/group`] (req, res) {
     const newData = req.body
-    newData.createTime = Mock.mock('@now')
-    newData.avatar = newData.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newData.nickName.substr(0, 1))
+    newData.avatar = newData.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newData.name.substr(0, 1))
     newData.id = Mock.mock('@id')
 
     database.unshift(newData)
