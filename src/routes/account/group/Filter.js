@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, Input, Cascader, Switch } from 'antd'
+import { Form, Button, Row, Col, Input, Switch } from 'antd'
 
 const Search = Input.Search
 
@@ -69,14 +69,13 @@ const Filter = ({
       <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
         {getFieldDecorator('name', { initialValue: name })(<Search placeholder="Search Name" size="large" onSearch={handleSubmit} />)}
       </Col>
-      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 12 }} sm={{ span: 12 }}>
+      <Col {...TwoColProps} xl={{ span: 4 }} md={{ span: 16 }} sm={{ span: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
             <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>Search</Button>
             <Button size="large" onClick={handleReset}>Reset</Button>
           </div>
           <div>
-            <Switch style={{ marginRight: 16 }} size="large" defaultChecked={isMotion} onChange={switchIsMotion} checkedChildren={'Motion'} unCheckedChildren={'Motion'} />
             <Button size="large" type="ghost" onClick={onAdd}>Create</Button>
           </div>
         </div>

@@ -36,6 +36,14 @@ module.exports = [
     router: '/account/group',
   },
   {
+    id: 221,
+    mpid: -1,
+    bpid: 22,
+    name: '分组详情',
+    icon: 'solution',
+    router: '/account/group/:id',
+  },
+  {
     id: 3,
     bpid: 1,
     name: 'Request',
