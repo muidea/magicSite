@@ -25,32 +25,35 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: 'Avatar',
+      title: '图标',
       dataIndex: 'avatar',
       key: 'avatar',
       width: 64,
       className: styles.avatar,
       render: (text) => <img alt={'avatar'} width={24} src={text} />,
     }, {
-      title: 'Name',
+      title: '分组名',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => <Link to={`group/${record.id}`}>{text}</Link>,
     }, {
-      title: 'Catalog',
+      title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
       width: 100,
+      render: (text, record) => {
+        return record.catalog > 0 ? '管理员组' : '用户组'
+      },
     }, {
-      title: 'Description',
+      title: '描述',
       dataIndex: 'description',
       key: 'description',
     }, {
-      title: 'Operation',
+      title: '操作',
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
       },
     },
   ]

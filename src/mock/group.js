@@ -9,7 +9,7 @@ let groupsListData = Mock.mock({
       id: '@id',
       name: '@name',
       'description|2-10':'abcdefg',
-      'catalog|0-2':1,
+      'catalog|0-1':1,
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
       },

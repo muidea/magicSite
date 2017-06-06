@@ -44,7 +44,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="Name" hasFeedback {...formItemLayout}>
+        <FormItem label="分组名" hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -54,7 +54,7 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="Catalog" hasFeedback {...formItemLayout}>
+        <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('catalog', {
             initialValue: item.catalog,
             rules: [
@@ -70,7 +70,7 @@ const modal = ({
             </Radio.Group>
           )}
         </FormItem>
-        <FormItem label="Description" hasFeedback {...formItemLayout}>
+        <FormItem label="描述" hasFeedback {...formItemLayout}>
           {getFieldDecorator('description', {
             initialValue: item.description,
           })(<Input />)}
