@@ -15,7 +15,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: 'Are you sure delete this record?',
+        title: '确认删除分组?',
         onOk () {
           onDeleteItem(record.id)
         },

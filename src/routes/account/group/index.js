@@ -15,7 +15,7 @@ const Group = ({ location, dispatch, group, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],
-    title: `${modalType === 'create' ? 'Create Group' : 'Update Group'}`,
+    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
