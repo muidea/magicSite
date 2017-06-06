@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Group = ({ location, dispatch, group, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion } = group
+  const { list, pagination, currentItem, modalVisible, modalType } = group
   const { pageSize } = pagination
 
   const modalProps = {
@@ -35,7 +35,6 @@ const Group = ({ location, dispatch, group, loading }) => {
     loading: loading.effects['group/query'],
     pagination,
     location,
-    isMotion,
     onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
@@ -65,7 +64,6 @@ const Group = ({ location, dispatch, group, loading }) => {
   }
 
   const filterProps = {
-    isMotion,
     filter: {
       ...location.query,
     },
@@ -97,9 +95,6 @@ const Group = ({ location, dispatch, group, loading }) => {
           modalType: 'create',
         },
       })
-    },
-    switchIsMotion () {
-      dispatch({ type: 'group/switchIsMotion' })
     },
   }
 

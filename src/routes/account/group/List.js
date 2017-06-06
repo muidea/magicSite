@@ -9,7 +9,7 @@ import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
@@ -60,13 +60,13 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
     current: tableProps.pagination.current,
   }
 
-  const getBodyWrapper = body => { return isMotion ? <AnimTableBody {...getBodyWrapperProps} body={body} /> : body }
+  const getBodyWrapper = body => { return body }
 
   return (
     <div>
       <Table
         {...tableProps}
-        className={classnames({ [styles.table]: true, [styles.motion]: isMotion })}
+        className={classnames({ [styles.table]: true, })}
         bordered
         scroll={{ x: 1200 }}
         columns={columns}
@@ -81,7 +81,6 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
 List.propTypes = {
   onDeleteItem: PropTypes.func,
   onEditItem: PropTypes.func,
-  isMotion: PropTypes.bool,
   location: PropTypes.object,
 }
 

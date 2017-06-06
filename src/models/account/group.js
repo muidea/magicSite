@@ -11,7 +11,6 @@ export default {
     currentItem: {},
     modalVisible: false,
     modalType: 'create',
-    isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -106,12 +105,6 @@ export default {
     hideModal (state) {
       return { ...state, modalVisible: false }
     },
-
-    switchIsMotion (state) {
-      localStorage.setItem('antdAdminUserIsMotion', !state.isMotion)
-      return { ...state, isMotion: !state.isMotion }
-    },
-
   },
 
 }
