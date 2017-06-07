@@ -32,7 +32,7 @@ module.exports = [
     bpid: 2,
     mpid: 2,
     name: '分类管理',
-    icon: 'tags-o',
+    icon: 'folder',
     router: '/content/catalog',
   },
   {

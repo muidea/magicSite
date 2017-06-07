@@ -62,6 +62,22 @@ const Routers = function ({ history, app }) {
             }, 'group-detail')
           },
         }, {
+          path: 'content/article',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/article'))
+              cb(null, require('./routes/content/article/'))
+            }, 'article')
+          },
+        }, {
+          path: 'content/article/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/article/detail'))
+              cb(null, require('./routes/content/article/detail/'))
+            }, 'article-detail')
+          },
+        }, {
           path: 'login',
           getComponent (nextState, cb) {
             require.ensure([], require => {
