@@ -78,6 +78,54 @@ const Routers = function ({ history, app }) {
             }, 'article-detail')
           },
         }, {
+          path: 'content/catalog',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/catalog'))
+              cb(null, require('./routes/content/catalog/'))
+            }, 'catalog')
+          },
+        }, {
+          path: 'content/catalog/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/catalog/detail'))
+              cb(null, require('./routes/content/catalog/detail/'))
+            }, 'catalog-detail')
+          },
+        }, {
+          path: 'content/link',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/link'))
+              cb(null, require('./routes/content/link/'))
+            }, 'link')
+          },
+        }, {
+          path: 'content/link/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/link/detail'))
+              cb(null, require('./routes/content/link/detail/'))
+            }, 'link-detail')
+          },
+        }, {
+          path: 'content/media',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/media'))
+              cb(null, require('./routes/content/media/'))
+            }, 'media')
+          },
+        }, {
+          path: 'content/media/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/media/detail'))
+              cb(null, require('./routes/content/media/detail/'))
+            }, 'media-detail')
+          },
+        }, {
           path: 'login',
           getComponent (nextState, cb) {
             require.ensure([], require => {

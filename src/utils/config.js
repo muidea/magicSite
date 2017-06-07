@@ -20,6 +20,12 @@ module.exports = {
     group: '/group/:id',
     articles: '/groups',
     article: '/group/:id',
+    catalogs: '/groups',
+    catalog: '/group/:id',
+    links: '/groups',
+    link: '/group/:id',
+    medias: '/groups',
+    media: '/group/:id',
     dashboard: '/dashboard',
   },
 }
