@@ -44,9 +44,9 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分组名" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: item.name,
+        <FormItem label="标题" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('title', {
+            initialValue: item.title,
             rules: [
               {
                 required: true,
@@ -54,6 +54,16 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
+        <FormItem label="内容" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('content', {
+            initialValue: item.content,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>        
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('catalog', {
             initialValue: item.catalog,
@@ -70,11 +80,6 @@ const modal = ({
             </Radio.Group>
           )}
         </FormItem>
-        <FormItem label="描述" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<Input />)}
-        </FormItem>        
       </Form>
     </Modal>
   )

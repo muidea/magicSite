@@ -24,6 +24,13 @@ module.exports = [
     id: 211,
     mpid: -1,
     bpid: 21,
+    name: '编辑文章',
+    router: '/content/article/editor',
+  },  
+  {
+    id: 212,
+    mpid: -1,
+    bpid: 21,
     name: '文章详情',
     router: '/content/article/:id',
   },
