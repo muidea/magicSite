@@ -1,12 +1,22 @@
 import React from 'react'
 import { Editor } from '../../../../components'
 import { convertToRaw } from 'draft-js'
-import { Row, Col, Card } from 'antd'
-import draftToHtml from 'draftjs-to-html'
-import draftToMarkdown from 'draftjs-to-markdown'
+import PropTypes from 'prop-types'
+import { Form, Input, InputNumber, Radio } from 'antd'
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/docs/src/components/Demo/index.js
 
-export default class EditorPage extends React.Component {
+const FormItem = Form.Item
+
+const formItemLayout = {
+  labelCol: {
+    span: 2,
+  },
+  wrapperCol: {
+    span: 22,
+  },
+}
+
+class ContentEditor extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -18,6 +28,7 @@ export default class EditorPage extends React.Component {
       editorContent,
     })
   }
+  
   render () {
     const { editorContent } = this.state
     const colProps = {
@@ -31,50 +42,63 @@ export default class EditorPage extends React.Component {
       borderColor: '#F1F1F1',
       padding: '16px 8px',
     }
+    return (<div>
+      <Editor
+        wrapperStyle={{
+          minHeight: 500,
+        }}
+        editorStyle={{
+          minHeight: 376,
+        }}
+        editorState={editorContent}
+        onEditorStateChange={this.onEditorStateChange}
+      />
+    </div>)
+  }  
+}
+
+class EditorPage extends React.Component {
+  constructor (props) {
+    super(props)
+  }
+  render () {
+    const { getFieldDecorator } = this.props.form;
     return (<div className="content-inner">
-      <Row gutter={32}>
-        <Col {...colProps}>
-          <Card title="Editor" style={{ overflow: 'visible' }}>
-            <Editor
-              wrapperStyle={{
-                minHeight: 500,
-              }}
-              editorStyle={{
-                minHeight: 376,
-              }}
-              editorState={editorContent}
-              onEditorStateChange={this.onEditorStateChange}
-            />
-          </Card>
-        </Col>
-        <Col {...colProps}>
-          <Card title="HTML">
-            <textarea
-              style={textareaStyle}
-              disabled
-              value={editorContent ? draftToHtml(convertToRaw(editorContent.getCurrentContent())) : ''}
-            />
-          </Card>
-        </Col>
-        <Col {...colProps}>
-          <Card title="Markdown">
-            <textarea
-              style={textareaStyle}
-              disabled
-              value={editorContent ? draftToMarkdown(convertToRaw(editorContent.getCurrentContent())) : ''}
-            />
-          </Card>
-        </Col>
-        <Col {...colProps}>
-          <Card title="JSON">
-            <textarea
-              style={textareaStyle}
-              disabled
-              value={editorContent ? JSON.stringify(convertToRaw(editorContent.getCurrentContent())) : ''}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <Form layout="horizontal">
+        <FormItem label="标题" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('title', {
+            initialValue: 'test title',
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="内容" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('content', {
+            initialValue: 'test content',
+          })(<ContentEditor />)}
+        </FormItem>        
+        <FormItem label="分类" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('catalog', {
+            initialValue: 0,
+            rules: [
+              {
+                required: true,
+                type: 'number',
+              },
+            ],
+          })(
+            <Radio.Group>
+              <Radio value={1}>管理员组</Radio>
+              <Radio value={0}>用户组</Radio>
+            </Radio.Group>
+          )}
+        </FormItem>
+      </Form>
     </div>)
   }
 }
+
+export default Form.create()(EditorPage)
