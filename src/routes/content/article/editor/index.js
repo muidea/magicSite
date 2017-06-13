@@ -20,17 +20,17 @@ class ContentEditor extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editorContent: null,
+      value: this.props.value,
     }
   }
-  onEditorStateChange = (editorContent) => {
+  onEditorStateChange = (value) => {
     this.setState({
-      editorContent,
+      value,
     })
   }
   
   render () {
-    const { editorContent } = this.state
+    const { value } = this.state
     const colProps = {
       lg: 12,
       md: 24,
@@ -50,7 +50,7 @@ class ContentEditor extends React.Component {
         editorStyle={{
           minHeight: 376,
         }}
-        editorState={editorContent}
+        editorState={value}
         onEditorStateChange={this.onEditorStateChange}
       />
     </div>)
@@ -67,7 +67,6 @@ class EditorPage extends React.Component {
       <Form layout="horizontal">
         <FormItem label="标题" hasFeedback {...formItemLayout}>
           {getFieldDecorator('title', {
-            initialValue: 'test title',
             rules: [
               {
                 required: true,
@@ -77,12 +76,15 @@ class EditorPage extends React.Component {
         </FormItem>
         <FormItem label="内容" hasFeedback {...formItemLayout}>
           {getFieldDecorator('content', {
-            initialValue: 'test content',
+            rules: [
+              {
+                required: true,
+              },
+            ],            
           })(<ContentEditor />)}
         </FormItem>        
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('catalog', {
-            initialValue: 0,
             rules: [
               {
                 required: true,
