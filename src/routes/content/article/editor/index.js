@@ -3,7 +3,7 @@ import { Editor } from '../../../../components'
 import { convertToRaw, ContentState, EditorState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Button } from 'antd'
+import { Form, Row, Col, Input, InputNumber, Radio, Button } from 'antd'
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/docs/src/components/Demo/index.js
 
 const FormItem = Form.Item
@@ -18,7 +18,7 @@ const formItemLayout = {
 }
 
 class ContentEditor extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -31,8 +31,8 @@ class ContentEditor extends React.Component {
       editorContent,
     })
   }
-  
-  render () {
+
+  render() {
     const { editorContent } = this.state
     const { onChange } = this.props
     const colProps = {
@@ -56,74 +56,85 @@ class ContentEditor extends React.Component {
         }}
         editorState={editorContent}
         onEditorStateChange={this.onEditorStateChange}
-        onChange ={onChange}
+        onChange={onChange}
       />
     </div>)
-  }  
+  }
 }
 
 class EditorPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
   onEditorStateChange = (editorContent) => {
-    const contentValue = draftToHtml(editorContent)
-    console.log('----------1----------')
-    console.log(contentValue)
-    console.log('----------2----------')
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('----------Result----------')
         console.log('Received values of form: ', values);
       }
     });
   }
 
-  render () {
+  render() {
     const { getFieldDecorator } = this.props.form;
     return (<div className="content-inner">
       <Form onSubmit={this.handleSubmit} layout="horizontal">
-        <FormItem label="标题" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('title', {
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="内容" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('content', {
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<ContentEditor onChange={this.onEditorStateChange}/>)}
-        </FormItem>        
-        <FormItem label="分类" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            rules: [
-              {
-                required: true,
-                type: 'number',
-              },
-            ],
-          })(
-            <Radio.Group>
-              <Radio value={1}>管理员组</Radio>
-              <Radio value={0}>用户组</Radio>
-            </Radio.Group>
-          )}
-        </FormItem>
-        <FormItem>
-          <Button type="primary" htmlType="submit">Submit</Button>
-        </FormItem>        
+        <Row>
+          <Col>
+            <FormItem label="标题" hasFeedback {...formItemLayout}>
+              {getFieldDecorator('title', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <FormItem label="内容" {...formItemLayout}>
+              {getFieldDecorator('content', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(<ContentEditor onChange={this.onEditorStateChange} />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <FormItem label="分类" hasFeedback {...formItemLayout}>
+              {getFieldDecorator('catalog', {
+                rules: [
+                  {
+                    required: true,
+                    type: 'number',
+                  },
+                ],
+              })(
+                <Radio.Group>
+                  <Radio value={1}>管理员组</Radio>
+                  <Radio value={0}>用户组</Radio>
+                </Radio.Group>
+                )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ textAlign: 'right' }}>
+            <FormItem>
+              <Button type="primary" htmlType="submit">Submit</Button>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     </div>)
   }
