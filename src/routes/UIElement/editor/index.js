@@ -14,7 +14,7 @@ export default class EditorPage extends React.Component {
     }
   }
   onEditorStateChange = (editorContent) => {
-    this.setState({
+        this.setState({
       editorContent,
     })
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Editor } from '../../../../components'
-import { convertToRaw } from 'draft-js'
+import { convertToRaw, ContentState, EditorState } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
 import PropTypes from 'prop-types'
 import { Form, Input, InputNumber, Radio } from 'antd'
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/docs/src/components/Demo/index.js
@@ -19,18 +20,28 @@ const formItemLayout = {
 class ContentEditor extends React.Component {
   constructor (props) {
     super(props)
+
+    //const content = ContentState.create('<p>a<code>a</code>a<del>bbb</del></p>')
+    //const edit = EditorState.create(content)
+
+    const value = this.props.value
     this.state = {
-      value: this.props.value,
+      editorContent: null,
+      contentValue: value,
     }
   }
-  onEditorStateChange = (value) => {
+
+  onEditorStateChange = (editorContent) => {
+    const contentValue = draftToHtml(convertToRaw(editorContent.getCurrentContent()))
+    console.log(contentValue);    
     this.setState({
-      value,
+      editorContent,
+      contentValue,
     })
   }
   
   render () {
-    const { value } = this.state
+    const { editorContent } = this.state
     const colProps = {
       lg: 12,
       md: 24,
@@ -50,7 +61,7 @@ class ContentEditor extends React.Component {
         editorStyle={{
           minHeight: 376,
         }}
-        editorState={value}
+        editorState={editorContent}
         onEditorStateChange={this.onEditorStateChange}
       />
     </div>)
