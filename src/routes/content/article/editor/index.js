@@ -3,7 +3,7 @@ import { Editor } from '../../../../components'
 import { convertToRaw, ContentState, EditorState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio } from 'antd'
+import { Form, Input, InputNumber, Radio, Button } from 'antd'
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/docs/src/components/Demo/index.js
 
 const FormItem = Form.Item
@@ -21,27 +21,20 @@ class ContentEditor extends React.Component {
   constructor (props) {
     super(props)
 
-    //const content = ContentState.create('<p>a<code>a</code>a<del>bbb</del></p>')
-    //const edit = EditorState.create(content)
-
-    const value = this.props.value
     this.state = {
-      editorContent: null,
-      contentValue: value,
+      editorContent: EditorState.createEmpty(),
     }
   }
 
   onEditorStateChange = (editorContent) => {
-    const contentValue = draftToHtml(convertToRaw(editorContent.getCurrentContent()))
-    console.log(contentValue);    
     this.setState({
       editorContent,
-      contentValue,
     })
   }
   
   render () {
     const { editorContent } = this.state
+    const { onChange } = this.props
     const colProps = {
       lg: 12,
       md: 24,
@@ -63,6 +56,7 @@ class ContentEditor extends React.Component {
         }}
         editorState={editorContent}
         onEditorStateChange={this.onEditorStateChange}
+        onChange ={onChange}
       />
     </div>)
   }  
@@ -72,10 +66,28 @@ class EditorPage extends React.Component {
   constructor (props) {
     super(props)
   }
+
+  onEditorStateChange = (editorContent) => {
+    const contentValue = draftToHtml(editorContent)
+    console.log('----------1----------')
+    console.log(contentValue)
+    console.log('----------2----------')
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('----------Result----------')
+        console.log('Received values of form: ', values);
+      }
+    });
+  }
+
   render () {
     const { getFieldDecorator } = this.props.form;
     return (<div className="content-inner">
-      <Form layout="horizontal">
+      <Form onSubmit={this.handleSubmit} layout="horizontal">
         <FormItem label="标题" hasFeedback {...formItemLayout}>
           {getFieldDecorator('title', {
             rules: [
@@ -91,8 +103,8 @@ class EditorPage extends React.Component {
               {
                 required: true,
               },
-            ],            
-          })(<ContentEditor />)}
+            ],
+          })(<ContentEditor onChange={this.onEditorStateChange}/>)}
         </FormItem>        
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('catalog', {
@@ -109,6 +121,9 @@ class EditorPage extends React.Component {
             </Radio.Group>
           )}
         </FormItem>
+        <FormItem>
+          <Button type="primary" htmlType="submit">Submit</Button>
+        </FormItem>        
       </Form>
     </div>)
   }
