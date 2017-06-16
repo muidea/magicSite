@@ -68,6 +68,10 @@ class EditorPage extends React.Component {
   }
 
   onEditorStateChange = (editorContent) => {
+    let contentVal = editorContent ? draftToHtml(editorContent) : '';
+    this.props.form.setFieldsValue({
+      content: contentVal,
+    });
   }
 
   handleSubmit = (e) => {
@@ -105,7 +109,8 @@ class EditorPage extends React.Component {
                     required: true,
                   },
                 ],
-              })(<ContentEditor onChange={this.onEditorStateChange} />)}
+              })(<Input type="hidden" />)}
+              <ContentEditor onChange={this.onEditorStateChange} />
             </FormItem>
           </Col>
         </Row>
