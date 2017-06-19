@@ -11,11 +11,11 @@ export default {
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {/*
-        const match = pathToRegexp('/content/article/:id').exec(location.pathname)
+      history.listen(() => {
+        const match = pathToRegexp('/content/article/editor/:id').exec(location.pathname)
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
-        }*/
+        }
       })
     },
   },

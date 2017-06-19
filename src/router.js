@@ -73,7 +73,6 @@ const Routers = function ({ history, app }) {
           path: 'content/article/editor',
           getComponent (nextState, cb) {
             require.ensure([], require => {
-              //registerModel(app, require('./models/content/article/editor'))
               cb(null, require('./routes/content/article/editor/'))
             }, 'article-create-editor')
           },
@@ -81,8 +80,8 @@ const Routers = function ({ history, app }) {
           path: 'content/article/editor/:id',
           getComponent (nextState, cb) {
             require.ensure([], require => {
-              registerModel(app, require('./models/content/article/detail'))
-              cb(null, require('./routes/content/article/detail/'))
+              registerModel(app, require('./models/content/article/editor'))
+              cb(null, require('./routes/content/article/editor/'))
             }, 'article-update-detail')
           },
         }, {
