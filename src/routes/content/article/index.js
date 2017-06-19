@@ -4,31 +4,10 @@ import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import List from './List'
 import Filter from './Filter'
-import Modal from './Modal'
 
 const Article = ({ location, dispatch, article, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = article
+  const { list, pagination, currentItem } = article
   const { pageSize } = pagination
-
-  const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
-    visible: modalVisible,
-    maskClosable: false,
-    confirmLoading: loading.effects['article/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
-    wrapClassName: 'vertical-center-modal',
-    onOk (data) {
-      dispatch({
-        type: `article/${modalType}`,
-        payload: data,
-      })
-    },
-    onCancel () {
-      dispatch({
-        type: 'article/hideModal',
-      })
-    },
-  }
 
   const listProps = {
     dataSource: list,
@@ -53,13 +32,9 @@ const Article = ({ location, dispatch, article, loading }) => {
       })
     },
     onEditItem (item) {
-      dispatch({
-        type: 'article/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
-      })
+      dispatch(routerRedux.push({
+        pathname: '/content/article/editor/' + item.id,
+      }))
     },
   }
 
@@ -99,7 +74,6 @@ const Article = ({ location, dispatch, article, loading }) => {
     <div className="content-inner">
       <Filter {...filterProps} />
       <List {...listProps} />
-      {modalVisible && <Modal {...modalProps} />}
     </div>
   )
 }

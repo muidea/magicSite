@@ -17,21 +17,31 @@ module.exports = [
     bpid: 2,
     mpid: 2,
     name: '文章管理',
-    icon: 'file-text',
+    icon: 'file',
     router: '/content/article',
   },
   {
     id: 211,
     mpid: -1,
     bpid: 21,
-    name: '编辑文章',
+    name: '新建文章',
+    icon: 'edit',
     router: '/content/article/editor',
+  },
+  {
+    id: 211,
+    mpid: -1,
+    bpid: 21,
+    name: '编辑文章',
+    icon: 'edit',
+    router: '/content/article/editor/:id',
   },  
   {
     id: 212,
     mpid: -1,
     bpid: 21,
     name: '文章详情',
+    icon: 'file-text',
     router: '/content/article/:id',
   },
   {
@@ -47,6 +57,7 @@ module.exports = [
     mpid: -1,
     bpid: 22,
     name: '分类详情',
+    icon: 'folder-open',
     router: '/content/catalog/:id',
   },
   {
@@ -62,6 +73,7 @@ module.exports = [
     mpid: -1,
     bpid: 23,
     name: '链接详情',
+    icon: 'link',
     router: '/content/link/:id',
   },
    {
@@ -69,7 +81,7 @@ module.exports = [
     bpid: 2,
     mpid: 2,
     name: '文件管理',
-    icon: 'file',
+    icon: 'picture',
     router: '/content/media',
   },
   {
@@ -77,6 +89,7 @@ module.exports = [
     mpid: -1,
     bpid: 24,
     name: '文件详情',
+    icon: 'file',
     router: '/content/media/:id',
   },
   {

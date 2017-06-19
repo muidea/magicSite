@@ -75,7 +75,15 @@ const Routers = function ({ history, app }) {
             require.ensure([], require => {
               //registerModel(app, require('./models/content/article/editor'))
               cb(null, require('./routes/content/article/editor/'))
-            }, 'article-editor')
+            }, 'article-create-editor')
+          },
+        }, {
+          path: 'content/article/editor/:id',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/content/article/detail'))
+              cb(null, require('./routes/content/article/detail/'))
+            }, 'article-update-detail')
           },
         }, {
           path: 'content/article/:id',

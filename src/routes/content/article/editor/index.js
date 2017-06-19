@@ -134,10 +134,9 @@ class EditorPage extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col span={24} style={{ textAlign: 'right' }}>
-            <FormItem>
-              <Button type="primary" htmlType="submit">Submit</Button>
-            </FormItem>
+          <Col style={{ textAlign: 'right' }}>
+              <Button type="primary" htmlType="submit">确定</Button>
+              <Button style={{ marginLeft: 8 }}>取消</Button>
           </Col>
         </Row>
       </Form>

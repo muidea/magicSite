@@ -9,8 +9,6 @@ export default {
   state: {
     list: [],
     currentItem: {},
-    modalVisible: false,
-    modalType: 'create',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
