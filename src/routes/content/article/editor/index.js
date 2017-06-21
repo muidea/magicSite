@@ -17,58 +17,21 @@ const formItemLayout = {
   },
 }
 
-class ContentEditor extends React.Component {
+class EditorPage extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       editorContent: EditorState.createEmpty(),
-    }
+    }    
   }
 
   onEditorStateChange = (editorContent) => {
     this.setState({
       editorContent,
     })
-  }
 
-  render() {
-    const { editorContent } = this.state
-    const { onChange } = this.props
-    const colProps = {
-      lg: 12,
-      md: 24,
-    }
-    const textareaStyle = {
-      minHeight: 496,
-      width: '100%',
-      background: '#f7f7f7',
-      borderColor: '#F1F1F1',
-      padding: '16px 8px',
-    }
-    return (<div>
-      <Editor
-        wrapperStyle={{
-          minHeight: 500,
-        }}
-        editorStyle={{
-          minHeight: 376,
-        }}
-        editorState={editorContent}
-        onEditorStateChange={this.onEditorStateChange}
-        onChange={onChange}
-      />
-    </div>)
-  }
-}
-
-class EditorPage extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  onEditorStateChange = (editorContent) => {
-    let contentVal = editorContent ? draftToHtml(editorContent) : '';
+    let contentVal = editorContent ? draftToHtml(convertToRaw(editorContent.getCurrentContent())) : '';
     this.props.form.setFieldsValue({
       content: contentVal,
     });
@@ -84,6 +47,19 @@ class EditorPage extends React.Component {
   }
 
   render() {
+    const { editorContent } = this.state
+    const colProps = {
+      lg: 12,
+      md: 24,
+    }
+    const textareaStyle = {
+      minHeight: 496,
+      width: '100%',
+      background: '#f7f7f7',
+      borderColor: '#F1F1F1',
+      padding: '16px 8px',
+    }
+
     const { getFieldDecorator } = this.props.form;
     return (<div className="content-inner">
       <Form onSubmit={this.handleSubmit} layout="horizontal">
@@ -110,7 +86,16 @@ class EditorPage extends React.Component {
                   },
                 ],
               })(<Input type="hidden" />)}
-              <ContentEditor onChange={this.onEditorStateChange} />
+                <Editor
+                  wrapperStyle={{
+                    minHeight: 500,
+                  }}
+                  editorStyle={{
+                    minHeight: 376,
+                  }}
+                  editorState={editorContent}
+                  onEditorStateChange={this.onEditorStateChange}
+                />
             </FormItem>
           </Col>
         </Row>
