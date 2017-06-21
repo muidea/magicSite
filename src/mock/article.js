@@ -3,24 +3,24 @@ const Mock = require('mockjs')
 const config = require('../utils/config')
 const { apiPrefix } = config
 
-let groupsListData = Mock.mock({
-  'data|6-8': [
+let articlesListData = Mock.mock({
+  'data|6-30': [
     {
       id: '@id',
-      name: '@name',
-      description() {
+      title() {
+        return Mock.Random.title()
+      },
+      content() {
         return Mock.Random.sentence()
       },
       'catalog|0-1':1,
-      avatar () {
-        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
-      },
+      createTime: '@datetime',
     },
   ],
 })
 
 
-let database = groupsListData.data
+let database = articlesListData.data
 
 const queryArray = (array, key, keyAlias = 'key') => {
   if (!(array instanceof Array)) {
@@ -48,7 +48,7 @@ const NOTFOUND = {
 
 module.exports = {
 
-  [`GET ${apiPrefix}/groups`] (req, res) {
+  [`GET ${apiPrefix}/articles`] (req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
@@ -82,9 +82,9 @@ module.exports = {
     })
   },
 
-  [`POST ${apiPrefix}/group`] (req, res) {
+  [`POST ${apiPrefix}/article`] (req, res) {
     const newData = req.body
-    newData.avatar = newData.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newData.name.substr(0, 1))
+    newData.createTime = Mock.mock('@now')
     newData.id = Mock.mock('@id')
 
     database.unshift(newData)
@@ -92,7 +92,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/group/:id`] (req, res) {
+  [`GET ${apiPrefix}/article/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
@@ -102,7 +102,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/group/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/article/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
@@ -113,7 +113,7 @@ module.exports = {
     }
   },
 
-  [`PATCH ${apiPrefix}/group/:id`] (req, res) {
+  [`PATCH ${apiPrefix}/article/:id`] (req, res) {
     const { id } = req.params
     const editItem = req.body
     let isExist = false

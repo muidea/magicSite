@@ -25,29 +25,23 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '图标',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: (text) => <img alt={'avatar'} width={24} src={text} />,
-    }, {
-      title: '分组名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '标题',
+      dataIndex: 'title',
+      key: 'title',
       render: (text, record) => <Link to={`/content/article/${record.id}`}>{text}</Link>,
     }, {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
       width: 100,
-      render: (text, record) => {
-        return record.catalog > 0 ? '管理员组' : '用户组'
-      },
     }, {
       title: '描述',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'content',
+      key: 'content',
+    }, {
+      title: '新建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
     }, {
       title: '操作',
       key: 'operation',
