@@ -7,7 +7,7 @@ import { Form, Row, Col, Input, InputNumber, Radio, Button } from 'antd'
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/docs/src/components/Demo/index.js
 
 const FormItem = Form.Item
-
+ 
 const formItemLayout = {
   labelCol: {
     span: 2,
@@ -23,7 +23,7 @@ class EditorPage extends React.Component {
 
     this.state = {
       editorContent: EditorState.createEmpty(),
-    }    
+    }
   }
 
   onEditorStateChange = (editorContent) => {
@@ -42,6 +42,10 @@ class EditorPage extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        dispatch({
+          type: 'article/create',
+          payload: values,
+        })
       }
     });
   }
