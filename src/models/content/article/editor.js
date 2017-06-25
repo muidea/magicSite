@@ -5,16 +5,18 @@ export default {
   namespace: 'articleEditor',
 
   state: {
-    result:{}
+    article: {},
+    result: {}
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
     },
   },
-
+ 
   effects: {
     *create ({ payload }, { call, put }) {
+      Console.log(payload)
       const data = yield call(create, payload)
       if (data.success) {
         yield put({
