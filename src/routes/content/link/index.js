@@ -6,7 +6,7 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Article = ({ location, dispatch, link, loading }) => {
+const Link = ({ location, dispatch, link, loading }) => {
   const { list, pagination, currentItem, modalVisible, modalType } = link
   const { pageSize } = pagination
 
@@ -107,11 +107,11 @@ const Article = ({ location, dispatch, link, loading }) => {
   )
 }
 
-Article.propTypes = {
+Link.propTypes = {
   link: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ link, loading }) => ({ link, loading }))(Article)
+export default connect(({ link, loading }) => ({ link, loading }))(Link)

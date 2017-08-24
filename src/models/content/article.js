@@ -9,8 +9,6 @@ export default {
   state: {
     list: [],
     currentItem: {},
-    modalVisible: false,
-    modalType: 'create',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -65,7 +63,6 @@ export default {
     *create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
       if (data.success) {
-        yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
         throw data
@@ -77,7 +74,6 @@ export default {
       const newUser = { ...payload, id }
       const data = yield call(update, newUser)
       if (data.success) {
-        yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
         throw data

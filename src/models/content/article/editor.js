@@ -1,37 +1,27 @@
-import pathToRegexp from 'path-to-regexp'
-import { query } from '../../../services/content/article'
+import { create } from '../../../services/content/article'
 
 export default {
 
   namespace: 'articleEditor',
 
   state: {
-    data: {},
+    article: {},
+    result: {}
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {/*
-        const match = pathToRegexp('/content/article/:id').exec(location.pathname)
-        if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
-        }*/
-      })
     },
   },
-
+ 
   effects: {
-    *query ({
-      payload,
-    }, { call, put }) {
-      const data = yield call(query, payload)
-      const { success, message, status, ...other } = data
-      if (success) {
+    *create ({ payload }, { call, put }) {
+      Console.log(payload)
+      const data = yield call(create, payload)
+      if (data.success) {
         yield put({
-          type: 'querySuccess',
-          payload: {
-            data: other,
-          },
+          type: 'createSuccess',
+          payload: { result: data } 
         })
       } else {
         throw data
@@ -40,7 +30,7 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
+    createSuccess (state, { payload }) {
       const { data } = payload
       return {
         ...state,
