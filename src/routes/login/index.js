@@ -34,16 +34,16 @@ const Login = ({
       </div>
       <form>
         <FormItem hasFeedback>
-          {getFieldDecorator('username', {
+          {getFieldDecorator('user_account', {
             rules: [
               {
                 required: true,
               },
             ],
-          })(<Input size="large" onPressEnter={handleOk} placeholder="Username" />)}
+          })(<Input size="large" onPressEnter={handleOk} placeholder="Account" />)}
         </FormItem>
         <FormItem hasFeedback>
-          {getFieldDecorator('password', {
+          {getFieldDecorator('user_password', {
             rules: [
               {
                 required: true,
@@ -55,10 +55,6 @@ const Login = ({
           <Button type="primary" size="large" onClick={handleOk} loading={loginLoading}>
             Sign in
           </Button>
-          <p>
-            <span>Username：guest</span>
-            <span>Password：guest</span>
-          </p>
         </Row>
 
       </form>

@@ -7,7 +7,7 @@ const { prefix } = config
 export default {
   namespace: 'app',
   state: {
-    user: {},
+    accountInfo: {},
     menuPopoverVisible: false,
     siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
@@ -34,10 +34,10 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(query, parse(payload))
-      if (data.success && data.user) {
+      if (data.ErrCode==0 && data.AccountInfo) {
         yield put({
           type: 'querySuccess',
-          payload: data.user,
+          payload: data.AccountInfo,
         })
         if (location.pathname === '/login') {
           yield put(routerRedux.push('/dashboard'))
@@ -57,7 +57,7 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(logout, parse(payload))
-      if (data.success) {
+      if (data.ErrCode == 0) {
         yield put({ type: 'query' })
       } else {
         throw (data)
@@ -76,10 +76,10 @@ export default {
 
   },
   reducers: {
-    querySuccess (state, { payload: user }) {
+    querySuccess (state, { payload: accountInfo }) {
       return {
         ...state,
-        user,
+        accountInfo,
       }
     },
 

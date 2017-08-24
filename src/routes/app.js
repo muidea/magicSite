@@ -13,7 +13,7 @@ const { Header, Bread, Footer, Sider, styles } = Layout
 let lastHref
 
 const App = ({ children, location, dispatch, app, loading }) => {
-  const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app
+  const { accountInfo, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app
   const href = window.location.href
 
   if (lastHref !== href) {
@@ -26,7 +26,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
   const headerProps = {
     menu,
-    user,
+    accountInfo,
     siderFold,
     location,
     isNavbar,

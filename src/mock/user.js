@@ -80,50 +80,54 @@ const NOTFOUND = {
 
 module.exports = {
 
-  [`POST ${apiPrefix}/user/login`] (req, res) {
-    const { username, password } = req.body
-    const user = adminUsers.filter((item) => item.username === username)
+  [`POST ${apiPrefix}/cas/user/`] (req, res) {
+    const { user_account, user_password } = req.body
+    const user = adminUsers.filter((item) => item.username === user_account)
 
-    if (user.length > 0 && user[0].password === password) {
+    if (user.length > 0 && user[0].password === user_password) {
       const now = new Date()
       now.setDate(now.getDate() + 1)
       res.cookie('token', JSON.stringify({ id: user[0].id, deadline: now.getTime() }), {
         maxAge: 900000,
         httpOnly: true,
       })
-      res.json({ success: true, message: 'Ok' })
+      res.json({ ErrCode: 0})
     } else {
       res.status(400).end()
     }
   },
 
-  [`GET ${apiPrefix}/user/logout`] (req, res) {
+  [`DELETE ${apiPrefix}/cas/user/`] (req, res) {
     res.clearCookie('token')
-    res.status(200).end()
+    res.json({ErrCode:0})
   },
 
-  [`GET ${apiPrefix}/user`] (req, res) {
+  [`GET ${apiPrefix}/cas/user`] (req, res) {
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const response = {}
-    const user = {}
+    const accountInfo = {}
     if (!cookies.token) {
-      res.status(200).send({ message: 'Not Login' })
+      res.status(200).send({ ErrCode:1, Reason: 'Not Login' })
       return
     }
     const token = JSON.parse(cookies.token)
     if (token) {
-      response.success = token.deadline > new Date().getTime()
-    }
-    if (response.success) {
-      const userItem = adminUsers.filter(_ => _.id === token.id)
-      if (userItem.length > 0) {
-        user.permissions = userItem[0].permissions
-        user.username = userItem[0].username
-        user.id = userItem[0].id
+      if (token.deadline > new Date().getTime()) {
+        response.ErrCode = 0
+      } else {
+        response.ErrCode = 1
       }
     }
-    response.user = user
+    if (response.ErrCode == 0) {
+      const userItem = adminUsers.filter(_ => _.id === token.id)
+      if (userItem.length > 0) {
+        accountInfo.permissions = userItem[0].permissions
+        accountInfo.Name = userItem[0].username
+        accountInfo.ID = userItem[0].id
+      }
+    }
+    response.AccountInfo = accountInfo
     res.json(response)
   },
 
