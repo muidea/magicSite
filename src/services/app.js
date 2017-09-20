@@ -1,6 +1,7 @@
-import { request, config } from '../utils'
+import { request, config } from 'utils'
+
 const { api } = config
-const { userStatus, userLogout, userLogin } = api
+const { userInfo, userLogout, userLogin } = api
 
 export async function login (params) {
   return request({
@@ -18,9 +19,9 @@ export async function logout (params) {
   })
 }
 
-export async function query (params) {  
+export async function query (params) {
   return request({
-    url: userStatus,
+    url: userInfo,
     method: 'get',
     data: params,
   })

@@ -1,5 +1,5 @@
-import { create, remove, update } from '../../services/content/catalog'
-import { query } from '../../services/content/catalogs'
+import { create, remove, update } from 'services/content/catalog'
+import { query } from 'services/content/catalogs'
 import { parse } from 'qs'
 
 export default {

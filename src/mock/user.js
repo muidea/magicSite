@@ -1,6 +1,7 @@
 const qs = require('qs')
 const Mock = require('mockjs')
 const config = require('../utils/config')
+
 const { apiPrefix } = config
 
 let usersListData = Mock.mock({
@@ -25,31 +26,46 @@ let usersListData = Mock.mock({
 
 let database = usersListData.data
 
+const EnumRoleType = {
+  ADMIN: 'admin',
+  DEFAULT: 'guest',
+  DEVELOPER: 'developer',
+}
+
 const userPermission = {
-  DEFAULT: [
-    'dashboard', 'chart',
-  ],
-  ADMIN: [
-    'dashboard', 'users', 'UIElement', 'UIElementIconfont', 'chart',
-  ],
-  DEVELOPER: ['dashboard', 'users', 'UIElement', 'UIElementIconfont', 'chart'],
+  DEFAULT: {
+    visit: ['1', '5', '6', '7', '71', '72', '73', '74'],
+    role: EnumRoleType.DEFAULT,
+  },
+  ADMIN: {
+    role: EnumRoleType.ADMIN,
+  },
+  DEVELOPER: {
+    role: EnumRoleType.DEVELOPER,
+  },
 }
 
 const adminUsers = [
   {
     id: 0,
+    useraccount: 'admin',
     username: 'admin',
     password: 'admin',
+    email: 'admin@test.com',
     permissions: userPermission.ADMIN,
   }, {
     id: 1,
+    useraccount: 'guest',
     username: 'guest',
     password: 'guest',
+    email: 'guest@test.com',
     permissions: userPermission.DEFAULT,
   }, {
     id: 2,
+    useraccount: 'wyz',
     username: '吴彦祖',
     password: '123456',
+    email: 'wyz@test.com',
     permissions: userPermission.DEVELOPER,
   },
 ]
@@ -78,11 +94,13 @@ const NOTFOUND = {
   documentation_url: 'http://localhost:8000/request',
 }
 
+const AuthToken = 'rvelzsmvjdiowcp3ucuntzvaoef906zr'
+
 module.exports = {
 
-  [`POST ${apiPrefix}/cas/user/`] (req, res) {
+  [`POST ${apiPrefix}/cas/user`] (req, res) {
     const { user_account, user_password } = req.body
-    const user = adminUsers.filter((item) => item.username === user_account)
+    const user = adminUsers.filter(item => item.useraccount === user_account)
 
     if (user.length > 0 && user[0].password === user_password) {
       const now = new Date()
@@ -91,15 +109,15 @@ module.exports = {
         maxAge: 900000,
         httpOnly: true,
       })
-      res.json({ ErrCode: 0})
+      res.json({ ErrCode: 0, Reason: '', SessionID:'', AuthToken: AuthToken, User:{ID: user[0].id, Name: user[0].username, Account: user[0].useraccount, Email: user[0].email} })
     } else {
       res.status(400).end()
     }
   },
 
-  [`DELETE ${apiPrefix}/cas/user/`] (req, res) {
+  [`DELETE ${apiPrefix}/cas/user`] (req, res) {
     res.clearCookie('token')
-    res.json({ErrCode:0})
+    res.json({ ErrCode: 0, Reason: '' })
   },
 
   [`GET ${apiPrefix}/cas/user`] (req, res) {
@@ -108,21 +126,20 @@ module.exports = {
     const response = {}
     const accountInfo = {}
     if (!cookies.token) {
-      res.status(200).send({ ErrCode:1, Reason: 'Not Login' })
+      res.json({ ErrCode: -1, Reason: 'Not Login' })
       return
     }
     const token = JSON.parse(cookies.token)
     if (token) {
-      if (token.deadline > new Date().getTime()) {
-        response.ErrCode = 0
-      } else {
-        response.ErrCode = 1
-      }
+      response.ErrCode = token.deadline > new Date().getTime() ? 0 : -1
     }
     if (response.ErrCode == 0) {
       const userItem = adminUsers.filter(_ => _.id === token.id)
       if (userItem.length > 0) {
-        accountInfo.permissions = userItem[0].permissions
+        accountInfo.Permissions = userItem[0].permissions
+        accountInfo.LoginTime = '1505907360'
+        accountInfo.UpdateTime = '1505907360'
+        accountInfo.Address = '127.0.0.1'
         accountInfo.Name = userItem[0].username
         accountInfo.ID = userItem[0].id
       }
@@ -167,6 +184,13 @@ module.exports = {
     })
   },
 
+  [`DELETE ${apiPrefix}/users`] (req, res) {
+    const { ids } = req.body
+    database = database.filter(item => !ids.some(_ => _ === item.id))
+    res.status(204).end()
+  },
+
+
   [`POST ${apiPrefix}/user`] (req, res) {
     const newData = req.body
     newData.createTime = Mock.mock('@now')
@@ -192,7 +216,7 @@ module.exports = {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
-      database = database.filter((item) => item.id !== id)
+      database = database.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)

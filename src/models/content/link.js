@@ -1,5 +1,5 @@
-import { create, remove, update } from '../../services/content/link'
-import { query } from '../../services/content/links'
+import { create, remove, update } from 'services/content/link'
+import { query } from 'services/content/links'
 import { parse } from 'qs'
 
 export default {

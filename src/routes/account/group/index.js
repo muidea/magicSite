@@ -2,12 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
+import { Row, Col, Button, Popconfirm } from 'antd'
+import { Page } from 'components'
+import queryString from 'query-string'
 import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
+
 const Group = ({ location, dispatch, group, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = group
+  location.query = queryString.parse(location.search)
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = group
   const { pageSize } = pagination
 
   const modalProps = {
@@ -15,7 +20,7 @@ const Group = ({ location, dispatch, group, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? 'Create Group' : 'Update Group'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -35,15 +40,16 @@ const Group = ({ location, dispatch, group, loading }) => {
     loading: loading.effects['group/query'],
     pagination,
     location,
+    isMotion,
     onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        query: {
+        search: queryString.stringify({
           ...query,
           page: page.current,
           pageSize: page.pageSize,
-        },
+        }),
       }))
     },
     onDeleteItem (id) {
@@ -61,29 +67,41 @@ const Group = ({ location, dispatch, group, loading }) => {
         },
       })
     },
+    rowSelection: {
+      selectedRowKeys,
+      onChange: (keys) => {
+        dispatch({
+          type: 'group/updateState',
+          payload: {
+            selectedRowKeys: keys,
+          },
+        })
+      },
+    },
   }
 
   const filterProps = {
+    isMotion,
     filter: {
       ...location.query,
     },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        query: {
+        search: queryString.stringify({
           ...value,
           page: 1,
           pageSize,
-        },
+        }),
       }))
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
         pathname: '/group',
-        query: {
+        search: queryString.stringify({
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
-        },
+        }),
       })) : dispatch(routerRedux.push({
         pathname: '/group',
       }))
@@ -96,14 +114,37 @@ const Group = ({ location, dispatch, group, loading }) => {
         },
       })
     },
+    switchIsMotion () {
+      dispatch({ type: 'group/switchIsMotion' })
+    },
+  }
+
+  const handleDeleteItems = () => {
+    dispatch({
+      type: 'group/multiDelete',
+      payload: {
+        ids: selectedRowKeys,
+      },
+    })
   }
 
   return (
-    <div className="content-inner">
+    <Page inner>
       <Filter {...filterProps} />
+      {
+        selectedRowKeys.length > 0 &&
+        <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
+          <Col>
+            {`Selected ${selectedRowKeys.length} items `}
+            <Popconfirm title={'Are you sure delete these items?'} placement="left" onConfirm={handleDeleteItems}>
+              <Button type="primary" size="large" style={{ marginLeft: 8 }}>Remove</Button>
+            </Popconfirm>
+          </Col>
+        </Row>
+      }
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
-    </div>
+    </Page>
   )
 }
 

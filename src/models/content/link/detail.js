@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from '../../../services/content/link'
+import { query } from 'services/content/link'
 
 export default {
 

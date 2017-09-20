@@ -1,12 +1,11 @@
+/* global window */
 import axios from 'axios'
 import qs from 'qs'
-import { YQL, CORS, baseURL } from './config'
 import jsonp from 'jsonp'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
-
-axios.defaults.baseURL = baseURL
+import { YQL, CORS } from './config'
 
 const fetch = (options) => {
   let {
@@ -64,9 +63,9 @@ const fetch = (options) => {
         data: cloneData,
       })
     case 'post':
-      return axios.post(url, qs.stringify(cloneData))
+      return axios.post(url, cloneData)
     case 'put':
-      return axios.put(url, qs.stringify(cloneData))
+      return axios.put(url, cloneData)
     case 'patch':
       return axios.patch(url, cloneData)
     default:
@@ -91,26 +90,29 @@ export default function request (options) {
   return fetch(options).then((response) => {
     const { statusText, status } = response
     let data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data
-    return {
+    if (data instanceof Array) {
+      data = {
+        list: data,
+      }
+    }
+    return Promise.resolve({
       success: true,
       message: statusText,
-      status,
+      statusCode: status,
       ...data,
-    }
+    })
   }).catch((error) => {
     const { response } = error
     let msg
-    let status
-    let otherData = {}
-    if (response) {
+    let statusCode
+    if (response && response instanceof Object) {
       const { data, statusText } = response
-      otherData = data
-      status = response.status
+      statusCode = response.status
       msg = data.message || statusText
     } else {
-      status = 600
-      msg = 'Network Error'
+      statusCode = 600
+      msg = error.message || 'Network Error'
     }
-    return { success: false, status, message: msg, ...otherData }
+    return Promise.reject({ success: false, statusCode, message: msg })
   })
 }

@@ -9,13 +9,13 @@ import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: '确认删除分组?',
+        title: 'Are you sure delete this record?',
         onOk () {
           onDeleteItem(record.id)
         },
@@ -25,35 +25,54 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '图标',
+      title: 'Avatar',
       dataIndex: 'avatar',
       key: 'avatar',
       width: 64,
       className: styles.avatar,
       render: (text) => <img alt={'avatar'} width={24} src={text} />,
     }, {
-      title: '分组名',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => <Link to={`/account/group/${record.id}`}>{text}</Link>,
     }, {
-      title: '分类',
-      dataIndex: 'catalog',
-      key: 'catalog',
+      title: 'NickName',
+      dataIndex: 'nickName',
+      key: 'nickName',
+    }, {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+    }, {
+      title: 'Gender',
+      dataIndex: 'isMale',
+      key: 'isMale',
+      render: (text) => <span>{text
+            ? 'Male'
+            : 'Female'}</span>,
+    }, {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+    }, {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    }, {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    }, {
+      title: 'CreateTime',
+      dataIndex: 'createTime',
+      key: 'createTime',
+    }, {
+      title: 'Operation',
+      key: 'operation',
       width: 100,
       render: (text, record) => {
-        return record.catalog > 0 ? '管理员组' : '用户组'
-      },
-    }, {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
-    }, {
-      title: '操作',
-      key: 'operation',
-      width: 80,
-      render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
       },
     },
   ]
@@ -63,13 +82,13 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
     current: tableProps.pagination.current,
   }
 
-  const getBodyWrapper = body => { return body }
+  const getBodyWrapper = body => { return isMotion ? <AnimTableBody {...getBodyWrapperProps} body={body} /> : body }
 
   return (
     <div>
       <Table
         {...tableProps}
-        className={classnames({ [styles.table]: true, })}
+        className={classnames({ [styles.table]: true, [styles.motion]: isMotion })}
         bordered
         scroll={{ x: 1200 }}
         columns={columns}
@@ -84,6 +103,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 List.propTypes = {
   onDeleteItem: PropTypes.func,
   onEditItem: PropTypes.func,
+  isMotion: PropTypes.bool,
   location: PropTypes.object,
 }
 

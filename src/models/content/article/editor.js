@@ -1,4 +1,4 @@
-import { create } from '../../../services/content/article'
+import { create } from 'services/content/article'
 
 export default {
 

@@ -1,33 +1,32 @@
-import { create, remove, update } from '../../services/account/user'
-import { query } from '../../services/account/users'
-import { parse } from 'qs'
+/* global window */
+import modelExtend from 'dva-model-extend'
+import { config } from 'utils'
+import { create, remove, update } from 'services/account/user'
+import * as usersService from 'services/account/users'
+import queryString from 'query-string'
+import { pageModel } from '../common'
 
-export default {
+const { query } = usersService
+const { prefix } = config
 
+export default modelExtend(pageModel, {
   namespace: 'user',
 
   state: {
-    list: [],
     currentItem: {},
     modalVisible: false,
     modalType: 'create',
-    isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
-      current: 1,
-      total: null,
-    },
+    selectedRowKeys: [],
+    isMotion: window.localStorage.getItem(`${prefix}userIsMotion`) === 'true',
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(location => {
+      history.listen((location) => {
         if (location.pathname === '/account/user') {
           dispatch({
             type: 'query',
-            payload: location.query,
+            payload: queryString.parse(location.search),
           })
         }
       })
@@ -36,8 +35,7 @@ export default {
 
   effects: {
 
-    *query ({ payload }, { call, put }) {
-      payload = parse(location.search.substr(1))
+    * query ({ payload = {} }, { call, put }) {
       const data = yield call(query, payload)
       if (data) {
         yield put({
@@ -54,16 +52,28 @@ export default {
       }
     },
 
-    *'delete' ({ payload }, { call, put }) {
+    * delete ({ payload }, { call, put, select }) {
       const data = yield call(remove, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
+        yield put({ type: 'updateState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'query' })
       } else {
         throw data
       }
     },
 
-    *create ({ payload }, { call, put }) {
+    * multiDelete ({ payload }, { call, put }) {
+      const data = yield call(usersService.remove, payload)
+      if (data.success) {
+        yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
+    * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
       if (data.success) {
         yield put({ type: 'hideModal' })
@@ -73,7 +83,7 @@ export default {
       }
     },
 
-    *update ({ payload }, { select, call, put }) {
+    * update ({ payload }, { select, call, put }) {
       const id = yield select(({ user }) => user.currentItem.id)
       const newUser = { ...payload, id }
       const data = yield call(update, newUser)
@@ -89,18 +99,8 @@ export default {
 
   reducers: {
 
-    querySuccess (state, action) {
-      const { list, pagination } = action.payload
-      return { ...state,
-        list,
-        pagination: {
-          ...state.pagination,
-          ...pagination,
-        } }
-    },
-
-    showModal (state, action) {
-      return { ...state, ...action.payload, modalVisible: true }
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
     },
 
     hideModal (state) {
@@ -108,10 +108,9 @@ export default {
     },
 
     switchIsMotion (state) {
-      localStorage.setItem('antdAdminUserIsMotion', !state.isMotion)
+      window.localStorage.setItem(`${prefix}userIsMotion`, !state.isMotion)
       return { ...state, isMotion: !state.isMotion }
     },
 
   },
-
-}
+})
