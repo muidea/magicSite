@@ -21,6 +21,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/account/user')],
       component: () => import('./routes/account/user/'),
     }, {
+      path: '/account/user/:id',
+      models: () => [import('./models/account/user/detail')],
+      component: () => import('./routes/account/user/detail/'),
+    }, {
       path: '/account/group',
       models: () => [import('./models/account/group')],
       component: () => import('./routes/account/group/'),

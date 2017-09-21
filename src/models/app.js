@@ -14,7 +14,9 @@ const { prefix } = config
 export default {
   namespace: 'app',
   state: {
-    user: {},
+    sessionID: '',
+    authToken: '',
+    accountInfo: {},
     permissions: {
       visit: [],
     },
@@ -65,8 +67,8 @@ export default {
     * query ({
       payload,
     }, { call, put, select }) {
-      const { ErrCode, AccountInfo } = yield call(query, payload)
-      const { locationPathname } = yield select(_ => _.app)
+      const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
+      const { ErrCode, AccountInfo } = yield call(query, { sessionID, authToken, ...payload })
       if (ErrCode == 0 && AccountInfo) {
         const { list } = yield call(menusService.query)
         const { Permissions } = AccountInfo
@@ -86,7 +88,7 @@ export default {
         yield put({
           type: 'updateState',
           payload: {
-            user: AccountInfo,
+            accountInfo: AccountInfo,
             permissions: Permissions,
             menu,
           },

@@ -117,6 +117,8 @@ module.exports = {
   },
 
   [`GET ${apiPrefix}/cas/user`] (req, res) {
+    const { query } = req
+    const { sessionID, authToken } = query
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const response = {}
@@ -124,6 +126,11 @@ module.exports = {
     if (!cookies.token) {
       res.json({ ErrCode: -1, Reason: 'Not Login' })
       return
+    }
+
+    if (authToken != AuthToken) {
+      res.json({ ErrCode: -1, Reason: 'Illegal AuthToken' })
+      return      
     }
     const token = JSON.parse(cookies.token)
     if (token) {
