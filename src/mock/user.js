@@ -8,16 +8,12 @@ let usersListData = Mock.mock({
   'data|80-100': [
     {
       id: '@id',
+      account: '@name',
       name: '@name',
-      nickName: '@last',
-      phone: /^1[34578]\d{9}$/,
-      'age|11-99': 1,
-      address: '@county(true)',
-      isMale: '@boolean',
       email: '@email',
       createTime: '@datetime',
       avatar () {
-        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.nickName.substr(0, 1))
+        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.account.substr(0, 1))
       },
     },
   ],
@@ -48,22 +44,22 @@ const userPermission = {
 const adminUsers = [
   {
     id: 0,
-    useraccount: 'admin',
-    username: 'admin',
+    account: 'admin',
+    name: 'admin',
     password: 'admin',
     email: 'admin@test.com',
     permissions: userPermission.ADMIN,
   }, {
     id: 1,
-    useraccount: 'guest',
-    username: 'guest',
+    account: 'guest',
+    name: 'guest',
     password: 'guest',
     email: 'guest@test.com',
     permissions: userPermission.DEFAULT,
   }, {
     id: 2,
-    useraccount: 'wyz',
-    username: '吴彦祖',
+    account: 'wyz',
+    name: '吴彦祖',
     password: '123456',
     email: 'wyz@test.com',
     permissions: userPermission.DEVELOPER,
@@ -100,7 +96,7 @@ module.exports = {
 
   [`POST ${apiPrefix}/cas/user`] (req, res) {
     const { user_account, user_password } = req.body
-    const user = adminUsers.filter(item => item.useraccount === user_account)
+    const user = adminUsers.filter(item => item.account === user_account)
 
     if (user.length > 0 && user[0].password === user_password) {
       const now = new Date()
@@ -109,7 +105,7 @@ module.exports = {
         maxAge: 900000,
         httpOnly: true,
       })
-      res.json({ ErrCode: 0, Reason: '', SessionID:'', AuthToken: AuthToken, User:{ID: user[0].id, Name: user[0].username, Account: user[0].useraccount, Email: user[0].email} })
+      res.json({ ErrCode: 0, Reason: '', SessionID:'', AuthToken: AuthToken, User:{ID: user[0].id, Name: user[0].name, Account: user[0].account, Email: user[0].email} })
     } else {
       res.status(400).end()
     }
@@ -140,7 +136,7 @@ module.exports = {
         accountInfo.LoginTime = '1505907360'
         accountInfo.UpdateTime = '1505907360'
         accountInfo.Address = '127.0.0.1'
-        accountInfo.Name = userItem[0].username
+        accountInfo.Name = userItem[0].name
         accountInfo.ID = userItem[0].id
       }
     }
@@ -159,9 +155,7 @@ module.exports = {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
           if ({}.hasOwnProperty.call(item, key)) {
-            if (key === 'address') {
-              return other[key].every(iitem => item[key].indexOf(iitem) > -1)
-            } else if (key === 'createTime') {
+            if (key === 'createTime') {
               const start = new Date(other[key][0]).getTime()
               const end = new Date(other[key][1]).getTime()
               const now = new Date(item[key]).getTime()
@@ -193,11 +187,11 @@ module.exports = {
 
   [`POST ${apiPrefix}/user`] (req, res) {
     const newData = req.body
-    newData.createTime = Mock.mock('@now')
-    newData.avatar = newData.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newData.nickName.substr(0, 1))
-    newData.id = Mock.mock('@id')
 
-    database.unshift(newData)
+    const newUser = {id: Mock.mock('@id'), account: newData.user_account, name: newData.user_name, email: newData.user_email, createTime: Mock.mock('@now')}
+    newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
+    
+    database.unshift(newUser)
 
     res.status(200).end()
   },

@@ -36,18 +36,20 @@ const Login = ({
             rules: [
               {
                 required: true,
+                message: '请输入账号',
               },
             ],
-          })(<Input size="large" onPressEnter={handleOk} placeholder="Account" />)}
+          })(<Input size="large" onPressEnter={handleOk} placeholder="账号" />)}
         </FormItem>
         <FormItem hasFeedback>
           {getFieldDecorator('user_password', {
             rules: [
               {
                 required: true,
+                message: '请输入密码',
               },
             ],
-          })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="Password" />)}
+          })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="密码" />)}
         </FormItem>
         <Row>
           <Button type="primary" size="large" onClick={handleOk} loading={loading.effects.login}>

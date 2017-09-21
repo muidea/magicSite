@@ -1,7 +1,7 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update } from 'services/account/user'
+import { create, remove, multiRemove, update } from 'services/account/user'
 import * as usersService from 'services/account/users'
 import queryString from 'query-string'
 import { pageModel } from '../common'
@@ -17,7 +17,6 @@ export default modelExtend(pageModel, {
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
-    isMotion: window.localStorage.getItem(`${prefix}userIsMotion`) === 'true',
   },
 
   subscriptions: {
@@ -64,7 +63,7 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(usersService.remove, payload)
+      const data = yield call(multiRemove, payload)
       if (data.success) {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
@@ -106,11 +105,5 @@ export default modelExtend(pageModel, {
     hideModal (state) {
       return { ...state, modalVisible: false }
     },
-
-    switchIsMotion (state) {
-      window.localStorage.setItem(`${prefix}userIsMotion`, !state.isMotion)
-      return { ...state, isMotion: !state.isMotion }
-    },
-
   },
 })
