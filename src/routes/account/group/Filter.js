@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, DatePicker, Input, Cascader, Switch } from 'antd'
+import { Form, Button, Row, Col, DatePicker, Input, Popconfirm } from 'antd'
 import city from '../../../utils/city'
 
 const Search = Input.Search
@@ -23,9 +23,9 @@ const TwoColProps = {
 
 const Filter = ({
   onAdd,
-  isMotion,
-  switchIsMotion,
   onFilterChange,
+  onDeleteItems,
+  selectedRowKeys,
   filter,
   form: {
     getFieldDecorator,
@@ -68,7 +68,12 @@ const Filter = ({
     fields = handleFields(fields)
     onFilterChange(fields)
   }
-  const { name, address } = filter
+
+  const handleDeleteItems = () => {
+    onDeleteItems()
+  }
+
+  const { name } = filter
 
   let initialCreateTime = []
   if (filter.createTime && filter.createTime[0]) {
@@ -80,35 +85,23 @@ const Filter = ({
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
-        {getFieldDecorator('name', { initialValue: name })(<Search placeholder="Search Name" size="large" onSearch={handleSubmit} />)}
-      </Col>
-      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
-        {getFieldDecorator('address', { initialValue: address })(
-          <Cascader
-            size="large"
-            style={{ width: '100%' }}
-            options={city}
-            placeholder="Please pick an address"
-            onChange={handleChange.bind(null, 'address')}
-          />)}
-      </Col>
-      <Col {...ColProps} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }}>
-        <FilterItem label="Createtime">
-          {getFieldDecorator('createTime', { initialValue: initialCreateTime })(
-            <RangePicker style={{ width: '100%' }} size="large" onChange={handleChange.bind(null, 'createTime')} />
-          )}
-        </FilterItem>
+      <Col {...ColProps} xl={{ span: 14 }} md={{ span: 24 }}>
+        {getFieldDecorator('name', { initialValue: name })(<Search placeholder="查找分组" size="large" onSearch={handleSubmit} />)}
       </Col>
       <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 24 }} sm={{ span: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
-            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>Search</Button>
-            <Button size="large" onClick={handleReset}>Reset</Button>
+            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>
+            <Button size="large" onClick={handleReset}>重置</Button>
           </div>
           <div>
-            <Switch style={{ marginRight: 16 }} size="large" defaultChecked={isMotion} onChange={switchIsMotion} checkedChildren={'Motion'} unCheckedChildren={'Motion'} />
-            <Button size="large" type="ghost" onClick={onAdd}>Create</Button>
+            {
+            selectedRowKeys.length > 0 &&
+              <Popconfirm title={'确认删除选中项?'} placement="left" onConfirm={handleDeleteItems}>
+                <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
+              </Popconfirm>
+          }            
+          <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
           </div>
         </div>
       </Col>
@@ -117,9 +110,9 @@ const Filter = ({
 }
 
 Filter.propTypes = {
+  selectedRowKeys: PropTypes.array,
+  onDeleteItems: PropTypes.func,
   onAdd: PropTypes.func,
-  isMotion: PropTypes.bool,
-  switchIsMotion: PropTypes.func,
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,

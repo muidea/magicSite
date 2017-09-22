@@ -12,7 +12,7 @@ import Modal from './Modal'
 
 const Group = ({ location, dispatch, group, loading }) => {
   location.query = queryString.parse(location.search)
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = group
+  const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = group
   const { pageSize } = pagination
 
   const modalProps = {
@@ -20,7 +20,7 @@ const Group = ({ location, dispatch, group, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],
-    title: `${modalType === 'create' ? 'Create Group' : 'Update Group'}`,
+    title: `${modalType === 'create' ? '新建分组' : '编辑分组'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -40,7 +40,6 @@ const Group = ({ location, dispatch, group, loading }) => {
     loading: loading.effects['group/query'],
     pagination,
     location,
-    isMotion,
     onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
@@ -81,7 +80,7 @@ const Group = ({ location, dispatch, group, loading }) => {
   }
 
   const filterProps = {
-    isMotion,
+    selectedRowKeys,
     filter: {
       ...location.query,
     },
@@ -114,34 +113,19 @@ const Group = ({ location, dispatch, group, loading }) => {
         },
       })
     },
-    switchIsMotion () {
-      dispatch({ type: 'group/switchIsMotion' })
+    onDeleteItems () {
+      dispatch({
+        type: 'group/multiDelete',
+        payload: {
+          ids: selectedRowKeys,
+        },
+      })      
     },
-  }
-
-  const handleDeleteItems = () => {
-    dispatch({
-      type: 'group/multiDelete',
-      payload: {
-        ids: selectedRowKeys,
-      },
-    })
   }
 
   return (
     <Page inner>
       <Filter {...filterProps} />
-      {
-        selectedRowKeys.length > 0 &&
-        <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
-          <Col>
-            {`Selected ${selectedRowKeys.length} items `}
-            <Popconfirm title={'Are you sure delete these items?'} placement="left" onConfirm={handleDeleteItems}>
-              <Button type="primary" size="large" style={{ marginLeft: 8 }}>Remove</Button>
-            </Popconfirm>
-          </Col>
-        </Row>
-      }
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
     </Page>

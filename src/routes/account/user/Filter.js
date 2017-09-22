@@ -86,7 +86,7 @@ const Filter = ({
   return (
     <Row gutter={24}>
       <Col {...ColProps} xl={{ span: 8 }} md={{ span: 16 }}>
-        {getFieldDecorator('account', { initialValue: account })(<Search placeholder="搜索账号" size="large" onSearch={handleSubmit} />)}
+        {getFieldDecorator('account', { initialValue: account })(<Search placeholder="查找账号" size="large" onSearch={handleSubmit} />)}
       </Col>
       <Col {...ColProps} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }}>
         <FilterItem label="注册时间">

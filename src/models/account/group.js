@@ -1,12 +1,12 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update } from 'services/account/group'
-import * as groupsService from 'services/account/groups'
+import { create, remove, multiRemove, update } from 'services/account/group'
+import * as usersService from 'services/account/groups'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
-const { query } = groupsService
+const { query } = usersService
 const { prefix } = config
 
 export default modelExtend(pageModel, {
@@ -17,7 +17,6 @@ export default modelExtend(pageModel, {
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
-    isMotion: window.localStorage.getItem(`${prefix}userIsMotion`) === 'true',
   },
 
   subscriptions: {
@@ -54,7 +53,7 @@ export default modelExtend(pageModel, {
 
     * delete ({ payload }, { call, put, select }) {
       const data = yield call(remove, { id: payload })
-      const { selectedRowKeys } = yield select(_ => _.user)
+      const { selectedRowKeys } = yield select(_ => _.group)
       if (data.success) {
         yield put({ type: 'updateState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'query' })
@@ -64,7 +63,7 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(groupsService.remove, payload)
+      const data = yield call(multiRemove, payload)
       if (data.success) {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
@@ -84,7 +83,7 @@ export default modelExtend(pageModel, {
     },
 
     * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ user }) => user.currentItem.id)
+      const id = yield select(({ group }) => group.currentItem.id)
       const newUser = { ...payload, id }
       const data = yield call(update, newUser)
       if (data.success) {
@@ -106,11 +105,5 @@ export default modelExtend(pageModel, {
     hideModal (state) {
       return { ...state, modalVisible: false }
     },
-
-    switchIsMotion (state) {
-      window.localStorage.setItem(`${prefix}userIsMotion`, !state.isMotion)
-      return { ...state, isMotion: !state.isMotion }
-    },
-
   },
 })

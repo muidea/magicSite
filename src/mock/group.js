@@ -4,23 +4,22 @@ const config = require('../utils/config')
 
 const { apiPrefix } = config
 
-let usersListData = Mock.mock({
+let groupsListData = Mock.mock({
   'data|80-100': [
     {
       id: '@id',
-      account: '@name',
       name: '@name',
-      email: '@email',
-      createTime: '@datetime',
+      'description|0-20':'description info',
+      'catalog|0-2': 1,
       avatar () {
-        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.account.substr(0, 1))
+        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
       },
     },
   ],
 })
 
 
-let database = usersListData.data
+let database = groupsListData.data
 
 const queryArray = (array, key, keyAlias = 'key') => {
   if (!(array instanceof Array)) {
@@ -41,14 +40,10 @@ const queryArray = (array, key, keyAlias = 'key') => {
   return null
 }
 
-const NOTFOUND = {
-  message: 'Not Found',
-  documentation_url: 'http://localhost:8000/request',
-}
-
 module.exports = {
 
-  [`GET ${apiPrefix}/users`] (req, res) {
+
+  [`GET ${apiPrefix}/groups`] (req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
@@ -59,16 +54,6 @@ module.exports = {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
           if ({}.hasOwnProperty.call(item, key)) {
-            if (key === 'createTime') {
-              const start = new Date(other[key][0]).getTime()
-              const end = new Date(other[key][1]).getTime()
-              const now = new Date(item[key]).getTime()
-
-              if (start && end) {
-                return now >= start && now <= end
-              }
-              return true
-            }
             return String(item[key]).trim().indexOf(decodeURI(other[key]).trim()) > -1
           }
           return true
@@ -82,25 +67,25 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/users`] (req, res) {
+  [`DELETE ${apiPrefix}/groups`] (req, res) {
     const { ids } = req.body
     database = database.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/user`] (req, res) {
+  [`POST ${apiPrefix}/group`] (req, res) {
     const newData = req.body
 
-    const newUser = {id: Mock.mock('@id'), account: newData.user_account, name: newData.user_name, email: newData.user_email, createTime: Mock.mock('@now')}
-    newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
+    const newGroup = {id: Mock.mock('@id'), name: newData.group_name, description: newData.group_description, catalog: newData.group_catalog}
+    newGroup.avatar = newGroup.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newGroup.name.substr(0, 1))
     
-    database.unshift(newUser)
+    database.unshift(newGroup)
 
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/user/:id`] (req, res) {
+  [`GET ${apiPrefix}/group/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
@@ -110,7 +95,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/user/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/group/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
@@ -121,7 +106,7 @@ module.exports = {
     }
   },
 
-  [`PATCH ${apiPrefix}/user/:id`] (req, res) {
+  [`PATCH ${apiPrefix}/group/:id`] (req, res) {
     const { id } = req.params
     const editItem = req.body
     let isExist = false
