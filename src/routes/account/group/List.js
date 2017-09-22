@@ -43,6 +43,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
+      render: (text, record) => <span>{record.catalog.name}</span>,
     }, {
       title: '操作',
       key: 'operation',

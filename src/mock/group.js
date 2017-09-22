@@ -4,13 +4,21 @@ const config = require('../utils/config')
 
 const { apiPrefix } = config
 
+const catalogList = [{id:1, name:'注册用户'}, {id:2, name:'特权用户'}, {id:3, name:'系统管理员'}]
+
+Mock.Random.extend({
+  catalogInfo: function(date) {
+      return this.pick(catalogList)
+  }
+})
+
 let groupsListData = Mock.mock({
   'data|80-100': [
     {
       id: '@id',
-      name: '@name',
-      'description|0-20':'description info',
-      'catalog|0-2': 1,
+      name: '@ctitle(5,10)',
+      description:'@ctitle(10,20)',
+      catalog() {return Mock.Random.catalogInfo()},
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
       },
@@ -77,7 +85,8 @@ module.exports = {
   [`POST ${apiPrefix}/group`] (req, res) {
     const newData = req.body
 
-    const newGroup = {id: Mock.mock('@id'), name: newData.group_name, description: newData.group_description, catalog: newData.group_catalog}
+    const cur = queryArray(catalogList, newData.group_catalog, 'id')
+    const newGroup = {id: Mock.mock('@id'), name: newData.group_name, description: newData.group_description, catalog: cur, }
     newGroup.avatar = newGroup.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newGroup.name.substr(0, 1))
     
     database.unshift(newGroup)

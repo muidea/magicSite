@@ -9,14 +9,15 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-
 const Group = ({ location, dispatch, group, loading }) => {
   location.query = queryString.parse(location.search)
   const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = group
   const { pageSize } = pagination
 
+  const nilGroup = {name:'',description:'',catalog:{}}
+
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: modalType === 'create' ? nilGroup : currentItem,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],

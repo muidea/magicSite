@@ -70,7 +70,7 @@ const modal = ({
         </FormItem>
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('group_catalog', {
-            initialValue: item.catalog,
+            initialValue: item.catalog.id,
             rules: [
               {
                 required: true,
