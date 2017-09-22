@@ -4,6 +4,8 @@ import { Form, Input, InputNumber, Radio, Modal, Cascader } from 'antd'
 import city from '../../../utils/city'
 
 const FormItem = Form.Item
+const { TextArea } = Input;
+const RadioGroup = Radio.Group;
 
 const formItemLayout = {
   labelCol: {
@@ -64,7 +66,7 @@ const modal = ({
                 required: false,
               },
             ],
-          })(<Input />)}
+          })(<TextArea rows={4} />)}
         </FormItem>
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('group_catalog', {
@@ -72,10 +74,16 @@ const modal = ({
             rules: [
               {
                 required: true,
-                message: '无效E-mail!',
+                message: '分类必须选择',
               },
             ],
-          })(<Input />)}
+          })(
+            <RadioGroup>
+            <Radio value={1}>注册用户</Radio>
+            <Radio value={2}>特权用户</Radio>
+            <Radio value={3}>系统管理员</Radio>
+            </RadioGroup>
+          )}
         </FormItem>
       </Form>
     </Modal>
