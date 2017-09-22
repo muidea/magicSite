@@ -85,7 +85,7 @@ const Filter = ({
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
+      <Col {...ColProps} xl={{ span: 8 }} md={{ span: 16 }}>
         {getFieldDecorator('account', { initialValue: account })(<Search placeholder="搜索账号" size="large" onSearch={handleSubmit} />)}
       </Col>
       <Col {...ColProps} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }}>
@@ -102,13 +102,13 @@ const Filter = ({
             <Button size="large" onClick={handleReset}>重置</Button>
           </div>
           <div>
-            <Button size="large" type="ghost" className="margin-right" onClick={onAdd}>新建</Button>
             {
             selectedRowKeys.length > 0 &&
               <Popconfirm title={'确认删除选中项?'} placement="left" onConfirm={handleDeleteItems}>
-                <Button type="primary" size="large">删除</Button>
+                <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
               </Popconfirm>
           }            
+          <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
           </div>
         </div>
       </Col>
