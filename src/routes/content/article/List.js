@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
 import classnames from 'classnames'
-import AnimTableBody from '../../../components/DataTable/AnimTableBody'
 import { DropOption } from '../../../components'
 import { Link } from 'dva/router'
 
@@ -15,7 +14,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: '确认删除?',
+        title: '确认删除当前记录?',
         onOk () {
           onDeleteItem(record.id)
         },
@@ -25,6 +24,13 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      width: 64,
+      className: styles.avatar,
+      render: (text) => <img alt={'avatar'} width={24} src={text} />,
+    }, {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
@@ -33,21 +39,18 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
-      width: 100,
+      render: (text, record) => <span>{record.catalog.name}</span>,
     }, {
-      title: '描述',
-      dataIndex: 'content',
-      key: 'content',
-    }, {
-      title: '新建时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      title: '作者',
+      dataIndex: 'author',
+      key: 'author',
+      render: (text, record) => <span>{record.author.name}</span>,
     }, {
       title: '操作',
       key: 'operation',
-      width: 80,
+      width: 100,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '编辑' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
@@ -63,7 +66,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
     <div>
       <Table
         {...tableProps}
-        className={classnames({ [styles.table]: true, })}
+        className={classnames({ [styles.table]: true })}
         bordered
         scroll={{ x: 1200 }}
         columns={columns}

@@ -1,6 +1,6 @@
 import { request, config } from 'utils'
 const { api } = config
-const { article } = api
+const { article, articles } = api
 
 export async function query (params) {
   return request({
@@ -11,7 +11,6 @@ export async function query (params) {
 }
 
 export async function create (params) {
-  console.log(params)
   return request({
     url: article.replace('/:id', ''),
     method: 'post',
@@ -22,6 +21,14 @@ export async function create (params) {
 export async function remove (params) {
   return request({
     url: article,
+    method: 'delete',
+    data: params,
+  })
+}
+
+export async function multiRemove (params) {
+  return request({
+    url: articles,
     method: 'delete',
     data: params,
   })

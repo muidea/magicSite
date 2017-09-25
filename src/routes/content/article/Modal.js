@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { Form, Input, InputNumber, Radio, Modal } from 'antd'
 
 const FormItem = Form.Item
+const { TextArea } = Input;
+const RadioGroup = Radio.Group;
 
 const formItemLayout = {
   labelCol: {
@@ -45,39 +47,41 @@ const modal = ({
     <Modal {...modalOpts}>
       <Form layout="horizontal">
         <FormItem label="标题" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('title', {
+          {getFieldDecorator('article_title', {
             initialValue: item.title,
             rules: [
               {
                 required: true,
+                message: '标题不能为空',
               },
             ],
           })(<Input />)}
         </FormItem>
         <FormItem label="内容" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('content', {
+          {getFieldDecorator('article_content', {
             initialValue: item.content,
             rules: [
               {
-                required: true,
+                required: false,
               },
             ],
-          })(<Input />)}
-        </FormItem>        
+          })(<TextArea rows={4} />)}
+        </FormItem>
         <FormItem label="分类" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('catalog', {
+          {getFieldDecorator('article_catalog', {
             initialValue: item.catalog,
             rules: [
               {
                 required: true,
-                type: 'number',
+                message: '分类必须选择',
               },
             ],
           })(
-            <Radio.Group>
-              <Radio value={1}>管理员组</Radio>
-              <Radio value={0}>用户组</Radio>
-            </Radio.Group>
+            <RadioGroup>
+            <Radio value={1}>注册用户</Radio>
+            <Radio value={2}>特权用户</Radio>
+            <Radio value={3}>系统管理员</Radio>
+            </RadioGroup>
           )}
         </FormItem>
       </Form>

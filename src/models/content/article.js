@@ -1,30 +1,31 @@
-import { create, remove, update } from 'services/content/article'
-import { query } from 'services/content/articles'
-import { parse } from 'qs'
+/* global window */
+import modelExtend from 'dva-model-extend'
+import { config } from 'utils'
+import { create, remove, multiRemove, update } from 'services/content/article'
+import * as usersService from 'services/content/articles'
+import queryString from 'query-string'
+import { pageModel } from '../common'
 
-export default {
+const { query } = usersService
+const { prefix } = config
 
+export default modelExtend(pageModel, {
   namespace: 'article',
 
   state: {
-    list: [],
     currentItem: {},
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
-      current: 1,
-      total: null,
-    },
+    modalVisible: false,
+    modalType: 'create',
+    selectedRowKeys: [],
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(location => {
+      history.listen((location) => {
         if (location.pathname === '/content/article') {
           dispatch({
             type: 'query',
-            payload: location.query,
+            payload: queryString.parse(location.search),
           })
         }
       })
@@ -33,8 +34,7 @@ export default {
 
   effects: {
 
-    *query ({ payload }, { call, put }) {
-      payload = parse(location.search.substr(1))
+    * query ({ payload = {} }, { call, put }) {
       const data = yield call(query, payload)
       if (data) {
         yield put({
@@ -51,29 +51,43 @@ export default {
       }
     },
 
-    *'delete' ({ payload }, { call, put }) {
+    * delete ({ payload }, { call, put, select }) {
       const data = yield call(remove, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.article)
       if (data.success) {
+        yield put({ type: 'updateState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'query' })
       } else {
         throw data
       }
     },
 
-    *create ({ payload }, { call, put }) {
+    * multiDelete ({ payload }, { call, put }) {
+      const data = yield call(multiRemove, payload)
+      if (data.success) {
+        yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
+    * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
       if (data.success) {
+        yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
         throw data
       }
     },
 
-    *update ({ payload }, { select, call, put }) {
+    * update ({ payload }, { select, call, put }) {
       const id = yield select(({ article }) => article.currentItem.id)
       const newUser = { ...payload, id }
       const data = yield call(update, newUser)
       if (data.success) {
+        yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
         throw data
@@ -84,23 +98,12 @@ export default {
 
   reducers: {
 
-    querySuccess (state, action) {
-      const { list, pagination } = action.payload
-      return { ...state,
-        list,
-        pagination: {
-          ...state.pagination,
-          ...pagination,
-        } }
-    },
-
-    showModal (state, action) {
-      return { ...state, ...action.payload, modalVisible: true }
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
     },
 
     hideModal (state) {
       return { ...state, modalVisible: false }
     },
   },
-
-}
+})

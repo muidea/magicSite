@@ -2,12 +2,39 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
+import { Row, Col, Button, Popconfirm } from 'antd'
+import { Page } from 'components'
+import queryString from 'query-string'
 import List from './List'
 import Filter from './Filter'
+import Modal from './Modal'
 
 const Article = ({ location, dispatch, article, loading }) => {
-  const { list, pagination, currentItem } = article
+  location.query = queryString.parse(location.search)
+  const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = article
   const { pageSize } = pagination
+
+  const nilArticle = {name:'',description:'',catalog:{}}
+
+  const modalProps = {
+    item: modalType === 'create' ? nilArticle : currentItem,
+    visible: modalVisible,
+    maskClosable: false,
+    confirmLoading: loading.effects['article/update'],
+    title: `${modalType === 'create' ? '新建文章' : '编辑文章'}`,
+    wrapClassName: 'vertical-center-modal',
+    onOk (data) {
+      dispatch({
+        type: `article/${modalType}`,
+        payload: data,
+      })
+    },
+    onCancel () {
+      dispatch({
+        type: 'article/hideModal',
+      })
+    },
+  }
 
   const listProps = {
     dataSource: list,
@@ -18,11 +45,11 @@ const Article = ({ location, dispatch, article, loading }) => {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        query: {
+        search: queryString.stringify({
           ...query,
           page: page.current,
           pageSize: page.pageSize,
-        },
+        }),
       }))
     },
     onDeleteItem (id) {
@@ -32,49 +59,77 @@ const Article = ({ location, dispatch, article, loading }) => {
       })
     },
     onEditItem (item) {
-      dispatch(routerRedux.push({
-        pathname: '/content/article/editor/' + item.id,
-      }))
+      dispatch({
+        type: 'article/showModal',
+        payload: {
+          modalType: 'update',
+          currentItem: item,
+        },
+      })
+    },
+    rowSelection: {
+      selectedRowKeys,
+      onChange: (keys) => {
+        dispatch({
+          type: 'article/updateState',
+          payload: {
+            selectedRowKeys: keys,
+          },
+        })
+      },
     },
   }
 
   const filterProps = {
+    selectedRowKeys,
     filter: {
       ...location.query,
     },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        query: {
+        search: queryString.stringify({
           ...value,
           page: 1,
           pageSize,
-        },
+        }),
       }))
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/content/article',
-        query: {
+        pathname: '/article',
+        search: queryString.stringify({
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
-        },
+        }),
       })) : dispatch(routerRedux.push({
-        pathname: '/content/article',
+        pathname: '/article',
       }))
     },
     onAdd () {
-      dispatch(routerRedux.push({
-        pathname: '/content/article/editor',
-      }))
+      dispatch({
+        type: 'article/showModal',
+        payload: {
+          modalType: 'create',
+        },
+      })
+    },
+    onDeleteItems () {
+      dispatch({
+        type: 'article/multiDelete',
+        payload: {
+          ids: selectedRowKeys,
+        },
+      })      
     },
   }
 
   return (
-    <div className="content-inner">
+    <Page inner>
       <Filter {...filterProps} />
       <List {...listProps} />
-    </div>
+      {modalVisible && <Modal {...modalProps} />}
+    </Page>
   )
 }
 

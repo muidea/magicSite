@@ -17,6 +17,14 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/dashboard')],
       component: () => import('./routes/dashboard/'),
     }, {
+      path: '/content/article',
+      models: () => [import('./models/content/article')],
+      component: () => import('./routes/content/article/'),
+    }, {
+      path: '/account/article/:id',
+      models: () => [import('./models/content/article/detail')],
+      component: () => import('./routes/content/article/detail/'),
+    }, {
       path: '/account/user',
       models: () => [import('./models/account/user')],
       component: () => import('./routes/account/user/'),
@@ -28,6 +36,10 @@ const Routers = function ({ history, app }) {
       path: '/account/group',
       models: () => [import('./models/account/group')],
       component: () => import('./routes/account/group/'),
+    }, {
+      path: '/account/group/:id',
+      models: () => [import('./models/account/group/detail')],
+      component: () => import('./routes/account/group/detail/'),
     }, {
       path: '/user',
       models: () => [import('./models/user')],

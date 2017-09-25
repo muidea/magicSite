@@ -21,6 +21,8 @@ module.exports = {
     user: `${APIV1}/user/:id`,
     groups: `${APIV1}/groups`,
     group: `${APIV1}/group/:id`,
+    articles: `${APIV1}/articles`,
+    article: `${APIV1}/article/:id`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
