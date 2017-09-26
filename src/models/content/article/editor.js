@@ -1,3 +1,4 @@
+import pathToRegexp from 'path-to-regexp'
 import { create } from 'services/content/article'
 
 export default {
@@ -5,15 +6,16 @@ export default {
   namespace: 'articleEditor',
 
   state: {
-    article: {},
-    result: {}
+    data: {},
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
+      history.listen(() => {
+      })
     },
   },
- 
+
   effects: {
     *create ({ payload }, { call, put }) {
       Console.log(payload)

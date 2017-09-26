@@ -95,17 +95,6 @@ const Group = ({ location, dispatch, group, loading }) => {
         }),
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/group',
-        search: queryString.stringify({
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        }),
-      })) : dispatch(routerRedux.push({
-        pathname: '/group',
-      }))
-    },
     onAdd () {
       dispatch({
         type: 'group/showModal',

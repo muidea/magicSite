@@ -94,17 +94,6 @@ const User = ({ location, dispatch, user, loading }) => {
         }),
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/user',
-        search: queryString.stringify({
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        }),
-      })) : dispatch(routerRedux.push({
-        pathname: '/user',
-      }))
-    },
     onAdd () {
       dispatch({
         type: 'user/showModal',

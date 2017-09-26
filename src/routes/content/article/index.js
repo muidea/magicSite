@@ -95,24 +95,10 @@ const Article = ({ location, dispatch, article, loading }) => {
         }),
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/article',
-        search: queryString.stringify({
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        }),
-      })) : dispatch(routerRedux.push({
-        pathname: '/article',
-      }))
-    },
     onAdd () {
-      dispatch({
-        type: 'article/showModal',
-        payload: {
-          modalType: 'create',
-        },
-      })
+      dispatch(routerRedux.push({
+        pathname: '/content/article/editor',
+      }))
     },
     onDeleteItems () {
       dispatch({

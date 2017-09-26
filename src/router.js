@@ -21,7 +21,11 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/content/article')],
       component: () => import('./routes/content/article/'),
     }, {
-      path: '/account/article/:id',
+      path: '/content/article/editor',
+      models: () => [import('./models/content/article/editor')],
+      component: () => import('./routes/content/article/editor/'),
+    }, {
+      path: '/content/article/:id',
       models: () => [import('./models/content/article/detail')],
       component: () => import('./routes/content/article/detail/'),
     }, {

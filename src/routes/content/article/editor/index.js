@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal } from 'antd'
+import { connect } from 'dva'
+import styles from './index.less'
+import { Form, Input, Radio } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input;
@@ -8,23 +10,21 @@ const RadioGroup = Radio.Group;
 
 const formItemLayout = {
   labelCol: {
-    span: 4,
+    span: 1,
   },
   wrapperCol: {
-    span: 18,
+    span: 22,
   },
 }
 
-const modal = ({
-  item = {},
-  onOk,
+const Editor = ({ 
+  articleEditor,
   form: {
     getFieldDecorator,
     validateFields,
     getFieldsValue,
-  },
-  ...modalProps
-}) => {
+  }, }) => {
+  const { data } = articleEditor
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -32,23 +32,18 @@ const modal = ({
       }
       const data = {
         ...getFieldsValue(),
-        key: item.key,
+        key: data.key,
       }
-      onOk(data)
+      //onOk(data)
     })
   }
 
-  const modalOpts = {
-    ...modalProps,
-    onOk: handleOk,
-  }
-
-  return (
-    <Modal {...modalOpts}>
-      <Form layout="horizontal">
+  return (<div className="content-inner">
+    <div className={styles.content}>
+    <Form layout="horizontal">
         <FormItem label="标题" hasFeedback {...formItemLayout}>
           {getFieldDecorator('article_title', {
-            initialValue: item.title,
+            initialValue: data.title,
             rules: [
               {
                 required: true,
@@ -59,17 +54,17 @@ const modal = ({
         </FormItem>
         <FormItem label="内容" hasFeedback {...formItemLayout}>
           {getFieldDecorator('article_content', {
-            initialValue: item.content,
+            initialValue: data.content,
             rules: [
               {
                 required: false,
               },
             ],
-          })(<TextArea rows={20} cols={30} />)}
+          })(<TextArea rows={30} cols={30} />)}
         </FormItem>
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
-            initialValue: item.catalog,
+            initialValue: data.catalog,
             rules: [
               {
                 required: true,
@@ -85,15 +80,14 @@ const modal = ({
           )}
         </FormItem>
       </Form>
-    </Modal>
-  )
+    </div>
+  </div>)
 }
 
-modal.propTypes = {
-  form: PropTypes.object.isRequired,
-  type: PropTypes.string,
-  item: PropTypes.object,
-  onOk: PropTypes.func,
+Editor.propTypes = {
+  articleEditor: PropTypes.object,
+  form: PropTypes.object,
+  loading: PropTypes.bool,
 }
 
-export default Form.create()(modal)
+export default connect(({ articleEditor, loading }) => ({ articleEditor, loading: loading.models.articleEditor }))(Form.create()(Editor))
