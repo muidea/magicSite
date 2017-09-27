@@ -84,10 +84,10 @@ const Filter = ({
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 14 }} md={{ span: 24 }}>
+      <Col {...ColProps} xl={{ span: 14 }} md={{ span: 14 }}>
         {getFieldDecorator('name', { initialValue: name })(<Search placeholder="查找分组" size="large" onSearch={handleSubmit} />)}
       </Col>
-      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 24 }} sm={{ span: 24 }}>
+      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 10 }} sm={{ span: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
             <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>

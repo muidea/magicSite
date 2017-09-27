@@ -84,17 +84,17 @@ const Filter = ({
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 8 }} md={{ span: 16 }}>
+      <Col {...ColProps} xl={{ span: 7 }} md={{ span: 7 }}>
         {getFieldDecorator('account', { initialValue: account })(<Search placeholder="查找账号" size="large" onSearch={handleSubmit} />)}
       </Col>
-      <Col {...ColProps} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }}>
+      <Col {...ColProps} xl={{ span: 7 }} md={{ span: 7 }} sm={{ span: 7 }}>
         <FilterItem label="注册时间">
           {getFieldDecorator('createTime', { initialValue: initialCreateTime })(
             <RangePicker style={{ width: '100%' }} size="large" onChange={handleChange.bind(null, 'createTime')} />
           )}
         </FilterItem>
       </Col>
-      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 24 }} sm={{ span: 24 }}>
+      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 10 }} sm={{ span: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
             <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>
