@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import styles from './index.less'
+import { Editor } from 'components'
+import { convertToRaw } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
 import { Row, Form, Input, Checkbox, Button } from 'antd'
+import styles from './index.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input;
@@ -47,11 +50,12 @@ const options = [
   { label: 'Jj', value: 'Jj' },
 ];
 
-const Editor = ({ 
+const ArticleEditor = ({ 
   articleEditor,
   form: {
     getFieldDecorator,
     validateFields,
+    setFieldsValue, 
     getFieldsValue,
   }, }) => {
   const { data } = articleEditor
@@ -62,10 +66,19 @@ const Editor = ({
       }
       const data = {
         ...getFieldsValue(),
-        key: data.key,
       }
+      
+      console.log(data)
       //onOk(data)
     })
+  }
+
+  const onEditorStateChange = (editorContent) => {
+    let content = draftToHtml(convertToRaw(editorContent.getCurrentContent()))
+    setFieldsValue({article_content: content})
+  }
+  const onCheckBoxStateChange = (checkedValues) => {
+    setFieldsValue({article_catalog: checkedValues})
   }
 
   return (<div className="content-inner">
@@ -90,7 +103,16 @@ const Editor = ({
                 required: false,
               },
             ],
-          })(<TextArea rows={30} cols={30} />)}
+          })(<TextArea rows={3} cols={30} style={{ display: 'none' }}/>)}
+          <Editor
+          wrapperStyle={{
+            minHeight: 500,
+          }}
+          editorStyle={{
+            minHeight: 376,
+          }}
+          onEditorStateChange = {onEditorStateChange}
+        />
         </FormItem>
         <FormItem label="分类" hasFeedback {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
@@ -101,21 +123,22 @@ const Editor = ({
                 message: '分类必须选择',
               },
             ],
-          })(<CheckboxGroup options={options} defaultValue={['Pear']}/>)}
+          })(<Input type='hidden'/>)}
+          <CheckboxGroup options={options} onChange={onCheckBoxStateChange}/>
         </FormItem>
         <FormItem {...tailFormItemLayout}>
         <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
-        <Button type="primary" htmlType="submit">提交</Button>
+        <Button type="primary" onClick={handleOk} htmlType="submit">提交</Button>
         </FormItem>
       </Form>
     </div>
   </div>)
 }
 
-Editor.propTypes = {
+ArticleEditor.propTypes = {
   articleEditor: PropTypes.object,
   form: PropTypes.object,
   loading: PropTypes.bool,
 }
 
-export default connect(({ articleEditor, loading }) => ({ articleEditor, loading: loading.models.articleEditor }))(Form.create()(Editor))
+export default connect(({ articleEditor, loading }) => ({ articleEditor, loading: loading.models.articleEditor }))(Form.create()(ArticleEditor))
