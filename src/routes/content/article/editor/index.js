@@ -2,20 +2,50 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import styles from './index.less'
-import { Form, Input, Radio } from 'antd'
+import { Row, Form, Input, Checkbox, Button } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input;
-const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
 
 const formItemLayout = {
   labelCol: {
-    span: 1,
+    span: 2,
   },
   wrapperCol: {
-    span: 22,
+    span: 20,
   },
 }
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 24,
+      offset: 10,
+    },
+  },
+};
+
+const options = [
+  { label: 'Apple', value: 'Apple' },
+  { label: 'Pear', value: 'Pear' },
+  { label: 'Orange', value: 'Orange' },
+  { label: 'Banana', value: 'Banana' },
+  { label: 'Aa', value: 'Aa' },
+  { label: 'Bb', value: 'Bb' },
+  { label: 'Cc', value: 'Cc' },
+  { label: 'Dd', value: 'Dd' },
+  { label: 'Ee', value: 'Ee' },
+  { label: 'Ff', value: 'Ff' },
+  { label: 'Gg', value: 'Gg' },
+  { label: 'Hh', value: 'Hh' },
+  { label: 'Ii', value: 'Ii' },
+  { label: 'Jj', value: 'Jj' },
+];
 
 const Editor = ({ 
   articleEditor,
@@ -71,13 +101,11 @@ const Editor = ({
                 message: '分类必须选择',
               },
             ],
-          })(
-            <RadioGroup>
-            <Radio value={1}>注册用户</Radio>
-            <Radio value={2}>特权用户</Radio>
-            <Radio value={3}>系统管理员</Radio>
-            </RadioGroup>
-          )}
+          })(<CheckboxGroup options={options} defaultValue={['Pear']}/>)}
+        </FormItem>
+        <FormItem {...tailFormItemLayout}>
+        <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
+        <Button type="primary" htmlType="submit">提交</Button>
         </FormItem>
       </Form>
     </div>
