@@ -4,12 +4,22 @@ const config = require('../utils/config')
 
 const { apiPrefix } = config
 
-const catalogList = [{id:1, name:'Linux'}, {id:2, name:'Go'}, {id:3, name:'Cloud'}]
+const catalogList = [{id:1, name:'Linux'}, {id:2, name:'Go'}, {id:3, name:'Cloud'}, {id:4, name:'Devlop'}, {id:5, name:'Test'}]
 const authorList = [{id:0, name:'admin'}, {id:1, name:'guest'}, {id:2, name:'wyz'}]
 
 Mock.Random.extend({
   catalogInfo: function(date) {
       return this.pick(catalogList)
+  },
+
+  catalogArray: function(date) {
+    let first = this.pick(catalogList)
+    let second = this.pick(catalogList)
+    while ( first.id == second.id) {
+      second = this.pick(catalogList)
+    }
+
+    return new Array(first, second)
   },
 
   authorInfo: function(date) {
@@ -23,7 +33,7 @@ let articlesListData = Mock.mock({
       id: '@id',
       title: '@ctitle(5,10)',
       content:'@ctitle(50,200)',
-      catalog() {return Mock.Random.catalogInfo()},
+      catalog() {return Mock.Random.catalogArray()},
       author() {return Mock.Random.authorInfo()},
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.title.substr(0, 1))
@@ -58,11 +68,13 @@ const selectArray = (array, key, keyAlias = 'key') => {
   if (!(array instanceof Array)) {
     return null
   }
-  let data
+  let data = new Array()
 
   for (let item of array) {
-    if (item[keyAlias] === key) {
-      data[keyAlias] = item
+    for ( let idx of key) {
+      if (item[keyAlias] === parseInt(idx)) {
+        data.unshift(item)
+      }  
     }
   }
 

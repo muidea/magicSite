@@ -34,23 +34,14 @@ const tailFormItemLayout = {
 };
 
 const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-  { label: 'Banana', value: 'Banana' },
-  { label: 'Aa', value: 'Aa' },
-  { label: 'Bb', value: 'Bb' },
-  { label: 'Cc', value: 'Cc' },
-  { label: 'Dd', value: 'Dd' },
-  { label: 'Ee', value: 'Ee' },
-  { label: 'Ff', value: 'Ff' },
-  { label: 'Gg', value: 'Gg' },
-  { label: 'Hh', value: 'Hh' },
-  { label: 'Ii', value: 'Ii' },
-  { label: 'Jj', value: 'Jj' },
+  { label: 'Linux', value: '1' },
+  { label: 'Go', value: '2' },
+  { label: 'Cloud', value: '3' },
 ];
 
 const ArticleEditor = ({ 
+  location, 
+  dispatch, 
   articleEditor,
   form: {
     getFieldDecorator,
@@ -68,8 +59,10 @@ const ArticleEditor = ({
         ...getFieldsValue(),
       }
       
-      console.log(data)
-      //onOk(data)
+      dispatch({
+        type: `articleEditor/create`,
+        payload: data,
+      })
     })
   }
 
@@ -84,7 +77,7 @@ const ArticleEditor = ({
   return (<div className="content-inner">
     <div className={styles.content}>
     <Form layout="horizontal">
-        <FormItem label="标题" hasFeedback {...formItemLayout}>
+        <FormItem label="标题" {...formItemLayout}>
           {getFieldDecorator('article_title', {
             initialValue: data.title,
             rules: [
@@ -95,7 +88,7 @@ const ArticleEditor = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="内容" hasFeedback {...formItemLayout}>
+        <FormItem label="内容" {...formItemLayout}>
           {getFieldDecorator('article_content', {
             initialValue: data.content,
             rules: [
@@ -114,7 +107,7 @@ const ArticleEditor = ({
           onEditorStateChange = {onEditorStateChange}
         />
         </FormItem>
-        <FormItem label="分类" hasFeedback {...formItemLayout}>
+        <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
             initialValue: data.catalog,
             rules: [
@@ -136,6 +129,8 @@ const ArticleEditor = ({
 }
 
 ArticleEditor.propTypes = {
+  location: PropTypes.object,
+  dispatch: PropTypes.func,  
   articleEditor: PropTypes.object,
   form: PropTypes.object,
   loading: PropTypes.bool,

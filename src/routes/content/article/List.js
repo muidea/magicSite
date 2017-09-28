@@ -39,7 +39,15 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
-      render: (text, record) => <span>{record.catalog.name}</span>,
+      render: (text, record) => {
+        let catalogVal = ''
+        for ( let item of record.catalog ) {
+          catalogVal += item.name
+          catalogVal += ', '
+        }
+
+        return <span>{catalogVal}</span>
+      },
     }, {
       title: '作者',
       dataIndex: 'author',

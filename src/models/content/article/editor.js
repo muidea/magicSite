@@ -1,4 +1,4 @@
-import pathToRegexp from 'path-to-regexp'
+import { routerRedux } from 'dva/router'
 import { create } from 'services/content/article'
 
 export default {
@@ -18,26 +18,27 @@ export default {
 
   effects: {
     *create ({ payload }, { call, put }) {
-      Console.log(payload)
       const data = yield call(create, payload)
       if (data.success) {
-        yield put({
-          type: 'createSuccess',
-          payload: { result: data } 
-        })
+        yield put(routerRedux.push('/content/article'))
       } else {
         throw data
       }
     },
+
+    * update ({ payload }, { select, call, put }) {
+      const id = yield select(({ articleEditor }) => articleEditor.currentItem.id)
+      const newUser = { ...payload, id }
+      const data = yield call(update, newUser)
+      if (data.success) {
+        yield put({ type: 'hideModal' })
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },    
   },
 
   reducers: {
-    createSuccess (state, { payload }) {
-      const { data } = payload
-      return {
-        ...state,
-        data,
-      }
-    },
   },
 }

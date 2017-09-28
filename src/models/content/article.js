@@ -72,16 +72,6 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * create ({ payload }, { call, put }) {
-      const data = yield call(create, payload)
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
-    },
-
     * update ({ payload }, { select, call, put }) {
       const id = yield select(({ article }) => article.currentItem.id)
       const newUser = { ...payload, id }
