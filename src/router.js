@@ -21,11 +21,15 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/content/article')],
       component: () => import('./routes/content/article/'),
     }, {
-      path: '/content/article/editor',
+      path: '/content/article/add',
       models: () => [import('./models/content/article/editor')],
       component: () => import('./routes/content/article/editor/'),
     }, {
-      path: '/content/article/:id',
+      path: '/content/article/edit/:id',
+      models: () => [import('./models/content/article/editor')],
+      component: () => import('./routes/content/article/editor/'),
+    }, {
+      path: '/content/article/view/:id',
       models: () => [import('./models/content/article/detail')],
       component: () => import('./routes/content/article/detail/'),
     }, {

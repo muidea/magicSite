@@ -7,34 +7,11 @@ import { Page } from 'components'
 import queryString from 'query-string'
 import List from './List'
 import Filter from './Filter'
-import Modal from './Modal'
 
 const Article = ({ location, dispatch, article, loading }) => {
   location.query = queryString.parse(location.search)
   const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = article
   const { pageSize } = pagination
-
-  const nilArticle = {name:'',description:'',catalog:{}}
-
-  const modalProps = {
-    item: modalType === 'create' ? nilArticle : currentItem,
-    visible: modalVisible,
-    maskClosable: false,
-    confirmLoading: loading.effects['article/update'],
-    title: `${modalType === 'create' ? '新建文章' : '编辑文章'}`,
-    wrapClassName: 'vertical-center-modal',
-    onOk (data) {
-      dispatch({
-        type: `article/${modalType}`,
-        payload: data,
-      })
-    },
-    onCancel () {
-      dispatch({
-        type: 'article/hideModal',
-      })
-    },
-  }
 
   const listProps = {
     dataSource: list,
@@ -59,13 +36,10 @@ const Article = ({ location, dispatch, article, loading }) => {
       })
     },
     onEditItem (item) {
-      dispatch({
-        type: 'article/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
-      })
+      let editURL = '/content/article/edit/' + item.id
+      dispatch(routerRedux.push({
+        pathname: editURL,
+      }))      
     },
     rowSelection: {
       selectedRowKeys,
@@ -86,6 +60,7 @@ const Article = ({ location, dispatch, article, loading }) => {
       ...location.query,
     },
     onFilterChange (value) {
+      console.log(value)
       dispatch(routerRedux.push({
         pathname: location.pathname,
         search: queryString.stringify({
@@ -97,7 +72,7 @@ const Article = ({ location, dispatch, article, loading }) => {
     },
     onAdd () {
       dispatch(routerRedux.push({
-        pathname: '/content/article/editor',
+        pathname: '/content/article/add',
       }))
     },
     onDeleteItems () {
@@ -114,7 +89,6 @@ const Article = ({ location, dispatch, article, loading }) => {
     <Page inner>
       <Filter {...filterProps} />
       <List {...listProps} />
-      {modalVisible && <Modal {...modalProps} />}
     </Page>
   )
 }

@@ -33,10 +33,6 @@ const Filter = ({
   },
 }) => {
   const handleFields = (fields) => {
-    const { createTime } = fields
-    if (createTime.length) {
-      fields.createTime = [createTime[0].format('YYYY-MM-DD'), createTime[1].format('YYYY-MM-DD')]
-    }
     return fields
   }
 

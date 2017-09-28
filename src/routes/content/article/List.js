@@ -34,7 +34,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
-      render: (text, record) => <Link to={`/content/article/${record.id}`}>{text}</Link>,
+      render: (text, record) => <Link to={`/content/article/view/${record.id}`}>{text}</Link>,
     }, {
       title: '分类',
       dataIndex: 'catalog',

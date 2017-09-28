@@ -11,7 +11,6 @@ export async function query (params) {
 }
 
 export async function create (params) {
-  console.log(params)
   return request({
     url: article.replace('/:id', ''),
     method: 'post',
