@@ -13,10 +13,10 @@ const CheckboxGroup = Checkbox.Group;
 
 const formItemLayout = {
   labelCol: {
-    span: 2,
+    span: 1,
   },
   wrapperCol: {
-    span: 20,
+    span: 22,
   },
 }
 

@@ -16,12 +16,25 @@ export default {
         const match = pathToRegexp('/content/article/edit/:id').exec(location.pathname)
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
-        }        
+        } else {
+          dispatch({ type: 'reset', payload: {} })
+        }
       })
     },
   },
 
   effects: {
+    *reset ({
+      payload,
+    }, { put }) {
+      yield put({
+        type: 'querySuccess',
+        payload: {
+          data: payload,
+        },
+      })
+    },
+
     *query ({
       payload,
     }, { call, put }) {
@@ -37,7 +50,8 @@ export default {
       } else {
         throw data
       }
-    },    
+    },
+
     *create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
       if (data.success) {
