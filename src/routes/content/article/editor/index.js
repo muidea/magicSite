@@ -33,12 +33,6 @@ const tailFormItemLayout = {
   },
 };
 
-const options = [
-  { label: 'Linux', value: '1' },
-  { label: 'Go', value: '2' },
-  { label: 'Cloud', value: '3' },
-];
-
 const ArticleEditor = ({ 
   location, 
   dispatch, 
@@ -49,7 +43,8 @@ const ArticleEditor = ({
     setFieldsValue, 
     getFieldsValue,
   }, }) => {
-  const { data } = articleEditor
+  const { article, catalogs } = articleEditor
+  const { catalog } = article
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -79,7 +74,7 @@ const ArticleEditor = ({
     <Form layout="horizontal">
         <FormItem label="标题" {...formItemLayout}>
           {getFieldDecorator('article_title', {
-            initialValue: data.title,
+            initialValue: article.title,
             rules: [
               {
                 required: true,
@@ -90,7 +85,7 @@ const ArticleEditor = ({
         </FormItem>
         <FormItem label="内容" {...formItemLayout}>
           {getFieldDecorator('article_content', {
-            initialValue: data.content,
+            initialValue: article.content,
             rules: [
               {
                 required: false,
@@ -109,15 +104,15 @@ const ArticleEditor = ({
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
-            initialValue: data.catalog,
+            initialValue: article.catalog,
             rules: [
               {
                 required: true,
                 message: '分类必须选择',
               },
             ],
-          })(<Input type='hidden'/>)}
-          <CheckboxGroup options={options} onChange={onCheckBoxStateChange}/>
+          })(<Input />)}
+          <CheckboxGroup options={catalogs} defaultValue={[...catalog]} onChange={onCheckBoxStateChange}/>
         </FormItem>
         <FormItem {...tailFormItemLayout}>
         <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>

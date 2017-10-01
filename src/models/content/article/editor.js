@@ -7,7 +7,8 @@ export default {
   namespace: 'articleEditor',
 
   state: {
-    data: {},
+    article: {catalog:[],},
+    catalogs: [],
   },
 
   subscriptions: {
@@ -17,7 +18,7 @@ export default {
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
         } else {
-          dispatch({ type: 'reset', payload: {} })
+          dispatch({ type: 'reset', payload: { article:{catalog:[],}, catalogs:[] } })
         }
       })
     },
@@ -30,7 +31,7 @@ export default {
       yield put({
         type: 'querySuccess',
         payload: {
-          data: payload,
+          ...payload
         },
       })
     },
@@ -39,12 +40,13 @@ export default {
       payload,
     }, { call, put }) {
       const data = yield call(query, payload)
-      const { success, message, status, ...other } = data
+      const { success, message, status, article, catalogList } = data
       if (success) {
         yield put({
           type: 'querySuccess',
           payload: {
-            data: other,
+            article,
+            catalogList
           },
         })
       } else {
@@ -76,10 +78,17 @@ export default {
 
   reducers: {
     querySuccess (state, { payload }) {
-      const { data } = payload
+      const { article, catalogList } = payload
+      let catalogArray = new Array()
+      if (catalogList) {
+        for (let item of catalogList) {
+          catalogArray.unshift({value: item.id.toString(), label: item.name})
+        }
+      }
       return {
         ...state,
-        data,
+        article,
+        catalogs: catalogArray,
       }
     },    
   },

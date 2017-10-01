@@ -138,7 +138,12 @@ module.exports = {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
-      res.status(200).json(data)
+      let catalog = new Array()
+      for ( let item of data.catalog ) {
+        catalog.unshift(item.id.toString())
+      }
+      const result = {article: {...data, catalog}, catalogList}
+      res.status(200).json(result)
     } else {
       res.status(404).json(NOTFOUND)
     }
