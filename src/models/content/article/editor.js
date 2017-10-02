@@ -82,7 +82,7 @@ export default {
       let catalogArray = new Array()
       if (catalogList) {
         for (let item of catalogList) {
-          catalogArray.unshift({value: item.id.toString(), label: item.name})
+          catalogArray.unshift({value: item.id, label: item.name})
         }
       }
       return {

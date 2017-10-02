@@ -140,7 +140,7 @@ module.exports = {
     if (data) {
       let catalog = new Array()
       for ( let item of data.catalog ) {
-        catalog.unshift(item.id.toString())
+        catalog.unshift(item.id)
       }
       const result = {article: {...data, catalog}, catalogList}
       res.status(200).json(result)

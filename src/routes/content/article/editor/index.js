@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Editor } from 'components'
-import { convertToRaw } from 'draft-js'
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html'
 import { Row, Form, Input, Checkbox, Button } from 'antd'
 import styles from './index.less'
@@ -44,7 +44,6 @@ const ArticleEditor = ({
     getFieldsValue,
   }, }) => {
   const { article, catalogs } = articleEditor
-  const { catalog } = article
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -66,6 +65,7 @@ const ArticleEditor = ({
     setFieldsValue({article_content: content})
   }
   const onCheckBoxStateChange = (checkedValues) => {
+
     setFieldsValue({article_catalog: checkedValues})
   }
 
@@ -112,7 +112,7 @@ const ArticleEditor = ({
               },
             ],
           })(<Input />)}
-          <CheckboxGroup options={catalogs} defaultValue={[...catalog]} onChange={onCheckBoxStateChange}/>
+          <CheckboxGroup options={catalogs} value={article.catalog} onChange={onCheckBoxStateChange}/>
         </FormItem>
         <FormItem {...tailFormItemLayout}>
         <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
@@ -122,6 +122,7 @@ const ArticleEditor = ({
     </div>
   </div>)
 }
+
 
 ArticleEditor.propTypes = {
   location: PropTypes.object,
