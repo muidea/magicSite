@@ -57,6 +57,14 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/user/detail')],
       component: () => import('./routes/user/detail/'),
     }, {
+      path: '/authority/acl',
+      models: () => [import('./models/authority/acl')],
+      component: () => import('./routes/authority/acl/'),
+    }, {
+      path: '/authority/module',
+      models: () => [import('./models/authority/module')],
+      component: () => import('./routes/authority/module/'),
+    }, {
       path: '/login',
       models: () => [import('./models/login')],
       component: () => import('./routes/login/'),
