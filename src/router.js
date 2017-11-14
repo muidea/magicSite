@@ -65,6 +65,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/authority/module')],
       component: () => import('./routes/authority/module/'),
     }, {
+      path: '/system/config',
+      models: () => [import('./models/system/config')],
+      component: () => import('./routes/system/config/'),
+    }, {
       path: '/login',
       models: () => [import('./models/login')],
       component: () => import('./routes/login/'),

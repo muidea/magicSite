@@ -31,22 +31,17 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       className: styles.avatar,
       render: (text) => <img alt={'avatar'} width={24} src={text} />,
     }, {
-      title: '账号',
-      dataIndex: 'account',
-      key: 'account',
-      render: (text, record) => <Link to={`/account/user/${record.id}`}>{text}</Link>,
+      title: '模块ID',
+      dataIndex: 'id',
+      key: 'id',
     }, {
-      title: '昵称',
+      title: '模块名称',
       dataIndex: 'name',
       key: 'name',
     }, {
-      title: '邮箱',
-      dataIndex: 'email',
-      key: 'email',
-    }, {
-      title: '注册时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      title: '模块描述',
+      dataIndex: 'description',
+      key: 'description',
     }, {
       title: '操作',
       key: 'operation',

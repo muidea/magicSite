@@ -160,7 +160,14 @@ let database = [
     bpid: '1',
     name: '系统设置',
     icon: 'setting',
-    route: '/user',
+  },
+  {
+    id: '51',
+    bpid: '5',
+    mpid: '5',
+    name: '基本信息',
+    icon: 'info-circle-o',
+    route: '/system/config',
   },
   {
     id: '6',
