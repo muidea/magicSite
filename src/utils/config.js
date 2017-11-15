@@ -23,6 +23,7 @@ module.exports = {
     group: `${APIV1}/group/:id`,
     articles: `${APIV1}/articles`,
     article: `${APIV1}/article/:id`,
+    systemInfo: `${APIV1}/system/config/`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,

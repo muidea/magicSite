@@ -167,7 +167,7 @@ let database = [
     mpid: '5',
     name: '基本信息',
     icon: 'info-circle-o',
-    route: '/system/config',
+    route: '/system/info',
   },
   {
     id: '6',
