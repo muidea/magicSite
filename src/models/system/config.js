@@ -2,7 +2,7 @@ import { routerRedux } from 'dva/router'
 import { parse } from 'qs'
 import config from 'config'
 import queryString from 'query-string'
-import { querySystemInfo } from 'services/system/config'
+import { querySystemInfo, updateSystemInfo } from 'services/system/config'
 
 const { prefix } = config
 
@@ -10,6 +10,7 @@ export default {
   namespace: 'config',
   state: {
     modalVisible: false,
+    modalType: 'updateSite',
     systemInfo: {
     },
   },
@@ -46,7 +47,22 @@ export default {
     },
 
   * updateSystemInfo ({ payload }, { call, put }) {
-    },
+    const data = yield call(updateSystemInfo, payload)
+    const { success, message, status, ...other } = data
+    
+    if (success) {
+      yield put({
+        type: 'refreshSystemInfo',
+        payload: other,
+      })
+      yield put({
+        type: 'hideModal'
+      })
+
+    } else {
+      throw data
+    }    
+  },
 
   },
 

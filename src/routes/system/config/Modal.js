@@ -16,6 +16,7 @@ const formItemLayout = {
 
 const modal = ({
   item = {},
+  type, 
   onOk,
   form: {
     getFieldDecorator,
@@ -45,6 +46,7 @@ const modal = ({
 
   return (
     <Modal {...modalOpts}>
+    { type=="updateSite" && 
       <Form layout="horizontal">
         <FormItem label="名称" {...formItemLayout}>
           {getFieldDecorator('site-name', {
@@ -77,6 +79,41 @@ const modal = ({
           })(<TextArea rows={5} cols={10} />)}
         </FormItem>
       </Form>
+    }
+    { type=="updateSystem" && 
+      <Form layout="horizontal">
+        <FormItem label="邮件服务器" {...formItemLayout}>
+          {getFieldDecorator('email-server', {
+            initialValue: item.emailServer,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="邮件账号" {...formItemLayout}>
+          {getFieldDecorator('email-account', {
+            initialValue: item.emailAccount,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="账号密码" {...formItemLayout}>
+          {getFieldDecorator('email-password', {
+            initialValue: item.emailPassword,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(<Input type="password" />)}
+        </FormItem>
+      </Form>
+    }    
     </Modal>
   )
 }

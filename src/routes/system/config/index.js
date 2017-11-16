@@ -18,17 +18,21 @@ const ColProps = {
 
 const Config = ({ location, dispatch, config, loading }) => {
   location.query = queryString.parse(location.search)
-  const { modalVisible, systemInfo } = config
+  const { modalVisible, modalType, systemInfo } = config
   const { siteName, siteDomain, siteDescription, emailServer, emailAccount, emailPassword } = systemInfo
 
   const modalProps = {
     item: systemInfo,
+    type: modalType,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['config/updateSystemInfo'],
-    title: `站点信息`,
+    title: `${modalType === 'updateSite' ? '站点信息' : '系统信息'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
+      dispatch({
+        type: 'config/updateSystemInfo',
+        payload: data,
+      })
     },
     onCancel () {
       dispatch({
@@ -40,28 +44,32 @@ const Config = ({ location, dispatch, config, loading }) => {
   const onSiteInfoSetting = () => {
     dispatch({
       type: 'config/showModal',
-      payload: { },
+      payload: {
+        modalType: 'updateSite',
+      },
     })
   }
 
   const onSystemInfoSetting = () => {
     dispatch({
       type: 'config/showModal',
-      payload: { },
+      payload: {
+        modalType: 'updateSystem',
+      },
     })
   }
 
   return (
     <Page inner>
-    <Card title="站点信息" bordered={true} extra={<Button onClick={onSiteInfoSetting}>设置</Button>}>
+    <Card title="站点信息" bordered={true} extra={<Button type="primary" onClick={onSiteInfoSetting}>设置</Button>}>
       <Row gutter={20}><Col {...ColProps}>名称：{siteName}</Col></Row>
       <Row gutter={20}><Col {...ColProps}>域名：{siteDomain}</Col></Row>
       <Row gutter={20}><Col {...ColProps}>描述：</Col></Row>
       <Row gutter={20}><Col {...ColProps}>{siteDescription}</Col></Row>
     </Card>
-    <Card title="系统信息" bordered={true} extra={<Button onClick={onSystemInfoSetting}>设置</Button>}>
+    <Card title="系统信息" bordered={true} extra={<Button type="primary" onClick={onSystemInfoSetting}>设置</Button>}>
       <Row gutter={20}><Col {...ColProps}>邮件服务器：{emailServer}</Col></Row>
-      <Row gutter={20}><Col {...ColProps}>邮件账号：{emailAccount}</Col><Col>邮件密码：{emailPassword}</Col></Row>
+      <Row gutter={20}><Col {...ColProps}>邮件账号：{emailAccount}</Col><Col>账号密码：{emailPassword}</Col></Row>
     </Card>
     {modalVisible && <Modal {...modalProps} />}
     </Page>

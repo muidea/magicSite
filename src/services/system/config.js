@@ -10,7 +10,12 @@ export async function querySystemInfo (params) {
     })
 }
 
-export async function create (params) {
+export async function updateSystemInfo (params) {
+    return request({
+        url: systemInfo,
+        method: 'put',
+        data: params,
+    })
 }
 
 export async function remove (params) {
