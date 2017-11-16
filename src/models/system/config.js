@@ -9,9 +9,9 @@ const { prefix } = config
 export default {
   namespace: 'config',
   state: {
+    modalVisible: false,
     systemInfo: {
     },
-
   },
 
   subscriptions: {
@@ -34,10 +34,10 @@ export default {
     }, { call, put }) {
       const data = yield call(querySystemInfo, payload)
       const { success, message, status, ...other } = data
-
+      
       if (success) {
         yield put({
-          type: 'updateSystemInfo',
+          type: 'refreshSystemInfo',
           payload: other,
         })
       } else {
@@ -45,16 +45,27 @@ export default {
       }
     },
 
+  * updateSystemInfo ({ payload }, { call, put }) {
+    },
+
   },
 
   reducers: {
-    updateSystemInfo (state, { payload } ) {
+    refreshSystemInfo (state, { payload } ) {
       const { systemInfo } = payload
 
       return {
         ...state,
-        systemInfo,
+        systemInfo: systemInfo,
       }
+    },
+
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
+    },
+
+    hideModal (state) {
+      return { ...state, modalVisible: false }
     },
 
   },
