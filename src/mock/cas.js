@@ -12,13 +12,16 @@ const EnumRoleType = {
 
 const userPermission = {
   DEFAULT: {
-    visit: ['1', '5', '6', '7', '71', '72', '73', '74'],
+    visit: ['1', '5', '6','61', '7', '8', '9', '91', '92','93','94','95','96', '10', '101', '11' ],
+    module:['common','content'],
     role: EnumRoleType.DEFAULT,
   },
   ADMIN: {
+    module:['common','system','content','account','authority'],
     role: EnumRoleType.ADMIN,
   },
   DEVELOPER: {
+    module:['common','system','content','account'],
     role: EnumRoleType.DEVELOPER,
   },
 }
@@ -42,7 +45,7 @@ const adminUsers = [
     id: 2,
     account: 'wyz',
     name: '吴彦祖',
-    password: '123456',
+    password: 'wyz',
     email: 'wyz@test.com',
     permissions: userPermission.DEVELOPER,
   },

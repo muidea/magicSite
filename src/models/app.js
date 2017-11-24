@@ -62,8 +62,8 @@ export default {
     },
 
   },
+  
   effects: {
-
     * query ({
       payload,
     }, { call, put, select }) {
@@ -85,19 +85,37 @@ export default {
             return cases.every(_ => _)
           })
         }
-        yield put({
+
+      let avalibleMenu = new Array()
+      let avalible = false
+      menu.forEach((value, index, menu) => {
+        if (value.module) {
+          if (Permissions.module.some((val)=>{ return val == value.module })) {
+            avalibleMenu.push(value)
+            avalible = true  
+          } else {
+            avalible = false
+          }
+        } else if (avalible) {
+          avalibleMenu.push(value)
+        } else {
+        }
+      });
+      menu = avalibleMenu
+
+       yield put({
           type: 'updateState',
           payload: {
             accountInfo: AccountInfo,
             permissions: Permissions,
             menu,
           },
-        })
-        if (location.pathname === '/login') {
-          yield put(routerRedux.push({
+       })
+       if (location.pathname === '/login') {
+         yield put(routerRedux.push({
             pathname: '/dashboard',
-          }))
-        }
+         }))
+       }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({
           pathname: '/login',
@@ -128,6 +146,7 @@ export default {
     },
 
   },
+
   reducers: {
     updateState (state, { payload }) {
       return {

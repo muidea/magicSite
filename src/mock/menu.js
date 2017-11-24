@@ -6,6 +6,7 @@ let database = [
     id: '1',
     icon: 'laptop',
     name: '主页',
+    module: 'common',
     route: '/dashboard',
   },
   {
@@ -13,6 +14,7 @@ let database = [
     bpid: '1',
     name: '内容管理',
     icon: 'appstore-o',
+    module: 'content',
     route: '/content',
   },
   {
@@ -99,6 +101,7 @@ let database = [
     id: '3',
     bpid: '1',
     name: '账号管理',
+    module: 'account',
     icon: 'team',
   },
   {
@@ -137,6 +140,7 @@ let database = [
     id: '4',
     bpid: '1',
     name: '权限管理',
+    module: 'authority',
     icon: 'select',
   },
   {
@@ -156,9 +160,18 @@ let database = [
     route: '/authority/module',
   },
   {
+    id: '43',
+    bpid: '4',
+    mpid: '4',
+    name: '用户管理',
+    icon: 'user',
+    route: '/authority/user',
+  },  
+  {
     id: '5',
     bpid: '1',
     name: '系统设置',
+    module: 'system',
     icon: 'setting',
   },
   {
@@ -174,6 +187,7 @@ let database = [
     bpid: '1',
     name: 'Users',
     icon: 'user',
+    module: 'common',
     route: '/user',
   },
   {
@@ -188,6 +202,7 @@ let database = [
     bpid: '1',
     name: 'Posts',
     icon: 'shopping-cart',
+    module: 'common',
     route: '/post',
   },
   {
@@ -195,12 +210,14 @@ let database = [
     bpid: '1',
     name: 'Request',
     icon: 'api',
+    module: 'common',
     route: '/request',
   },
   {
     id: '9',
     bpid: '1',
     name: 'UI Element',
+    module: 'common',
     icon: 'camera-o',
   },
   {
@@ -255,6 +272,7 @@ let database = [
     id: '10',
     bpid: '1',
     name: 'Recharts',
+    module: 'common',
     icon: 'code-o',
   },
   {
@@ -285,6 +303,7 @@ let database = [
     id: '11',
     bpid: '1',
     name: 'Test Navigation',
+    module: 'common',
     icon: 'setting',
   },
   {
