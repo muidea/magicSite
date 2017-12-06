@@ -19,7 +19,7 @@ export async function logout (params) {
   })
 }
 
-export async function query (params) {
+export async function queryStatus (params) {
   return request({
     url: userInfo,
     method: 'get',

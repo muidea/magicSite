@@ -5,7 +5,7 @@ import { routerRedux } from 'dva/router'
 import { parse } from 'qs'
 import config from 'config'
 import { EnumRoleType } from 'enums'
-import { query, logout } from 'services/app'
+import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
 import queryString from 'query-string'
 
@@ -14,8 +14,8 @@ const { prefix } = config
 export default {
   namespace: 'app',
   state: {
-    sessionID: '',
-    authToken: '',
+    sessionID: window.localStorage.getItem(`${prefix}SessionID`),
+    authToken: window.localStorage.getItem(`${prefix}AuthToken`),
     accountInfo: {},
     permissions: {
       visit: [],
@@ -68,10 +68,10 @@ export default {
       payload,
     }, { call, put, select }) {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
-      const { ErrCode, AccountInfo } = yield call(query, { sessionID, authToken, ...payload })
-      if (ErrCode == 0 && AccountInfo) {
+      const { errorCode, accountInfo } = yield call(queryStatus, { sessionID, authToken, ...payload })
+      if (errorCode == 0 && accountInfo) {
         const { list } = yield call(menusService.query)
-        const { Permissions } = AccountInfo
+        const { Permissions } = accountInfo
         let menu = list
         if (Permissions.role === EnumRoleType.ADMIN || Permissions.role === EnumRoleType.DEVELOPER) {
           Permissions.visit = list.map(item => item.id)
@@ -86,27 +86,27 @@ export default {
           })
         }
 
-      let avalibleMenu = new Array()
+      let availableMenu = new Array()
       let avalible = false
       menu.forEach((value, index, menu) => {
         if (value.module) {
           if (Permissions.module.some((val)=>{ return val == value.module })) {
-            avalibleMenu.push(value)
+            availableMenu.push(value)
             avalible = true  
           } else {
             avalible = false
           }
         } else if (avalible) {
-          avalibleMenu.push(value)
+          availableMenu.push(value)
         } else {
         }
       });
-      menu = avalibleMenu
+      menu = availableMenu
 
        yield put({
           type: 'updateState',
           payload: {
-            accountInfo: AccountInfo,
+            accountInfo: accountInfo,
             permissions: Permissions,
             menu,
           },
@@ -128,9 +128,11 @@ export default {
 
     * logout ({
       payload,
-    }, { call, put }) {
-      const data = yield call(logout, parse(payload))
+    }, { call, put, select }) {
+      const { sessionID, authToken } = yield select(_ => _.app)
+      const data = yield call(logout, { sessionID, authToken, ...payload })
       if (data.success) {
+        yield put({ type: 'clearStatus' })
         yield put({ type: 'query' })
       } else {
         throw (data)
@@ -148,10 +150,33 @@ export default {
   },
 
   reducers: {
+
     updateState (state, { payload }) {
+      const {sessionID, authToken} = payload
+
+      if (sessionID && authToken) {
+        window.localStorage.setItem(`${prefix}SessionID`, sessionID)
+        window.localStorage.setItem(`${prefix}AuthToken`, authToken)  
+      }
+      
       return {
         ...state,
         ...payload,
+      }
+    },
+
+    clearStatus(state) {
+      window.localStorage.removeItem(`${prefix}SessionID`)
+      window.localStorage.removeItem(`${prefix}AuthToken`)
+      
+      return {
+        ...state,
+        sessionID: '',
+        authToken: '',
+        accountInfo: {},
+        permissions: {
+          visit: [],
+        },        
       }
     },
 

@@ -11,14 +11,14 @@ export default {
       payload,
     }, { put, call, select }) {
       const data = yield call(login, payload)
-      const { ErrCode, SessionID, AuthToken } = data
+      const { errorCode, sessionID, authToken } = data
       const { locationQuery } = yield select(_ => _.app)
-      if (ErrCode == 0) { 
+      if (errorCode == 0) { 
         yield put({ 
           type: 'app/updateState',
           payload: {
-            sessionID: SessionID,
-            authToken: AuthToken,
+            sessionID: sessionID,
+            authToken: authToken,
           }, })
         const { from } = locationQuery
         yield put({ type: 'app/query' })

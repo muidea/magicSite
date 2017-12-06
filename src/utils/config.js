@@ -3,7 +3,7 @@ const APIV2 = '/api/v2'
 
 module.exports = {
   name: 'MagicCenter',
-  prefix: 'magicAdmin',
+  prefix: 'magicCenter',
   footerText: 'MagicCenter © 2017 muidea.com',
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
