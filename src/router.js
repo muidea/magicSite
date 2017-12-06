@@ -72,41 +72,7 @@ const Routers = function ({ history, app }) {
       path: '/login',
       models: () => [import('./models/login')],
       component: () => import('./routes/login/'),
-    }, {
-      path: '/request',
-      component: () => import('./routes/request/'),
-    }, {
-      path: '/UIElement/iconfont',
-      component: () => import('./routes/UIElement/iconfont/'),
-    }, {
-      path: '/UIElement/search',
-      component: () => import('./routes/UIElement/search/'),
-    }, {
-      path: '/UIElement/dropOption',
-      component: () => import('./routes/UIElement/dropOption/'),
-    }, {
-      path: '/UIElement/layer',
-      component: () => import('./routes/UIElement/layer/'),
-    }, {
-      path: '/UIElement/dataTable',
-      component: () => import('./routes/UIElement/dataTable/'),
-    }, {
-      path: '/UIElement/editor',
-      component: () => import('./routes/UIElement/editor/'),
-    }, {
-      path: '/chart/lineChart',
-      component: () => import('./routes/chart/lineChart/'),
-    }, {
-      path: '/chart/barChart',
-      component: () => import('./routes/chart/barChart/'),
-    }, {
-      path: '/chart/areaChart',
-      component: () => import('./routes/chart/areaChart/'),
-    }, {
-      path: '/post',
-      models: () => [import('./models/post')],
-      component: () => import('./routes/post/'),
-    },
+    }, 
   ]
 
   return (
