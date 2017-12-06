@@ -5,7 +5,6 @@ import jsonp from 'jsonp'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
-import { YQL, CORS } from './config'
 
 const fetch = (options) => {
   let {
@@ -48,9 +47,6 @@ const fetch = (options) => {
         resolve({ statusText: 'OK', status: 200, data: result })
       })
     })
-  } else if (fetchType === 'YQL') {
-    url = `http://query.yahooapis.com/v1/public/yql?q=select * from json where url='${options.url}?${encodeURIComponent(qs.stringify(options.data))}'&format=json`
-    data = null
   }
 
   switch (method.toLowerCase()) {
@@ -77,19 +73,13 @@ export default function request (options) {
   if (options.url && options.url.indexOf('//') > -1) {
     const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`
     if (window.location.origin !== origin) {
-      if (CORS && CORS.indexOf(origin) > -1) {
-        options.fetchType = 'CORS'
-      } else if (YQL && YQL.indexOf(origin) > -1) {
-        options.fetchType = 'YQL'
-      } else {
         options.fetchType = 'JSONP'
-      }
     }
   }
 
   return fetch(options).then((response) => {
     const { statusText, status } = response
-    let data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data
+    let data = response.data
     if (data instanceof Array) {
       data = {
         list: data,
