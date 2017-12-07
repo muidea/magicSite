@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { color } from 'utils'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import styles from './sales.less'
+import styles from './visitTrend.less'
 
-function Sales ({ data }) {
+function VisitTrend ({ data }) {
   return (
-    <div className={styles.sales}>
-      <div className={styles.title}>Yearly Sales</div>
+    <div className={styles.trend}>
+      <div className={styles.title}>访问趋势</div>
       <ResponsiveContainer minHeight={360}>
         <LineChart data={data}>
           <Legend verticalAlign="top"
@@ -38,8 +38,8 @@ function Sales ({ data }) {
   )
 }
 
-Sales.propTypes = {
+VisitTrend.propTypes = {
   data: PropTypes.array,
 }
 
-export default Sales
+export default VisitTrend

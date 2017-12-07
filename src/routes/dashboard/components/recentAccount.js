@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Tag } from 'antd'
 import { color } from 'utils'
-import styles from './recentSales.less'
+import styles from './recentAccount.less'
 
 const status = {
   1: {
@@ -23,7 +23,7 @@ const status = {
   },
 }
 
-function RecentSales ({ data }) {
+function RecentAccount ({ data }) {
   const columns = [
     {
       title: 'NAME',
@@ -43,14 +43,14 @@ function RecentSales ({ data }) {
     },
   ]
   return (
-    <div className={styles.recentsales}>
+    <div className={styles.recentaccount}>
       <Table pagination={false} columns={columns} rowKey={(record, key) => key} dataSource={data.filter((item, key) => key < 5)} />
     </div>
   )
 }
 
-RecentSales.propTypes = {
+RecentAccount.propTypes = {
   data: PropTypes.array,
 }
 
-export default RecentSales
+export default RecentAccount
