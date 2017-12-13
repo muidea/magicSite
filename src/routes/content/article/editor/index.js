@@ -2,14 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Editor } from 'components'
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html'
-import { Row, Form, Input, Checkbox, Button } from 'antd'
+import { Form, Input, Checkbox, Button } from 'antd'
 import styles from './index.less'
 
 const FormItem = Form.Item
-const { TextArea } = Input;
-const CheckboxGroup = Checkbox.Group;
+const { TextArea } = Input
+const CheckboxGroup = Checkbox.Group
 
 const formItemLayout = {
   labelCol: {
@@ -31,19 +29,19 @@ const tailFormItemLayout = {
       offset: 10,
     },
   },
-};
+}
 
-const ArticleEditor = ({ 
-  location, 
-  dispatch, 
+const ArticleEditor = ({
+  location,
+  dispatch,
   articleEditor,
   form: {
     getFieldDecorator,
     validateFields,
-    setFieldsValue, 
+    setFieldsValue,
     getFieldsValue,
-  }, }) => {
-  const { article, catalogs } = articleEditor
+  },}) => {
+  const { article, catalogs, editorState } = articleEditor
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -52,26 +50,33 @@ const ArticleEditor = ({
       const data = {
         ...getFieldsValue(),
       }
-      
+
       dispatch({
-        type: `articleEditor/create`,
+        type: 'articleEditor/create',
         payload: data,
       })
     })
   }
 
-  const onEditorStateChange = (editorContent) => {
-    let content = draftToHtml(convertToRaw(editorContent.getCurrentContent()))
-    setFieldsValue({article_content: content})
+  const onContentStateChange = (editorContent) => {
+    console.log(editorContent)
+    setFieldsValue({ article_content: JSON.stringify(editorContent) })
   }
-  const onCheckBoxStateChange = (checkedValues) => {
 
-    setFieldsValue({article_catalog: checkedValues})
+  const onEditorStateChange = (state) => {
+    dispatch({
+      type: 'articleEditor/updateEditorState',
+      payload: { editorState: state },
+    })
+  }
+
+  const onCheckBoxStateChange = (checkedValues) => {
+    setFieldsValue({ article_catalog: checkedValues })
   }
 
   return (<div className="content-inner">
     <div className={styles.content}>
-    <Form layout="horizontal">
+      <Form layout="horizontal">
         <FormItem label="标题" {...formItemLayout}>
           {getFieldDecorator('article_title', {
             initialValue: article.title,
@@ -91,16 +96,18 @@ const ArticleEditor = ({
                 required: false,
               },
             ],
-          })(<TextArea rows={3} cols={30} style={{ display: 'none' }}/>)}
+          })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
           <Editor
-          wrapperStyle={{
-            minHeight: 500,
-          }}
-          editorStyle={{
-            minHeight: 376,
-          }}
-          onEditorStateChange = {onEditorStateChange}
-        />
+            wrapperStyle={{
+              minHeight: 500,
+            }}
+            editorStyle={{
+              minHeight: 376,
+            }}
+            editorState={editorState}
+            onContentStateChange={onContentStateChange}
+            onEditorStateChange={onEditorStateChange}
+          />
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
@@ -112,11 +119,11 @@ const ArticleEditor = ({
               },
             ],
           })(<Input />)}
-          <CheckboxGroup options={catalogs} value={article.catalog} onChange={onCheckBoxStateChange}/>
+          <CheckboxGroup options={catalogs} value={article.catalog} onChange={onCheckBoxStateChange} />
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-        <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
-        <Button type="primary" onClick={handleOk} htmlType="submit">提交</Button>
+          <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
+          <Button type="primary" onClick={handleOk} htmlType="submit">提交</Button>
         </FormItem>
       </Form>
     </div>
@@ -126,7 +133,7 @@ const ArticleEditor = ({
 
 ArticleEditor.propTypes = {
   location: PropTypes.object,
-  dispatch: PropTypes.func,  
+  dispatch: PropTypes.func,
   articleEditor: PropTypes.object,
   form: PropTypes.object,
   loading: PropTypes.bool,

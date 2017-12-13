@@ -2,41 +2,44 @@ import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
 import { query, create } from 'services/content/article'
 
+import { EditorState, convertFromRaw } from 'draft-js'
+
 export default {
 
   namespace: 'articleEditor',
 
   state: {
-    article: {catalog:[],},
+    article: { catalog: [] },
     catalogs: [],
+    editorState: EditorState.createEmpty(),
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {
+      history.listen((location) => {
         const match = pathToRegexp('/content/article/edit/:id').exec(location.pathname)
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
         } else {
-          dispatch({ type: 'reset', payload: { article:{catalog:[],}, catalogs:[] } })
+          dispatch({ type: 'reset', payload: { article: { catalog: [] }, catalogs: [] } })
         }
       })
     },
   },
 
   effects: {
-    *reset ({
+    * reset ({
       payload,
     }, { put }) {
       yield put({
-        type: 'querySuccess',
+        type: 'resetState',
         payload: {
-          ...payload
+          ...payload,
         },
       })
     },
 
-    *query ({
+    * query ({
       payload,
     }, { call, put }) {
       const data = yield call(query, payload)
@@ -46,7 +49,7 @@ export default {
           type: 'querySuccess',
           payload: {
             article,
-            catalogList
+            catalogList,
           },
         })
       } else {
@@ -54,7 +57,7 @@ export default {
       }
     },
 
-    *create ({ payload }, { call, put }) {
+    * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
       if (data.success) {
         yield put(routerRedux.push('/content/article'))
@@ -73,23 +76,46 @@ export default {
       } else {
         throw data
       }
-    },    
+    },
   },
 
   reducers: {
+    resetState (state, { payload }) {
+      const { article, catalogs } = payload
+
+      return {
+        ...state,
+        article,
+        catalogs,
+      }
+    },
+
     querySuccess (state, { payload }) {
       const { article, catalogList } = payload
-      let catalogArray = new Array()
+      let catalogArray = []
+
+      const contentState = convertFromRaw(JSON.parse(article.content))
+      const editorState = EditorState.createWithContent(contentState)
+
       if (catalogList) {
         for (let item of catalogList) {
-          catalogArray.unshift({value: item.id, label: item.name})
+          catalogArray.unshift({ value: item.id, label: item.name })
         }
       }
       return {
         ...state,
         article,
         catalogs: catalogArray,
+        editorState,
       }
-    },    
+    },
+
+    updateEditorState (state, { payload }) {
+      const { editorState } = payload
+      return {
+        ...state,
+        editorState,
+      }
+    },
   },
 }
