@@ -1,12 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, DatePicker, Input, Popconfirm } from 'antd'
+import { Form, Button, Row, Col, Input, Popconfirm } from 'antd'
 
 const Search = Input.Search
-const { RangePicker } = DatePicker
-
 const ColProps = {
   xs: 24,
   sm: 12,
@@ -57,13 +54,6 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
-    let fields = getFieldsValue()
-    fields[key] = values
-    fields = handleFields(fields)
-    onFilterChange(fields)
-  }
-
   const handleDeleteItems = () => {
     onDeleteItems()
   }
@@ -91,12 +81,12 @@ const Filter = ({
           </div>
           <div>
             {
-            selectedRowKeys.length > 0 &&
+              selectedRowKeys.length > 0 &&
               <Popconfirm title={'确认删除选中项?'} placement="left" onConfirm={handleDeleteItems}>
                 <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
               </Popconfirm>
-          }            
-          <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
+            }
+            <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
           </div>
         </div>
       </Col>

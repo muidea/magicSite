@@ -19,7 +19,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
     } else if (e.key === '2') {
       confirm({
         title: 'Are you sure delete this record?',
-        onOk () {
+        onOk() {
           onDeleteItem(record.id)
         },
       })

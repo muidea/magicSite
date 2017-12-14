@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
-import { query, create, update } from 'services/content/article'
+import { queryArticle, createArticle, updateArticle } from 'services/content/article'
 
 import { EditorState, convertFromRaw } from 'draft-js'
 
@@ -21,16 +21,16 @@ export default {
       history.listen((location) => {
         const match = pathToRegexp('/content/article/edit/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
+          dispatch({ type: 'queryArticle', payload: { id: match[1] } })
         } else {
-          dispatch({ type: 'reset' })
+          dispatch({ type: 'resetModel' })
         }
       })
     },
   },
 
   effects: {
-    * reset ({
+    * resetModel ({
       payload,
     }, { put }) {
       yield put({
@@ -41,10 +41,10 @@ export default {
       })
     },
 
-    * query ({
+    * queryArticle ({
       payload,
     }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(queryArticle, payload)
       const { success, message, status, article, catalogList } = data
       if (success) {
         yield put({
@@ -59,8 +59,8 @@ export default {
       }
     },
 
-    * create ({ payload }, { call, put }) {
-      const data = yield call(create, payload)
+    * createArticle ({ payload }, { call, put }) {
+      const data = yield call(createArticle, payload)
       if (data.success) {
         yield put(routerRedux.push('/content/article'))
       } else {
@@ -68,8 +68,8 @@ export default {
       }
     },
 
-    * update ({ payload }, { call, put }) {
-      const data = yield call(update, payload)
+    * updateArticle ({ payload }, { call, put }) {
+      const data = yield call(updateArticle, payload)
       if (data.success) {
         yield put(routerRedux.push('/content/article'))
       } else {

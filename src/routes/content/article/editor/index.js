@@ -32,7 +32,6 @@ const tailFormItemLayout = {
 }
 
 const ArticleEditor = ({
-  location,
   dispatch,
   articleEditor,
   form: {
@@ -40,7 +39,7 @@ const ArticleEditor = ({
     validateFields,
     setFieldsValue,
     getFieldsValue,
-  },}) => {
+  } }) => {
   const { id, article, catalogs, editorState, actionType } = articleEditor
   const handleOk = () => {
     validateFields((errors) => {
@@ -134,7 +133,6 @@ const ArticleEditor = ({
 
 
 ArticleEditor.propTypes = {
-  location: PropTypes.object,
   dispatch: PropTypes.func,
   articleEditor: PropTypes.object,
   form: PropTypes.object,

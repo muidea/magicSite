@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Row, Col, Button, Popconfirm } from 'antd'
 import { Page } from 'components'
 import queryString from 'query-string'
 import List from './List'
@@ -10,12 +9,12 @@ import Filter from './Filter'
 
 const Article = ({ location, dispatch, article, loading }) => {
   location.query = queryString.parse(location.search)
-  const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = article
+  const { list, pagination, selectedRowKeys } = article
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['article/query'],
+    loading: loading.effects['article/queryAllArticle'],
     pagination,
     location,
     onChange (page) {
@@ -31,21 +30,21 @@ const Article = ({ location, dispatch, article, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'article/delete',
+        type: 'article/deleteArticle',
         payload: id,
       })
     },
     onEditItem (item) {
-      let editURL = '/content/article/edit/' + item.id
       dispatch(routerRedux.push({
-        pathname: editURL,
-      }))      
+        pathname: '/content/article/edit/',
+        id: item.id,
+      }))
     },
     rowSelection: {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'article/updateState',
+          type: 'article/updateModelState',
           payload: {
             selectedRowKeys: keys,
           },
@@ -77,11 +76,11 @@ const Article = ({ location, dispatch, article, loading }) => {
     },
     onDeleteItems () {
       dispatch({
-        type: 'article/multiDelete',
+        type: 'article/multiDeleteArticle',
         payload: {
           ids: selectedRowKeys,
         },
-      })      
+      })
     },
   }
 

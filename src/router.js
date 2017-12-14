@@ -10,7 +10,7 @@ const Routers = function ({ history, app }) {
   const error = dynamic({
     app,
     component: () => import('./routes/error'),
-  }) 
+  })
   const routes = [
     {
       path: '/dashboard',
@@ -72,7 +72,7 @@ const Routers = function ({ history, app }) {
       path: '/login',
       models: () => [import('./models/login')],
       component: () => import('./routes/login/'),
-    }, 
+    },
   ]
 
   return (

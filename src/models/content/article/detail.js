@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from 'services/content/article'
+import { queryArticle } from 'services/content/article'
 
 export default {
 
@@ -11,24 +11,24 @@ export default {
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {
+      history.listen((location) => {
         const match = pathToRegexp('/content/article/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
+          dispatch({ type: 'queryArticle', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    *query ({
+    * queryArticle ({
       payload,
     }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(queryArticle, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryArticleSuccess',
           payload: {
             data: other,
           },
@@ -40,7 +40,7 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
+    queryArticleSuccess (state, { payload }) {
       const { data } = payload
       return {
         ...state,

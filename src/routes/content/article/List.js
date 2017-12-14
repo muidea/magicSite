@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
+import { Link } from 'react-router-dom'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
-import classnames from 'classnames'
 import { DropOption } from '../../../components'
-import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
@@ -29,7 +29,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       key: 'avatar',
       width: 64,
       className: styles.avatar,
-      render: (text) => <img alt={'avatar'} width={24} src={text} />,
+      render: text => <img alt={'avatar'} width={24} src={text} />,
     }, {
       title: '标题',
       dataIndex: 'title',
@@ -41,7 +41,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       key: 'catalog',
       render: (text, record) => {
         let catalogVal = ''
-        for ( let item of record.catalog ) {
+        for (let item of record.catalog) {
           catalogVal += item.name
           catalogVal += ', '
         }
@@ -63,13 +63,6 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
     },
   ]
 
-  const getBodyWrapperProps = {
-    page: location.query.page,
-    current: tableProps.pagination.current,
-  }
-
-  const getBodyWrapper = body => { return body }
-
   return (
     <div>
       <Table
@@ -80,7 +73,6 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         columns={columns}
         simple
         rowKey={record => record.id}
-        getBodyWrapper={getBodyWrapper}
       />
     </div>
   )
