@@ -4,25 +4,25 @@ const config = require('../utils/config')
 
 const { apiPrefix } = config
 
-const catalogList = [{id:1, name:'Linux'}, {id:2, name:'Go'}, {id:3, name:'Cloud'}, {id:4, name:'Devlop'}, {id:5, name:'Test'}]
-const authorList = [{id:0, name:'admin'}, {id:1, name:'guest'}, {id:2, name:'wyz'}]
+const catalogList = [{ id: 1, name: 'Linux' }, { id: 2, name: 'Go' }, { id: 3, name: 'Cloud' }, { id: 4, name: 'Devlop' }, { id: 5, name: 'Test' }]
+const authorList = [{ id: 0, name: 'admin' }, { id: 1, name: 'guest' }, { id: 2, name: 'wyz' }]
 
 Mock.Random.extend({
-  catalogInfo: function(date) {
-      return this.pick(catalogList)
+  catalogInfo: function (date) {
+    return this.pick(catalogList)
   },
 
-  catalogArray: function(date) {
+  catalogArray: function (date) {
     let first = this.pick(catalogList)
     let second = this.pick(catalogList)
-    while ( first.id == second.id) {
+    while (first.id == second.id) {
       second = this.pick(catalogList)
     }
 
     return new Array(first, second)
   },
 
-  authorInfo: function(date) {
+  authorInfo: function (date) {
     return this.pick(authorList)
   },
 })
@@ -32,10 +32,10 @@ let articlesListData = Mock.mock({
     {
       id: '@id',
       title: '@ctitle(5,10)',
-      content:'@ctitle(50,200)',
-      catalog() {return Mock.Random.catalogArray()},
-      author() {return Mock.Random.authorInfo()},
-      avatar () {
+      content: '@ctitle(50,200)',
+      catalog() { return Mock.Random.catalogArray() },
+      author() { return Mock.Random.authorInfo() },
+      avatar() {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.title.substr(0, 1))
       },
     },
@@ -71,10 +71,10 @@ const selectArray = (array, key, keyAlias = 'key') => {
   let data = new Array()
 
   for (let item of array) {
-    for ( let idx of key) {
+    for (let idx of key) {
       if (item[keyAlias] === parseInt(idx)) {
         data.unshift(item)
-      }  
+      }
     }
   }
 
@@ -84,10 +84,13 @@ const selectArray = (array, key, keyAlias = 'key') => {
   return null
 }
 
+const NOTFOUND = {
+  message: 'Not Found',
+  documentation_url: 'http://localhost:8000/request',
+}
+
 module.exports = {
-
-
-  [`GET ${apiPrefix}/articles`] (req, res) {
+  [`GET ${apiPrefix}/articles`](req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
@@ -111,14 +114,14 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/articles`] (req, res) {
+  [`DELETE ${apiPrefix}/articles`](req, res) {
     const { ids } = req.body
     database = database.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/article`] (req, res) {
+  [`POST ${apiPrefix}/article`](req, res) {
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
@@ -126,9 +129,9 @@ module.exports = {
 
     const curAuthor = queryArray(authorList, token.id, 'id')
     const curCatalog = selectArray(catalogList, newData.article_catalog, 'id')
-    const newArticle = {id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, }
+    const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, }
     newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
-    
+
     database.unshift(newArticle)
 
     res.status(200).end()
@@ -138,11 +141,11 @@ module.exports = {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
-      let catalog = new Array()
-      for ( let item of data.catalog ) {
+      let catalog = []
+      for (let item of data.catalog) {
         catalog.unshift(item.id)
       }
-      const result = {article: {...data, catalog}, catalogList}
+      const result = { article: { ...data, catalog }, catalogList }
       res.status(200).json(result)
     } else {
       res.status(404).json(NOTFOUND)
@@ -160,16 +163,26 @@ module.exports = {
     }
   },
 
-  [`PATCH ${apiPrefix}/group/:id`] (req, res) {
+  [`PUT ${apiPrefix}/article/:id`] (req, res) {
     const { id } = req.params
-    const editItem = req.body
     let isExist = false
+
+    const newData = req.body
+    const cookie = req.headers.cookie || ''
+    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+    const token = JSON.parse(cookies.token)
+
+    const curAuthor = queryArray(authorList, token.id, 'id')
+    const curCatalog = selectArray(catalogList, newData.article_catalog, 'id')
+    const newArticle = { id, title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor }
+    newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
 
     database = database.map((item) => {
       if (item.id === id) {
         isExist = true
-        return Object.assign({}, item, editItem)
+        return Object.assign({}, item, newArticle)
       }
+
       return item
     })
 

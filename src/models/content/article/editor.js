@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
-import { query, create } from 'services/content/article'
+import { query, create, update } from 'services/content/article'
 
 import { EditorState, convertFromRaw } from 'draft-js'
 
@@ -9,9 +9,11 @@ export default {
   namespace: 'articleEditor',
 
   state: {
+    id: -1,
     article: { catalog: [] },
     catalogs: [],
     editorState: EditorState.createEmpty(),
+    actionType: 'create',
   },
 
   subscriptions: {
@@ -21,7 +23,7 @@ export default {
         if (match) {
           dispatch({ type: 'query', payload: { id: match[1] } })
         } else {
-          dispatch({ type: 'reset', payload: { article: { catalog: [] }, catalogs: [] } })
+          dispatch({ type: 'reset' })
         }
       })
     },
@@ -46,7 +48,7 @@ export default {
       const { success, message, status, article, catalogList } = data
       if (success) {
         yield put({
-          type: 'querySuccess',
+          type: 'updateState',
           payload: {
             article,
             catalogList,
@@ -66,13 +68,10 @@ export default {
       }
     },
 
-    * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ articleEditor }) => articleEditor.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
+    * update ({ payload }, { call, put }) {
+      const data = yield call(update, payload)
       if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
+        yield put(routerRedux.push('/content/article'))
       } else {
         throw data
       }
@@ -81,19 +80,25 @@ export default {
 
   reducers: {
     resetState (state, { payload }) {
-      const { article, catalogs } = payload
-
+      const id = -1
+      const article = { catalog: [] }
+      const catalogs = []
+      const editorState = EditorState.createEmpty()
       return {
         ...state,
+        ...payload,
+        id,
         article,
         catalogs,
+        editorState,
+        actionType: 'create',
       }
     },
 
-    querySuccess (state, { payload }) {
+    updateState (state, { payload }) {
       const { article, catalogList } = payload
       let catalogArray = []
-
+      const { id } = article
       const contentState = convertFromRaw(JSON.parse(article.content))
       const editorState = EditorState.createWithContent(contentState)
 
@@ -104,9 +109,11 @@ export default {
       }
       return {
         ...state,
+        id,
         article,
         catalogs: catalogArray,
         editorState,
+        actionType: 'update',
       }
     },
 

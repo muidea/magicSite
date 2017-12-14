@@ -35,9 +35,10 @@ export async function multiRemove (params) {
 }
 
 export async function update (params) {
+  console.log(params)
   return request({
     url: article,
-    method: 'patch',
+    method: 'put',
     data: params,
   })
 }

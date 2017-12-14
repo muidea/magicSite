@@ -41,7 +41,7 @@ const ArticleEditor = ({
     setFieldsValue,
     getFieldsValue,
   },}) => {
-  const { article, catalogs, editorState } = articleEditor
+  const { id, article, catalogs, editorState, actionType } = articleEditor
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -52,14 +52,16 @@ const ArticleEditor = ({
       }
 
       dispatch({
-        type: 'articleEditor/create',
-        payload: data,
+        type: (actionType === 'create') ? 'articleEditor/create' : 'articleEditor/update',
+        payload: {
+          id,
+          ...data,
+        },
       })
     })
   }
 
   const onContentStateChange = (editorContent) => {
-    console.log(editorContent)
     setFieldsValue({ article_content: JSON.stringify(editorContent) })
   }
 
