@@ -8,21 +8,21 @@ const catalogList = [{ id: 1, name: 'Linux' }, { id: 2, name: 'Go' }, { id: 3, n
 const authorList = [{ id: 0, name: 'admin' }, { id: 1, name: 'guest' }, { id: 2, name: 'wyz' }]
 
 Mock.Random.extend({
-  catalogInfo: function (date) {
+  catalogInfo () {
     return this.pick(catalogList)
   },
 
-  catalogArray: function (date) {
+  catalogArray () {
     let first = this.pick(catalogList)
     let second = this.pick(catalogList)
-    while (first.id == second.id) {
+    while (first.id === second.id) {
       second = this.pick(catalogList)
     }
 
-    return new Array(first, second)
+    return [first, second]
   },
 
-  authorInfo: function (date) {
+  authorInfo () {
     return this.pick(authorList)
   },
 })
@@ -33,15 +33,14 @@ let articlesListData = Mock.mock({
       id: '@id',
       title: '@ctitle(5,10)',
       content: '@ctitle(50,200)',
-      catalog() { return Mock.Random.catalogArray() },
-      author() { return Mock.Random.authorInfo() },
-      avatar() {
+      catalog () { return Mock.Random.catalogArray() },
+      author () { return Mock.Random.authorInfo() },
+      avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.title.substr(0, 1))
       },
     },
   ],
 })
-
 
 let database = articlesListData.data
 
@@ -68,11 +67,11 @@ const selectArray = (array, key, keyAlias = 'key') => {
   if (!(array instanceof Array)) {
     return null
   }
-  let data = new Array()
+  let data = []
 
   for (let item of array) {
     for (let idx of key) {
-      if (item[keyAlias] === parseInt(idx)) {
+      if (item[keyAlias] === parseInt(idx, 10)) {
         data.unshift(item)
       }
     }
@@ -90,7 +89,7 @@ const NOTFOUND = {
 }
 
 module.exports = {
-  [`GET ${apiPrefix}/articles`](req, res) {
+  [`GET ${apiPrefix}/articles`] (req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
@@ -114,14 +113,15 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/articles`](req, res) {
+  [`DELETE ${apiPrefix}/articles`] (req, res) {
     const { ids } = req.body
     database = database.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/article`](req, res) {
+  [`POST ${apiPrefix}/article`] (req, res) {
+    console.log('add article')
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })

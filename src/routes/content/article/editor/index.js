@@ -51,7 +51,7 @@ const ArticleEditor = ({
       }
 
       dispatch({
-        type: (actionType === 'create') ? 'articleEditor/create' : 'articleEditor/update',
+        type: (actionType === 'create') ? 'articleEditor/createArticle' : 'articleEditor/updateArticle',
         payload: {
           id,
           ...data,
