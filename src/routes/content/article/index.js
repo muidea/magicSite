@@ -34,10 +34,9 @@ const Article = ({ location, dispatch, article, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch(routerRedux.push({
-        pathname: '/content/article/edit/',
-        id: item.id,
+        pathname: `/content/article/edit/${id}`,
       }))
     },
     rowSelection: {
