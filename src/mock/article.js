@@ -33,6 +33,7 @@ let articlesListData = Mock.mock({
       id: '@id',
       title: '@ctitle(5,10)',
       content: '@ctitle(50,200)',
+      createdate: '@datetime',
       catalog () { return Mock.Random.catalogArray() },
       author () { return Mock.Random.authorInfo() },
       avatar () {
@@ -129,7 +130,7 @@ module.exports = {
 
     const curAuthor = queryArray(authorList, token.id, 'id')
     const curCatalog = selectArray(catalogList, newData.article_catalog, 'id')
-    const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, }
+    const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, createdate: Mock.mock('@now') }
     newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
 
     database.unshift(newArticle)
@@ -141,11 +142,7 @@ module.exports = {
     const { id } = req.params
     const data = queryArray(database, id, 'id')
     if (data) {
-      let catalog = []
-      for (let item of data.catalog) {
-        catalog.unshift(item.id)
-      }
-      const result = { article: { ...data, catalog }, catalogList }
+      const result = { article: data, catalogList }
       res.status(200).json(result)
     } else {
       res.status(404).json(NOTFOUND)
@@ -180,6 +177,7 @@ module.exports = {
     database = database.map((item) => {
       if (item.id === id) {
         isExist = true
+        newArticle.createdate = item.createdate
         return Object.assign({}, item, newArticle)
       }
 

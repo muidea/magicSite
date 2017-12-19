@@ -28,7 +28,7 @@ const Dashboard = Mock.mock({
       title: 'Referrals',
       number: 4324,
     },
-  ],  
+  ],
   'visitTrend|8': [
     {
       'name|+1': 2008,
@@ -58,11 +58,12 @@ const Dashboard = Mock.mock({
       },
       'price|10-200.1-2': 1,
     },
-  ],  
+  ],
 })
 
 module.exports = {
   [`GET ${apiPrefix}/dashboard`] (req, res) {
+
     res.json(Dashboard)
   },
 }

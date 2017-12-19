@@ -1,22 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
+import { Row, Tag } from 'antd'
 import styles from './index.less'
 
 const Detail = ({ articleDetail }) => {
-  const { data } = articleDetail
-  const content = []
-  for (let key in data) {
-    if ({}.hasOwnProperty.call(data, key)) {
-      content.push(<div key={key} className={styles.item}>
-        <div>{key}</div>
-        <div>{String(data[key])}</div>
-      </div>)
-    }
+  const { title, content, catalog, author, createdate } = articleDetail
+  const catalogTags = []
+  for (let val of catalog) {
+    catalogTags.push(<Tag key={val.id}>{val.name}</Tag>)
   }
+  const contentView = <div>{content}</div>
   return (<div className="content-inner">
     <div className={styles.content}>
-      {content}
+      <Row gutter={24}><div>{title}</div></Row>
+      <Row gutter={24}><div>{createdate}</div><div>{catalogTags}</div><div>{author.name}</div></Row>
+      <Row gutter={24}>{contentView}</Row>
     </div>
   </div>)
 }

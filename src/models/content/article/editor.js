@@ -98,9 +98,16 @@ export default {
     updateState (state, { payload }) {
       const { article, catalogList } = payload
       let catalogArray = []
-      const { id } = article
+      const { id, catalog } = article
       const contentState = convertFromRaw(JSON.parse(article.content))
       const editorState = EditorState.createWithContent(contentState)
+
+      let catalogIDs = []
+      if (catalog) {
+        for (let val of catalog) {
+          catalogIDs.push(val.id)
+        }
+      }
 
       if (catalogList) {
         for (let item of catalogList) {
@@ -110,7 +117,7 @@ export default {
       return {
         ...state,
         id,
-        article,
+        article: { ...article, catalog: catalogIDs },
         catalogs: catalogArray,
         editorState,
         actionType: 'update',

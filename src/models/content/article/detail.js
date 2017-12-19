@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
+import draftToHtml from 'draftjs-to-html'
 import { queryArticle } from 'services/content/article'
 
 export default {
@@ -6,7 +7,11 @@ export default {
   namespace: 'articleDetail',
 
   state: {
-    data: {},
+    title: '',
+    content: '',
+    catalog: [],
+    author: '',
+    createdate: '',
   },
 
   subscriptions: {
@@ -42,9 +47,16 @@ export default {
   reducers: {
     queryArticleSuccess (state, { payload }) {
       const { data } = payload
+      const { article } = data
+      const { title, content, catalog, author, createdate } = article
+
       return {
         ...state,
-        data,
+        title,
+        content: draftToHtml(JSON.parse(content)),
+        catalog,
+        author,
+        createdate,
       }
     },
   },

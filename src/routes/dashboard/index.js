@@ -2,10 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Row, Col, Card } from 'antd'
-import { color } from 'utils'
 import { Page } from 'components'
 import { NumberCard, VisitTrend, RecentContent, RecentAccount } from './components'
-import styles from './index.less'
 
 const bodyStyle = {
   bodyStyle: {
