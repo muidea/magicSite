@@ -122,7 +122,6 @@ module.exports = {
 
 
   [`POST ${apiPrefix}/article`] (req, res) {
-    console.log('add article')
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
