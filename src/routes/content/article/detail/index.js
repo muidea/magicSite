@@ -17,8 +17,8 @@ const Detail = ({ articleDetail }) => {
 
   return (<div className="content-inner">
     <div className={styles.content}>
-      <Row gutter={24}><Col>{title}</Col></Row>
-      <Row gutter={24}>创建时间：{createdate} 分类：{catalogTags} 作者：{author.name}</Row>
+      <Row gutter={24} type="flex" justify="center"><Col><h1>{title}</h1></Col></Row>
+      <Row gutter={24} type="flex" justify="center"><span>作者：{author.name}</span> 分类：{catalogTags} <span>创建时间：{createdate}</span></Row>
       <Row gutter={24}>{reactElement}</Row>
     </div>
   </div>)
