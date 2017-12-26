@@ -1,0 +1,6 @@
+{
+  "name": "RichEditor",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./RichEditor.js"
+}

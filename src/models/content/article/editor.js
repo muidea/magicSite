@@ -1,18 +1,17 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
+import RichTextEditor from 'react-rte'
 import { queryArticle, createArticle, updateArticle } from 'services/content/article'
-
-import { EditorState, convertFromRaw } from 'draft-js'
 
 export default {
 
   namespace: 'articleEditor',
 
   state: {
-    id: -1,
-    article: { catalog: [] },
+    article: { content: '', catalog: [] },
     catalogs: [],
-    editorState: EditorState.createEmpty(),
+    editorValue: RichTextEditor.createEmptyValue(),
+    editorFormat: 'html',
     actionType: 'create',
   },
 
@@ -80,17 +79,17 @@ export default {
 
   reducers: {
     resetState (state, { payload }) {
-      const id = -1
-      const article = { catalog: [] }
+      const article = { id: -1, title: '', content: '', catalog: [] }
       const catalogs = []
-      const editorState = EditorState.createEmpty()
+      const editorValue = RichTextEditor.createEmptyValue()
+      const editorFormat = 'html'
       return {
         ...state,
         ...payload,
-        id,
         article,
         catalogs,
-        editorState,
+        editorValue,
+        editorFormat,
         actionType: 'create',
       }
     },
@@ -98,9 +97,7 @@ export default {
     updateState (state, { payload }) {
       const { article, catalogList } = payload
       let catalogArray = []
-      const { id, catalog } = article
-      const contentState = convertFromRaw(JSON.parse(article.content))
-      const editorState = EditorState.createWithContent(contentState)
+      const { catalog } = article
 
       let catalogIDs = []
       if (catalog) {
@@ -116,20 +113,25 @@ export default {
       }
       return {
         ...state,
-        id,
         article: { ...article, catalog: catalogIDs },
         catalogs: catalogArray,
-        editorState,
         actionType: 'update',
       }
     },
 
-    updateEditorState (state, { payload }) {
-      const { editorState } = payload
+    updateEditorContent (state, { payload }) {
       return {
         ...state,
-        editorState,
+        ...payload,
       }
     },
+
+    updateEditorState (state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
+
   },
 }

@@ -1,5 +1,4 @@
 import pathToRegexp from 'path-to-regexp'
-import draftToHtml from 'draftjs-to-html'
 import { queryArticle } from 'services/content/article'
 
 export default {
@@ -53,7 +52,7 @@ export default {
       return {
         ...state,
         title,
-        content: draftToHtml(JSON.parse(content)),
+        content: JSON.parse(content),
         catalog,
         author,
         createdate,

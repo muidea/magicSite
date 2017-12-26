@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Editor } from 'components'
-import { Form, Input, Checkbox, Button } from 'antd'
+import { RichEditor } from 'components'
+import { Tabs, Form, Input, Checkbox, Button } from 'antd'
 import styles from './index.less'
 
+const TabPane = Tabs.TabPane
 const FormItem = Form.Item
 const { TextArea } = Input
 const CheckboxGroup = Checkbox.Group
@@ -40,7 +41,9 @@ const ArticleEditor = ({
     setFieldsValue,
     getFieldsValue,
   } }) => {
-  const { id, article, catalogs, editorState, actionType } = articleEditor
+  const { article, catalogs, editorValue, editorFormat, actionType } = articleEditor
+  const { id, title, content, catalog } = article
+
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
@@ -60,14 +63,10 @@ const ArticleEditor = ({
     })
   }
 
-  const onContentStateChange = (editorContent) => {
-    setFieldsValue({ article_content: JSON.stringify(editorContent) })
-  }
-
-  const onEditorStateChange = (state) => {
+  const onEditorValueChange = (value) => {
     dispatch({
       type: 'articleEditor/updateEditorState',
-      payload: { editorState: state },
+      payload: { editorValue: value },
     })
   }
 
@@ -80,7 +79,7 @@ const ArticleEditor = ({
       <Form layout="horizontal">
         <FormItem label="标题" {...formItemLayout}>
           {getFieldDecorator('article_title', {
-            initialValue: article.title,
+            initialValue: title,
             rules: [
               {
                 required: true,
@@ -91,28 +90,39 @@ const ArticleEditor = ({
         </FormItem>
         <FormItem label="内容" {...formItemLayout}>
           {getFieldDecorator('article_content', {
-            initialValue: article.content,
+            initialValue: content,
             rules: [
               {
                 required: false,
               },
             ],
           })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
-          <Editor
-            wrapperStyle={{
-              minHeight: 500,
-            }}
-            editorStyle={{
-              minHeight: 376,
-            }}
-            editorState={editorState}
-            onContentStateChange={onContentStateChange}
-            onEditorStateChange={onEditorStateChange}
-          />
+          <Tabs type="card">
+            <TabPane tab="编辑器" key="1">
+              <RichEditor
+                value={editorValue}
+                onChange={onEditorValueChange}
+                className="react-rte-demo"
+                placeholder="Tell a story"
+                toolbarClassName="demo-toolbar"
+                editorClassName="demo-editor"
+                editorStyle={{
+                  minHeight: 376,
+                }}
+              />
+            </TabPane>
+            <TabPane tab="Markdown模式" key="2">
+              <TextArea rows={27} cols={30} value={content} />
+            </TabPane>
+            <TabPane tab="预览" key="preView">
+              <div>ddd</div>
+            </TabPane>
+          </Tabs>
+
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
-            initialValue: article.catalog,
+            initialValue: catalog,
             rules: [
               {
                 required: true,
@@ -120,7 +130,7 @@ const ArticleEditor = ({
               },
             ],
           })(<Input />)}
-          <CheckboxGroup options={catalogs} value={article.catalog} onChange={onCheckBoxStateChange} />
+          <CheckboxGroup options={catalogs} value={catalog} onChange={onCheckBoxStateChange} />
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
