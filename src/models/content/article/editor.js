@@ -1,6 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
-import RichTextEditor from 'react-rte'
 import { queryArticle, createArticle, updateArticle } from 'services/content/article'
 
 export default {
@@ -10,8 +9,7 @@ export default {
   state: {
     article: { content: '', catalog: [] },
     catalogs: [],
-    editorValue: RichTextEditor.createEmptyValue(),
-    editorFormat: 'html',
+    editorValue: '',
     actionType: 'create',
   },
 
@@ -81,15 +79,13 @@ export default {
     resetState (state, { payload }) {
       const article = { id: -1, title: '', content: '', catalog: [] }
       const catalogs = []
-      const editorValue = RichTextEditor.createEmptyValue()
-      const editorFormat = 'html'
+      const editorValue = ''
       return {
         ...state,
         ...payload,
         article,
         catalogs,
         editorValue,
-        editorFormat,
         actionType: 'create',
       }
     },

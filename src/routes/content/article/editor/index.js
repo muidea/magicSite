@@ -2,10 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { RichEditor } from 'components'
-import { Tabs, Form, Input, Checkbox, Button } from 'antd'
+import { Form, Input, Checkbox, Button } from 'antd'
 import styles from './index.less'
 
-const TabPane = Tabs.TabPane
 const FormItem = Form.Item
 const { TextArea } = Input
 const CheckboxGroup = Checkbox.Group
@@ -41,7 +40,7 @@ const ArticleEditor = ({
     setFieldsValue,
     getFieldsValue,
   } }) => {
-  const { article, catalogs, editorValue, editorFormat, actionType } = articleEditor
+  const { article, catalogs, editorValue, actionType } = articleEditor
   const { id, title, content, catalog } = article
 
   const handleOk = () => {
@@ -97,28 +96,13 @@ const ArticleEditor = ({
               },
             ],
           })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
-          <Tabs type="card">
-            <TabPane tab="编辑器" key="1">
-              <RichEditor
-                value={editorValue}
-                onChange={onEditorValueChange}
-                className="react-rte-demo"
-                placeholder="Tell a story"
-                toolbarClassName="demo-toolbar"
-                editorClassName="demo-editor"
-                editorStyle={{
-                  minHeight: 376,
-                }}
-              />
-            </TabPane>
-            <TabPane tab="Markdown模式" key="2">
-              <TextArea rows={27} cols={30} value={content} />
-            </TabPane>
-            <TabPane tab="预览" key="preView">
-              <div>ddd</div>
-            </TabPane>
-          </Tabs>
-
+          <RichEditor
+            value={editorValue}
+            onChange={onEditorValueChange}
+            editorStyle={{
+              minHeight: 376,
+            }}
+          />
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('article_catalog', {
