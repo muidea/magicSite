@@ -76,7 +76,7 @@ export default class RichEditor extends Component {
         </TabPane>
         <TabPane tab="预览" key="preView">
           <div className="row">
-            <RichTextEditor value={value} readOnly />
+            <RichTextEditor value={value} editorStyle={editorStyle} readOnly />
           </div>
         </TabPane>
       </Tabs>
