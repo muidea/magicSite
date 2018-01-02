@@ -2,7 +2,6 @@ import DataTable from './DataTable'
 import DropOption from './DropOption'
 import Iconfont from './Iconfont'
 import Search from './Search'
-import Editor from './Editor'
 import RichEditor from './RichEditor'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
@@ -17,7 +16,6 @@ export {
   DropOption,
   Iconfont,
   Search,
-  Editor,
   FilterItem,
   Loader,
   layer,
