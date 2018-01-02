@@ -99,6 +99,7 @@ const ArticleEditor = ({
           <RichEditor
             value={editorValue}
             onChange={onEditorValueChange}
+            placeholder="输入内容"
             editorStyle={{
               minHeight: 376,
             }}

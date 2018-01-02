@@ -8,6 +8,8 @@ const { TextArea } = Input
 
 type Props = {
   value: string,
+  placeholder: string,
+  editorStyle: any,
   onChange: (value: string) => any
 }
 type State = {
@@ -24,6 +26,8 @@ export default class RichEditor extends Component {
     this.state = {
       value: val.setContentFromString(this.props.value, defaultFormat),
       format: defaultFormat,
+      placeholder: this.props.placeholder,
+      editorStyle: this.props.editorStyle,
     }
 
     this._onChange = this._onChange.bind(this)
@@ -50,17 +54,30 @@ export default class RichEditor extends Component {
   }
 
   render () {
-    let { value, format } = this.state
+    let { value, format, placeholder, editorStyle } = this.state
     return (
       <Tabs type="card">
         <TabPane tab="编辑器" key="richEditor">
-          <RichTextEditor value={value} onChange={this._onChange} />
+          <div className="row">
+            <RichTextEditor
+              toolbarClassName="demo-toolbar"
+              editorClassName="demo-editor"
+              value={value}
+              onChange={this._onChange}
+              placeholder={placeholder}
+              editorStyle={editorStyle}
+            />
+          </div>
         </TabPane>
         <TabPane tab="Markdown模式" key="markdown">
-          <TextArea rows={27} cols={30} value={value.toString(format)} onChange={this._onChangeSource} />
+          <div className="row">
+            <TextArea rows={27} cols={30} value={value.toString(format)} onChange={this._onChangeSource} />
+          </div>
         </TabPane>
         <TabPane tab="预览" key="preView">
-          <RichTextEditor value={value} readOnly />
+          <div className="row">
+            <RichTextEditor value={value} readOnly />
+          </div>
         </TabPane>
       </Tabs>
     )
