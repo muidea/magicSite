@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Row, Col, Tag } from 'antd'
+import { RichView } from 'components'
 import styles from './index.less'
 
 const Detail = ({ articleDetail }) => {
@@ -15,7 +16,7 @@ const Detail = ({ articleDetail }) => {
     <div className={styles.content}>
       <Row gutter={24} type="flex" justify="center"><Col><h1>{title}</h1></Col></Row>
       <Row gutter={24} type="flex" justify="center"><span>作者：{author.name}</span> 分类：{catalogTags} <span>创建时间：{createdate}</span></Row>
-      <Row gutter={24}>{content}</Row>
+      <Row gutter={24}><RichView value={content} /> </Row>
     </div>
   </div>)
 }

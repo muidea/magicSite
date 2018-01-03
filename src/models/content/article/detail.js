@@ -52,7 +52,7 @@ export default {
       return {
         ...state,
         title,
-        content: JSON.parse(content),
+        content,
         catalog,
         author,
         createdate,

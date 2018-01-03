@@ -1,6 +1,7 @@
 {
-  "name": "RichEditor",
+  "name": "rich-editor",
   "version": "0.0.0",
   "private": true,
-  "main": "./RichEditor.js"
+  "main": "./index.js"
 }
+

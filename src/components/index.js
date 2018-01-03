@@ -2,7 +2,7 @@ import DataTable from './DataTable'
 import DropOption from './DropOption'
 import Iconfont from './Iconfont'
 import Search from './Search'
-import RichEditor from './RichEditor'
+import { RichEditor, RichView } from './RichEditor'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
 import * as Layout from './Layout/index.js'
@@ -21,4 +21,5 @@ export {
   layer,
   Page,
   RichEditor,
+  RichView,
 }
