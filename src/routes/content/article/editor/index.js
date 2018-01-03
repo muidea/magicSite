@@ -40,10 +40,10 @@ const ArticleEditor = ({
     setFieldsValue,
     getFieldsValue,
   } }) => {
-  const { article, catalogs, editorValue, actionType } = articleEditor
+  const { article, catalogs, actionType } = articleEditor
   const { id, title, content, catalog } = article
 
-  const handleOk = () => {
+  const onHandleSummit = () => {
     validateFields((errors) => {
       if (errors) {
         return
@@ -63,10 +63,7 @@ const ArticleEditor = ({
   }
 
   const onEditorValueChange = (value) => {
-    dispatch({
-      type: 'articleEditor/updateEditorState',
-      payload: { editorValue: value },
-    })
+    setFieldsValue({ article_content: value })
   }
 
   const onCheckBoxStateChange = (checkedValues) => {
@@ -97,7 +94,7 @@ const ArticleEditor = ({
             ],
           })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
           <RichEditor
-            value={editorValue}
+            value={content}
             onChange={onEditorValueChange}
             placeholder="输入内容"
             editorStyle={{
@@ -119,7 +116,7 @@ const ArticleEditor = ({
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
-          <Button type="primary" onClick={handleOk} htmlType="submit">提交</Button>
+          <Button type="primary" onClick={onHandleSummit} htmlType="submit">提交</Button>
         </FormItem>
       </Form>
     </div>

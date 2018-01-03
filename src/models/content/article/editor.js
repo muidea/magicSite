@@ -9,7 +9,6 @@ export default {
   state: {
     article: { content: '', catalog: [] },
     catalogs: [],
-    editorValue: '',
     actionType: 'create',
   },
 
@@ -79,13 +78,11 @@ export default {
     resetState (state, { payload }) {
       const article = { id: -1, title: '', content: '', catalog: [] }
       const catalogs = []
-      const editorValue = ''
       return {
         ...state,
         ...payload,
         article,
         catalogs,
-        editorValue,
         actionType: 'create',
       }
     },
