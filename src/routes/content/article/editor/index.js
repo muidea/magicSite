@@ -94,12 +94,12 @@ const ArticleEditor = ({
             ],
           })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
           <RichEditor
-            value={content}
-            onChange={onEditorValueChange}
+            initialValue={content}
             placeholder="输入内容"
             editorStyle={{
               minHeight: 376,
             }}
+            onChange={onEditorValueChange}
           />
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
