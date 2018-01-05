@@ -94,7 +94,7 @@ const ArticleEditor = ({
             ],
           })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
           <RichEditor
-            initialValue={content}
+            value={content}
             placeholder="输入内容"
             editorStyle={{
               minHeight: 376,

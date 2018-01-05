@@ -8,7 +8,7 @@ const TabPane = Tabs.TabPane
 const { TextArea } = Input
 
 type Props = {
-  initialValue: string,
+  value: string,
   placeholder: string,
   editorStyle: any,
   onChange: (value: string) => any
@@ -26,10 +26,8 @@ export default class RichEditor extends Component {
 
     autobind(this)
 
-    let val = RichTextEditor.createEmptyValue()
-
     this.state = {
-      value: val.setContentFromString(props.initialValue, defaultFormat),
+      value: RichTextEditor.createEmptyValue(),
       format: defaultFormat,
       placeholder: props.placeholder,
       editorStyle: props.editorStyle,
@@ -40,6 +38,14 @@ export default class RichEditor extends Component {
   }
 
   state: State
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.value !== nextProps.value) {
+      this.setState({
+        value: this.state.value.setContentFromString(nextProps.value, this.state.format),
+      })
+    }
+  }
   props: Props
 
   _onChange (value) {
@@ -51,6 +57,7 @@ export default class RichEditor extends Component {
   _onChangeSource (event) {
     let source = event.target.value
     let oldValue = this.state.value
+
     this.setState({
       value: oldValue.setContentFromString(source, this.state.format),
     })
