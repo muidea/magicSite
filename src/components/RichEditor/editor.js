@@ -45,6 +45,12 @@ export default class RichEditor extends Component {
         value: this.state.value.setContentFromString(nextProps.value, this.state.format),
       })
     }
+
+    if (this.props.placeholder !== nextProps.placeholder) {
+      this.setState({
+        placeholder: nextProps.placeholder,
+      })
+    }
   }
   props: Props
 
