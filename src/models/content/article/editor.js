@@ -1,6 +1,7 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
 import { queryArticle, createArticle, updateArticle } from 'services/content/article'
+import { queryAllCatalog } from 'services/content/catalog'
 
 export default {
 
@@ -28,11 +29,15 @@ export default {
   effects: {
     * resetModel ({
       payload,
-    }, { put }) {
+    }, { call, put }) {
+      const catalogsInfo = yield call(queryAllCatalog, payload)
+      const { data } = catalogsInfo
+
       yield put({
         type: 'resetState',
         payload: {
           ...payload,
+          catalogList: data,
         },
       })
     },
@@ -40,18 +45,21 @@ export default {
     * queryArticle ({
       payload,
     }, { call, put }) {
-      const data = yield call(queryArticle, payload)
-      const { success, message, status, article, catalogList } = data
+      const catalogsInfo = yield call(queryAllCatalog, payload)
+      const articleData = yield call(queryArticle, payload)
+      const { data } = catalogsInfo
+      const { success, article } = articleData
+
       if (success) {
         yield put({
           type: 'updateState',
           payload: {
             article,
-            catalogList,
+            catalogList: data,
           },
         })
       } else {
-        throw data
+        throw articleData
       }
     },
 
@@ -76,8 +84,15 @@ export default {
 
   reducers: {
     resetState (state, { payload }) {
+      const { catalogList } = payload
       const article = { id: -1, title: '', content: '', catalog: [] }
       const catalogs = []
+      if (catalogList) {
+        for (let item of catalogList) {
+          catalogs.unshift({ value: item.id, label: item.name })
+        }
+      }
+
       return {
         ...state,
         ...payload,
@@ -89,7 +104,7 @@ export default {
 
     updateState (state, { payload }) {
       const { article, catalogList } = payload
-      let catalogArray = []
+      let catalogs = []
       const { catalog } = article
 
       let catalogIDs = []
@@ -101,13 +116,14 @@ export default {
 
       if (catalogList) {
         for (let item of catalogList) {
-          catalogArray.unshift({ value: item.id, label: item.name })
+          catalogs.unshift({ value: item.id, label: item.name })
         }
       }
+
       return {
         ...state,
         article: { ...article, catalog: catalogIDs },
-        catalogs: catalogArray,
+        catalogs,
         actionType: 'update',
       }
     },

@@ -1,8 +1,17 @@
 import { request, config } from 'utils'
-const { api } = config
-const { link } = api
 
-export async function query (params) {
+const { api } = config
+const { link, links } = api
+
+export async function queryAllLink (params) {
+  return request({
+    url: links,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function queryLink (params) {
   return request({
     url: link,
     method: 'get',
@@ -10,7 +19,7 @@ export async function query (params) {
   })
 }
 
-export async function create (params) {
+export async function createLink (params) {
   return request({
     url: link.replace('/:id', ''),
     method: 'post',
@@ -18,7 +27,7 @@ export async function create (params) {
   })
 }
 
-export async function remove (params) {
+export async function deleteLink (params) {
   return request({
     url: link,
     method: 'delete',
@@ -26,10 +35,18 @@ export async function remove (params) {
   })
 }
 
-export async function update (params) {
+export async function multiDeleteLink (params) {
+  return request({
+    url: links,
+    method: 'delete',
+    data: params,
+  })
+}
+
+export async function updateLink (params) {
   return request({
     url: link,
-    method: 'patch',
+    method: 'put',
     data: params,
   })
 }

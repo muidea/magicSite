@@ -1,8 +1,17 @@
 import { request, config } from 'utils'
-const { api } = config
-const { media } = api
 
-export async function query (params) {
+const { api } = config
+const { media, medias } = api
+
+export async function queryAllMedia (params) {
+  return request({
+    url: medias,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function queryMedia (params) {
   return request({
     url: media,
     method: 'get',
@@ -10,7 +19,7 @@ export async function query (params) {
   })
 }
 
-export async function create (params) {
+export async function createMedia (params) {
   return request({
     url: media.replace('/:id', ''),
     method: 'post',
@@ -18,7 +27,7 @@ export async function create (params) {
   })
 }
 
-export async function remove (params) {
+export async function deleteMedia (params) {
   return request({
     url: media,
     method: 'delete',
@@ -26,10 +35,18 @@ export async function remove (params) {
   })
 }
 
-export async function update (params) {
+export async function multiDeleteMedia (params) {
+  return request({
+    url: medias,
+    method: 'delete',
+    data: params,
+  })
+}
+
+export async function updateMedia (params) {
   return request({
     url: media,
-    method: 'patch',
+    method: 'put',
     data: params,
   })
 }
