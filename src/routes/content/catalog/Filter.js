@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, Input, Switch } from 'antd'
+import { Form, Button, Row, Col, Input } from 'antd'
 
 const Search = Input.Search
 
@@ -29,7 +27,7 @@ const Filter = ({
     setFieldsValue,
   },
 }) => {
-  const handleFields = (fields) => {    
+  const handleFields = (fields) => {
     return fields
   }
 
@@ -54,12 +52,6 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
-    let fields = getFieldsValue()
-    fields[key] = values
-    fields = handleFields(fields)
-    onFilterChange(fields)
-  }
   const { name } = filter
 
   return (
@@ -77,7 +69,7 @@ const Filter = ({
             <Button size="large" type="ghost" onClick={onAdd}>新增</Button>
           </div>
         </div>
-      </Col>      
+      </Col>
     </Row>
   )
 }

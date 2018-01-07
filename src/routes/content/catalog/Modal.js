@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal } from 'antd'
+import { Form, Input, Radio, Modal } from 'antd'
 
 const FormItem = Form.Item
 
@@ -68,13 +68,13 @@ const modal = ({
               <Radio value={1}>管理员组</Radio>
               <Radio value={0}>用户组</Radio>
             </Radio.Group>
-          )}
+            )}
         </FormItem>
         <FormItem label="描述" hasFeedback {...formItemLayout}>
           {getFieldDecorator('description', {
             initialValue: item.description,
           })(<Input />)}
-        </FormItem>        
+        </FormItem>
       </Form>
     </Modal>
   )

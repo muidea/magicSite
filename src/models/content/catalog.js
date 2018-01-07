@@ -1,32 +1,24 @@
-import { create, remove, update } from 'services/content/catalog'
-import { query } from 'services/content/catalogs'
-import { parse } from 'qs'
+import modelExtend from 'dva-model-extend'
+import { routerRedux } from 'dva/router'
+import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog, multiDeleteCatalog } from 'services/content/catalog'
+import queryString from 'query-string'
+import { pageModel } from '../common'
 
-export default {
-
+export default modelExtend(pageModel, {
   namespace: 'catalog',
 
   state: {
-    list: [],
     currentItem: {},
-    modalVisible: false,
-    modalType: 'create',
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
-      current: 1,
-      total: null,
-    },
+    selectedRowKeys: [],
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(location => {
+      history.listen((location) => {
         if (location.pathname === '/content/catalog') {
           dispatch({
-            type: 'query',
-            payload: location.query,
+            type: 'queryAllCatalog',
+            payload: queryString.parse(location.search),
           })
         }
       })
@@ -35,12 +27,11 @@ export default {
 
   effects: {
 
-    *query ({ payload }, { call, put }) {
-      payload = parse(location.search.substr(1))
-      const data = yield call(query, payload)
+    * queryAllCatalog ({ payload = {} }, { call, put }) {
+      const data = yield call(queryAllCatalog, payload)
       if (data) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryAllSuccess',
           payload: {
             list: data.data,
             pagination: {
@@ -53,58 +44,58 @@ export default {
       }
     },
 
-    *'delete' ({ payload }, { call, put }) {
-      const data = yield call(remove, { id: payload })
+    * queryCatalog ({ payload }, { call, put, select }) {
+      const data = yield call(queryCatalog, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.catalog)
       if (data.success) {
-        yield put({ type: 'query' })
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllCatalog' })
       } else {
         throw data
       }
     },
 
-    *create ({ payload }, { call, put }) {
-      const data = yield call(create, payload)
+    * createCatalog ({ payload }, { call, put }) {
+      const data = yield call(createCatalog, payload)
       if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
+        yield put(routerRedux.push('/content/catalog'))
       } else {
         throw data
       }
     },
 
-    *update ({ payload }, { select, call, put }) {
-      const id = yield select(({ catalog }) => catalog.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
+    * updateCatalog ({ payload }, { call, put }) {
+      const data = yield call(updateCatalog, payload)
       if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
+        yield put(routerRedux.push('/content/catalog'))
       } else {
         throw data
       }
     },
+  },
 
+  * deleteCatalog ({ payload }, { call, put, select }) {
+    const data = yield call(deleteCatalog, { id: payload })
+    const { selectedRowKeys } = yield select(_ => _.catalog)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+      yield put({ type: 'queryAllCatalog' })
+    } else {
+      throw data
+    }
+  },
+
+  * multiDeleteCatalog ({ payload }, { call, put }) {
+    const data = yield call(multiDeleteCatalog, payload)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+      yield put({ type: 'queryAllCatalog' })
+    } else {
+      throw data
+    }
   },
 
   reducers: {
-
-    querySuccess (state, action) {
-      const { list, pagination } = action.payload
-      return { ...state,
-        list,
-        pagination: {
-          ...state.pagination,
-          ...pagination,
-        } }
-    },
-
-    showModal (state, action) {
-      return { ...state, ...action.payload, modalVisible: true }
-    },
-
-    hideModal (state) {
-      return { ...state, modalVisible: false }
-    },
   },
 
-}
+})

@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
+import { Link } from 'dva/router'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
-import classnames from 'classnames'
-import AnimTableBody from '../../../components/DataTable/AnimTableBody'
 import { DropOption } from '../../../components'
-import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
@@ -58,24 +57,16 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
     },
   ]
 
-  const getBodyWrapperProps = {
-    page: location.query.page,
-    current: tableProps.pagination.current,
-  }
-
-  const getBodyWrapper = body => { return body }
-
   return (
     <div>
       <Table
         {...tableProps}
-        className={classnames({ [styles.table]: true, })}
+        className={classnames({ [styles.table]: true })}
         bordered
         scroll={{ x: 1200 }}
         columns={columns}
         simple
         rowKey={record => record.id}
-        getBodyWrapper={getBodyWrapper}
       />
     </div>
   )

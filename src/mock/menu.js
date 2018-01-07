@@ -40,7 +40,7 @@ let database = [
     name: '编辑文章',
     icon: 'edit',
     route: '/content/article/edit/:id',
-  },  
+  },
   {
     id: '213',
     mpid: '-1',
@@ -81,7 +81,7 @@ let database = [
     icon: 'link',
     route: '/content/link/:id',
   },
-   {
+  {
     id: '24',
     bpid: '2',
     mpid: '2',
@@ -135,7 +135,7 @@ let database = [
     name: '分组详情',
     icon: 'solution',
     route: '/account/group/:id',
-  },  
+  },
   {
     id: '4',
     bpid: '1',
@@ -166,7 +166,7 @@ let database = [
     name: '用户管理',
     icon: 'user',
     route: '/authority/user',
-  },  
+  },
   {
     id: '5',
     bpid: '1',
@@ -181,12 +181,12 @@ let database = [
     name: '基本信息',
     icon: 'info-circle-o',
     route: '/system/info',
-  },  
+  },
 ]
 
 module.exports = {
-  
-    [`GET ${apiPrefix}/menus`] (req, res) {
-      res.status(200).json(database)
-    },
-  }
+
+  [`GET ${apiPrefix}/menus`] (req, res) {
+    res.status(200).json(database)
+  },
+}

@@ -35,7 +35,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     loading: loading.effects['catalog/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,

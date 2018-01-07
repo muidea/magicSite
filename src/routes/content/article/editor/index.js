@@ -111,7 +111,7 @@ const ArticleEditor = ({
                 message: '分类必须选择',
               },
             ],
-          })(<Input />)}
+          })(<Input style={{ display: 'none' }} />)}
           <CheckboxGroup options={catalogs} value={catalog} onChange={onCheckBoxStateChange} />
         </FormItem>
         <FormItem {...tailFormItemLayout}>

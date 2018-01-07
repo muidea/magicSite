@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal } from 'antd'
+import { Form, Input, Radio, Modal } from 'antd'
 
 const FormItem = Form.Item
 
@@ -74,7 +74,7 @@ const modal = ({
           {getFieldDecorator('description', {
             initialValue: item.description,
           })(<Input />)}
-        </FormItem>        
+        </FormItem>
       </Form>
     </Modal>
   )

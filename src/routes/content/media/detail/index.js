@@ -23,7 +23,6 @@ const Detail = ({ groupDetail }) => {
 
 Detail.propTypes = {
   groupDetail: PropTypes.object,
-  loading: PropTypes.bool,
 }
 
 export default connect(({ groupDetail, loading }) => ({ groupDetail, loading: loading.models.groupDetail }))(Detail)

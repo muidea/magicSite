@@ -1,32 +1,23 @@
-import { create, remove, update } from 'services/content/link'
-import { query } from 'services/content/links'
-import { parse } from 'qs'
+import modelExtend from 'dva-model-extend'
+import { queryAllLink, deleteLink, multiDeleteLink } from 'services/content/link'
+import queryString from 'query-string'
+import { pageModel } from '../common'
 
-export default {
-
+export default modelExtend(pageModel, {
   namespace: 'link',
 
   state: {
-    list: [],
     currentItem: {},
-    modalVisible: false,
-    modalType: 'create',
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
-      current: 1,
-      total: null,
-    },
+    selectedRowKeys: [],
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(location => {
+      history.listen((location) => {
         if (location.pathname === '/content/link') {
           dispatch({
-            type: 'query',
-            payload: location.query,
+            type: 'queryAllLink',
+            payload: queryString.parse(location.search),
           })
         }
       })
@@ -35,12 +26,11 @@ export default {
 
   effects: {
 
-    *query ({ payload }, { call, put }) {
-      payload = parse(location.search.substr(1))
-      const data = yield call(query, payload)
+    * queryAllLink ({ payload = {} }, { call, put }) {
+      const data = yield call(queryAllLink, payload)
       if (data) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryAllSuccess',
           payload: {
             list: data.data,
             pagination: {
@@ -53,58 +43,28 @@ export default {
       }
     },
 
-    *'delete' ({ payload }, { call, put }) {
-      const data = yield call(remove, { id: payload })
+    * deleteLink ({ payload }, { call, put, select }) {
+      const data = yield call(deleteLink, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
-        yield put({ type: 'query' })
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllLink' })
       } else {
         throw data
       }
     },
 
-    *create ({ payload }, { call, put }) {
-      const data = yield call(create, payload)
+    * multiDeleteLink ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteLink, payload)
       if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllLink' })
       } else {
         throw data
       }
     },
-
-    *update ({ payload }, { select, call, put }) {
-      const id = yield select(({ link }) => link.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
-    },
-
   },
 
   reducers: {
-
-    querySuccess (state, action) {
-      const { list, pagination } = action.payload
-      return { ...state,
-        list,
-        pagination: {
-          ...state.pagination,
-          ...pagination,
-        } }
-    },
-
-    showModal (state, action) {
-      return { ...state, ...action.payload, modalVisible: true }
-    },
-
-    hideModal (state) {
-      return { ...state, modalVisible: false }
-    },
   },
-
-}
+})

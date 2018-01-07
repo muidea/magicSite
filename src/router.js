@@ -33,6 +33,30 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/content/article/detail')],
       component: () => import('./routes/content/article/detail/'),
     }, {
+      path: '/content/catalog',
+      models: () => [import('./models/content/catalog')],
+      component: () => import('./routes/content/catalog/'),
+    }, {
+      path: '/content/catalog/view/:id',
+      models: () => [import('./models/content/catalog/detail')],
+      component: () => import('./routes/content/catalog/detail/'),
+    }, {
+      path: '/content/link',
+      models: () => [import('./models/content/link')],
+      component: () => import('./routes/content/link/'),
+    }, {
+      path: '/content/link/view/:id',
+      models: () => [import('./models/content/link/detail')],
+      component: () => import('./routes/content/link/detail/'),
+    }, {
+      path: '/content/media',
+      models: () => [import('./models/content/media')],
+      component: () => import('./routes/content/media/'),
+    }, {
+      path: '/content/media/view/:id',
+      models: () => [import('./models/content/media/detail')],
+      component: () => import('./routes/content/media/detail/'),
+    }, {
       path: '/account/user',
       models: () => [import('./models/account/user')],
       component: () => import('./routes/account/user/'),
