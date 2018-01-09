@@ -34,10 +34,6 @@ const modal = ({
         ...getFieldsValue(),
         key: item.key,
       }
-      console.log('handleOk')
-      console.log(data)
-      console.log('...................')
-
       onOk(data)
     })
   }
@@ -46,10 +42,6 @@ const modal = ({
     ...modalProps,
     onOk: handleOk,
   }
-
-  console.log('initial model....')
-  console.log(item)
-  console.log('finish initial model....')
 
   return (
     <Modal {...modalOpts}>
