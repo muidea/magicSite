@@ -3,6 +3,7 @@ import DropOption from './DropOption'
 import Iconfont from './Iconfont'
 import Search from './Search'
 import { RichEditor, RichView } from './RichEditor'
+import EditableTagGroup from './EditableTagGroup'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
 import * as Layout from './Layout/index.js'
@@ -22,4 +23,5 @@ export {
   Page,
   RichEditor,
   RichView,
+  EditableTagGroup,
 }

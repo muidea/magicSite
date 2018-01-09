@@ -15,7 +15,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['catalog/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -35,7 +35,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     loading: loading.effects['catalog/query'],
     pagination,
     location,
-    onChange(page) {
+    onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
