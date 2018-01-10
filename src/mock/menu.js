@@ -63,7 +63,7 @@ let database = [
     bpid: '22',
     name: '分类详情',
     icon: 'folder-open',
-    route: '/content/catalog/:id',
+    route: '/content/catalog/view/:id',
   },
   {
     id: '23',
@@ -79,7 +79,7 @@ let database = [
     bpid: '23',
     name: '链接详情',
     icon: 'link',
-    route: '/content/link/:id',
+    route: '/content/link/view/:id',
   },
   {
     id: '24',
@@ -95,7 +95,7 @@ let database = [
     bpid: '24',
     name: '文件详情',
     icon: 'file',
-    route: '/content/media/:id',
+    route: '/content/media/view/:id',
   },
   {
     id: '3',

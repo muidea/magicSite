@@ -271,7 +271,7 @@ module.exports = {
     const { id } = req.params
     const data = queryArray(catalogDataBase, id, 'id')
     if (data) {
-      const result = { catalog: data, catalogList }
+      const result = { catalog: data }
       res.status(200).json(result)
     } else {
       res.status(404).json(NOTFOUND)

@@ -4,19 +4,22 @@ import { connect } from 'dva'
 import styles from './index.less'
 
 const Detail = ({ catalogDetail }) => {
-  const { data } = catalogDetail
-  const content = []
-  for (let key in data) {
-    if ({}.hasOwnProperty.call(data, key)) {
-      content.push(<div key={key} className={styles.item}>
-        <div>{key}</div>
-        <div>{String(data[key])}</div>
-      </div>)
-    }
-  }
+  const { name, description, parent, author, createdate } = catalogDetail
+
   return (<div className="content-inner">
     <div className={styles.content}>
-      {content}
+      <div className={styles.item}>
+        <div>名称</div>
+        <div>{name}</div>
+      </div>
+      <div className={styles.item}>
+        <div>描述</div>
+        <div>{description}</div>
+      </div>
+      <div className={styles.item}>
+        <div>创建时间</div>
+        <div>{createdate}</div>
+      </div>
     </div>
   </div>)
 }
