@@ -9,7 +9,7 @@ export default {
     title: '',
     content: '',
     catalog: [],
-    author: '',
+    author: {},
     createdate: '',
   },
 

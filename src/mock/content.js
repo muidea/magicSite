@@ -5,10 +5,10 @@ const config = require('../utils/config')
 const { apiPrefix } = config
 
 const catalogList = [
-  { id: 1, name: 'Linux', description: 'This is Linux Catalog', parent: [], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 2, name: 'Go', description: 'This is Golang Catalog', parent: [], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 3, name: 'Cloud', description: 'This is Cloud Catalog', parent: [], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 4, name: 'Devlop', description: 'This is Develop Catalog', parent: [], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: 1, name: 'Linux', description: 'This is Linux Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: 2, name: 'Go', description: 'This is Golang Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: 3, name: 'Cloud', description: 'This is Cloud Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: 4, name: 'Devlop', description: 'This is Develop Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
 ]
 
 const authorList = [
@@ -57,7 +57,7 @@ let catalogsListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
-      name: '@title',
+      name: '@name',
       description: '@ctitle(50,200)',
       parent: [],
       createdate: '@datetime',

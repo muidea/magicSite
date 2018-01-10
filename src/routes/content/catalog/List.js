@@ -30,14 +30,14 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       width: 64,
       className: styles.avatar,
       render: (text) => {
-        <img alt={'avatar'} width={24} src={text} />
+        return <img alt={'avatar'} width={24} src={text} />
       },
     }, {
       title: '分类名',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
-        <Link to={`/content/catalog/${record.id}`}>{text}</Link>
+        return <Link to={`/content/catalog/view/${record.id}`}>{text}</Link>
       },
     }, {
       title: '分类',

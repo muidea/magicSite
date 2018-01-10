@@ -19,7 +19,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `catalog/${modalType}`,
+        type: `catalog/${modalType}Catalog`,
         payload: data,
       })
     },

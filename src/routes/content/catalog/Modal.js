@@ -56,7 +56,7 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="父类" hasFeedback {...formItemLayout}>
+        <FormItem label="父类" {...formItemLayout}>
           {getFieldDecorator('parent', {
             initialValue: item.parent,
           })(<EditableTagGroup />)}
