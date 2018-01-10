@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import styles from './index.less'
 
-const Detail = ({ groupDetail }) => {
-  const { data } = groupDetail
+const Detail = ({ linkDetail }) => {
+  const { data } = linkDetail
   const content = []
   for (let key in data) {
     if ({}.hasOwnProperty.call(data, key)) {
@@ -22,7 +22,7 @@ const Detail = ({ groupDetail }) => {
 }
 
 Detail.propTypes = {
-  groupDetail: PropTypes.object,
+  linkDetail: PropTypes.object,
 }
 
-export default connect(({ groupDetail, loading }) => ({ groupDetail, loading: loading.models.groupDetail }))(Detail)
+export default connect(({ linkDetail, loading }) => ({ linkDetail, loading: loading.models.linkDetail }))(Detail)

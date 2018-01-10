@@ -1,34 +1,38 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from 'services/content/link'
+import { queryLink } from 'services/content/link'
 
 export default {
 
-  namespace: 'linkDetail',
+  namespace: 'linkDetail',
 
   state: {
-    data: {},
+    name: '',
+    description: '',
+    parent: [],
+    author: {},
+    createdate: '',
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {
-        const match = pathToRegexp('/content/link/:id').exec(location.pathname)
+      history.listen((location) => {
+        const match = pathToRegexp('/content/link/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
+          dispatch({ type: 'queryLink', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    *query ({
+    * queryLink ({
       payload,
     }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(queryLink, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryLinkSuccess',
           payload: {
             data: other,
           },
@@ -40,11 +44,18 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
+    queryLinkSuccess (state, { payload }) {
       const { data } = payload
+      const { link } = data
+      const { name, description, parent, author, createdate } = link
+
       return {
         ...state,
-        data,
+        name,
+        description,
+        parent,
+        author,
+        createdate,
       }
     },
   },
