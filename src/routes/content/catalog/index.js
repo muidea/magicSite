@@ -53,11 +53,17 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
       })
     },
     onEditItem (item) {
+      let names = []
+      const { parent } = item
+      for (item of parent) {
+        names.push(item.name)
+      }
+
       dispatch({
         type: 'catalog/showModal',
         payload: {
           modalType: 'update',
-          currentItem: item,
+          currentItem: { ...item, parent: names },
         },
       })
     },

@@ -5,10 +5,10 @@ const config = require('../utils/config')
 const { apiPrefix } = config
 
 const catalogList = [
-  { id: 1, name: 'Linux', description: 'This is Linux Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 2, name: 'Go', description: 'This is Golang Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 3, name: 'Cloud', description: 'This is Cloud Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
-  { id: 4, name: 'Devlop', description: 'This is Develop Catalog', parent: [{ id: 0, name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: '1', name: 'Linux', description: 'This is Linux Catalog', parent: [{ id: '0', name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: '2', name: 'Go', description: 'This is Golang Catalog', parent: [{ id: '0', name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: '3', name: 'Cloud', description: 'This is Cloud Catalog', parent: [{ id: '0', name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
+  { id: '4', name: 'Devlop', description: 'This is Develop Catalog', parent: [{ id: '0', name: 'Top' }], createdate: '2017-12-30 10:00:00', author: { id: 0, name: 'admin' } },
 ]
 
 const authorList = [
@@ -270,6 +270,9 @@ module.exports = {
   [`GET ${apiPrefix}/catalog/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(catalogDataBase, id, 'id')
+    console.log(catalogDataBase)
+    console.log(id)
+    console.log(data)
     if (data) {
       const result = { catalog: data }
       res.status(200).json(result)
