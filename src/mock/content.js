@@ -256,10 +256,8 @@ module.exports = {
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const token = JSON.parse(cookies.token)
-
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const curCatalog = selectArray(catalogList, newData.catalog_parent, 'id')
-    const newCatalog = { id: Mock.mock('@id'), name: newData.catalog_name, description: newData.catalog_description, parent: curCatalog, author: curAuthor, createdate: Mock.mock('@now') }
+    const newCatalog = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
     catalogDataBase.unshift(newCatalog)
@@ -270,9 +268,6 @@ module.exports = {
   [`GET ${apiPrefix}/catalog/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(catalogDataBase, id, 'id')
-    console.log(catalogDataBase)
-    console.log(id)
-    console.log(data)
     if (data) {
       const result = { catalog: data }
       res.status(200).json(result)
@@ -302,8 +297,7 @@ module.exports = {
     const token = JSON.parse(cookies.token)
 
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const curCatalog = selectArray(catalogList, newData.catalog_parent, 'id')
-    const newCatalog = { id, name: newData.catalog_name, description: newData.catalog_description, parent: curCatalog, author: curAuthor }
+    const newCatalog = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
     catalogDataBase = catalogDataBase.map((item) => {

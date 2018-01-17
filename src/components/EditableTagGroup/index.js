@@ -42,8 +42,15 @@ export default class EditableTagGroup extends Component {
     const state = this.state
     const inputValue = state.inputValue
     let value = state.value
-    if (inputValue && value.indexOf(inputValue) === -1) {
-      value = [...value, inputValue]
+    let exitFlag = false
+    for (let item of value) {
+      if (item.name === inputValue) {
+        exitFlag = true
+        break
+      }
+    }
+    if (inputValue && !exitFlag) {
+      value = [...value, { name: inputValue, id: -1 }]
     }
 
     this.setState({
@@ -67,13 +74,13 @@ export default class EditableTagGroup extends Component {
     return (
       <div>
         {value.map((tag) => {
-          const isLongTag = tag.length > 20
+          const isLongTag = tag.name.length > 20
           const tagElem = (
-            <Tag key={tag} closable afterClose={() => this.handleClose(tag)}>
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+            <Tag key={tag.name} closable afterClose={() => this.handleClose(tag.name)}>
+              {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
             </Tag>
           )
-          return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem
+          return isLongTag ? <Tooltip title={tag.name} key={tag.name}>{tagElem}</Tooltip> : tagElem
         })}
         {inputVisible && (
           <Input

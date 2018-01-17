@@ -11,7 +11,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
   const { pageSize } = pagination
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: currentItem,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['catalog/update'],
@@ -20,7 +20,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     onOk (data) {
       dispatch({
         type: `catalog/${modalType}Catalog`,
-        payload: data,
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel () {
@@ -48,22 +48,16 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'catalog/delete',
+        type: 'catalog/deleteCatalog',
         payload: id,
       })
     },
     onEditItem (item) {
-      let names = []
-      const { parent } = item
-      for (item of parent) {
-        names.push(item.name)
-      }
-
       dispatch({
         type: 'catalog/showModal',
         payload: {
           modalType: 'update',
-          currentItem: { ...item, parent: names },
+          currentItem: item,
         },
       })
     },

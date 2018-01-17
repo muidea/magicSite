@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'catalog',
 
   state: {
-    currentItem: {},
+    currentItem: { id: -1, name: '', descrption: '', parent: [] },
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -60,6 +60,7 @@ export default modelExtend(pageModel, {
     * createCatalog ({ payload }, { call, put }) {
       const data = yield call(createCatalog, payload)
       if (data.success) {
+        yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/catalog'))
       } else {
         throw data
@@ -69,6 +70,7 @@ export default modelExtend(pageModel, {
     * updateCatalog ({ payload }, { call, put }) {
       const data = yield call(updateCatalog, payload)
       if (data.success) {
+        yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/catalog'))
       } else {
         throw data
@@ -103,7 +105,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false }
+      return { ...state, currentItem: { id: -1, name: '', descrption: '', parent: [] }, modalVisible: false }
     },
   },
 
