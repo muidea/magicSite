@@ -11,16 +11,16 @@ const Link = ({ location, dispatch, link, loading }) => {
   const { pageSize } = pagination
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: currentItem,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['link/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? '新建链接' : '修改链接'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `link/${modalType}`,
-        payload: data,
+        type: `link/${modalType}Link`,
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel () {
@@ -48,7 +48,7 @@ const Link = ({ location, dispatch, link, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'link/delete',
+        type: 'link/deleteLink',
         payload: id,
       })
     },

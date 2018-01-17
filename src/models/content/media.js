@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
-import { queryAllMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
+import { routerRedux } from 'dva/router'
+import { queryAllMedia, queryMedia, createMedia, updateMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -7,8 +8,10 @@ export default modelExtend(pageModel, {
   namespace: 'media',
 
   state: {
-    currentItem: {},
+    currentItem: { id: -1, name: '', descrption: '', parent: [] },
     selectedRowKeys: [],
+    modalVisible: false,
+    modalType: 'create',
   },
 
   subscriptions: {
@@ -43,8 +46,8 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteMedia ({ payload }, { call, put, select }) {
-      const data = yield call(deleteMedia, { id: payload })
+    * queryMedia ({ payload }, { call, put, select }) {
+      const data = yield call(queryMedia, { id: payload })
       const { selectedRowKeys } = yield select(_ => _.media)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -54,17 +57,56 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteMedia ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteMedia, payload)
+    * createMedia ({ payload }, { call, put }) {
+      const data = yield call(createMedia, payload)
       if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllMedia' })
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/content/media'))
+      } else {
+        throw data
+      }
+    },
+
+    * updateMedia ({ payload }, { call, put }) {
+      const data = yield call(updateMedia, payload)
+      if (data.success) {
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/content/media'))
       } else {
         throw data
       }
     },
   },
 
-  reducers: {
+  * deleteMedia ({ payload }, { call, put, select }) {
+    const data = yield call(deleteMedia, { id: payload })
+    const { selectedRowKeys } = yield select(_ => _.media)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+      yield put({ type: 'queryAllMedia' })
+    } else {
+      throw data
+    }
   },
+
+  * multiDeleteMedia ({ payload }, { call, put }) {
+    const data = yield call(multiDeleteMedia, payload)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+      yield put({ type: 'queryAllMedia' })
+    } else {
+      throw data
+    }
+  },
+
+  reducers: {
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
+    },
+
+    hideModal (state) {
+      return { ...state, currentItem: { id: -1, name: '', descrption: '', parent: [] }, modalVisible: false }
+    },
+  },
+
 })

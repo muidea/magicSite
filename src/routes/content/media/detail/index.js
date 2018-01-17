@@ -3,26 +3,29 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import styles from './index.less'
 
-const Detail = ({ groupDetail }) => {
-  const { data } = groupDetail
-  const content = []
-  for (let key in data) {
-    if ({}.hasOwnProperty.call(data, key)) {
-      content.push(<div key={key} className={styles.item}>
-        <div>{key}</div>
-        <div>{String(data[key])}</div>
-      </div>)
-    }
-  }
+const Detail = ({ mediaDetail }) => {
+  const { name, description, parent, author, createdate } = mediaDetail
+
   return (<div className="content-inner">
     <div className={styles.content}>
-      {content}
+      <div className={styles.item}>
+        <div>名称</div>
+        <div>{name}</div>
+      </div>
+      <div className={styles.item}>
+        <div>描述</div>
+        <div>{description}</div>
+      </div>
+      <div className={styles.item}>
+        <div>创建时间</div>
+        <div>{createdate}</div>
+      </div>
     </div>
   </div>)
 }
 
 Detail.propTypes = {
-  groupDetail: PropTypes.object,
+  mediaDetail: PropTypes.object,
 }
 
-export default connect(({ groupDetail, loading }) => ({ groupDetail, loading: loading.models.groupDetail }))(Detail)
+export default connect(({ mediaDetail, loading }) => ({ mediaDetail, loading: loading.models.mediaDetail }))(Detail)

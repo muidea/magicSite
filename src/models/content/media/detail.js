@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryMedia } from 'services/content/media'
+import { queryCatalog } from 'services/content/media'
 
 export default {
 
@@ -17,24 +17,22 @@ export default {
     setup ({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/content/media/view/:id').exec(location.pathname)
-        console.log(location.pathname)
-
         if (match) {
-          dispatch({ type: 'queryMedia', payload: { id: match[1] } })
+          dispatch({ type: 'queryCatalog', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    * queryMedia ({
+    * queryCatalog ({
       payload,
     }, { call, put }) {
-      const data = yield call(queryMedia, payload)
+      const data = yield call(queryCatalog, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'queryMediaSuccess',
+          type: 'queryCatalogSuccess',
           payload: {
             data: other,
           },
@@ -46,7 +44,7 @@ export default {
   },
 
   reducers: {
-    queryMediaSuccess (state, { payload }) {
+    queryCatalogSuccess (state, { payload }) {
       const { data } = payload
       const { media } = data
       const { name, description, parent, author, createdate } = media

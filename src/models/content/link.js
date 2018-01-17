@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
-import { queryAllLink, deleteLink, multiDeleteLink } from 'services/content/link'
+import { routerRedux } from 'dva/router'
+import { queryAllLink, queryLink, createLink, updateLink, deleteLink, multiDeleteLink } from 'services/content/link'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -7,8 +8,10 @@ export default modelExtend(pageModel, {
   namespace: 'link',
 
   state: {
-    currentItem: {},
+    currentItem: { id: -1, name: '', descrption: '', parent: [] },
     selectedRowKeys: [],
+    modalVisible: false,
+    modalType: 'create',
   },
 
   subscriptions: {
@@ -43,8 +46,8 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteLink ({ payload }, { call, put, select }) {
-      const data = yield call(deleteLink, { id: payload })
+    * queryLink ({ payload }, { call, put, select }) {
+      const data = yield call(queryLink, { id: payload })
       const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -54,17 +57,56 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteLink ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteLink, payload)
+    * createLink ({ payload }, { call, put }) {
+      const data = yield call(createLink, payload)
       if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/content/link'))
+      } else {
+        throw data
+      }
+    },
+
+    * updateLink ({ payload }, { call, put }) {
+      const data = yield call(updateLink, payload)
+      if (data.success) {
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/content/link'))
       } else {
         throw data
       }
     },
   },
 
-  reducers: {
+  * deleteLink ({ payload }, { call, put, select }) {
+    const data = yield call(deleteLink, { id: payload })
+    const { selectedRowKeys } = yield select(_ => _.link)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+      yield put({ type: 'queryAllLink' })
+    } else {
+      throw data
+    }
   },
+
+  * multiDeleteLink ({ payload }, { call, put }) {
+    const data = yield call(multiDeleteLink, payload)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+      yield put({ type: 'queryAllLink' })
+    } else {
+      throw data
+    }
+  },
+
+  reducers: {
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
+    },
+
+    hideModal (state) {
+      return { ...state, currentItem: { id: -1, name: '', descrption: '', parent: [] }, modalVisible: false }
+    },
+  },
+
 })

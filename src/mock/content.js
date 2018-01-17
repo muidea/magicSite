@@ -69,6 +69,38 @@ let catalogsListData = Mock.mock({
   ],
 })
 
+let linksListData = Mock.mock({
+  'data|3-5': [
+    {
+      id: '@id',
+      name: '@name',
+      description: '@ctitle(50,200)',
+      parent: [],
+      createdate: '@datetime',
+      author () { return Mock.Random.authorInfo() },
+      avatar () {
+        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
+      },
+    },
+  ],
+})
+
+let mediasListData = Mock.mock({
+  'data|3-5': [
+    {
+      id: '@id',
+      name: '@name',
+      description: '@ctitle(50,200)',
+      parent: [],
+      createdate: '@datetime',
+      author () { return Mock.Random.authorInfo() },
+      avatar () {
+        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
+      },
+    },
+  ],
+})
+
 const constructCatalogDataBase = (database) => {
   for (let item of catalogList) {
     item.avatar = Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', item.name.substr(0, 1))
@@ -81,6 +113,8 @@ const constructCatalogDataBase = (database) => {
 
 let articleDataBase = articlesListData.data
 let catalogDataBase = catalogsListData.data
+let linkDataBase = linksListData.data
+let mediaDataBase = mediasListData.data
 
 catalogDataBase = constructCatalogDataBase(catalogDataBase)
 
@@ -305,6 +339,176 @@ module.exports = {
         isExist = true
         newCatalog.createdate = item.createdate
         return Object.assign({}, item, newCatalog)
+      }
+
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`GET ${apiPrefix}/links`] (req, res) {
+    const { query } = req
+    let { pageSize, page } = query
+    pageSize = pageSize || 10
+    page = page || 1
+
+    let newData = linkDataBase
+    res.status(200).json({
+      data: newData.slice((page - 1) * pageSize, page * pageSize),
+      total: newData.length,
+    })
+  },
+
+  [`DELETE ${apiPrefix}/links`] (req, res) {
+    const { ids } = req.body
+    linkDataBase = linkDataBase.filter(item => !ids.some(_ => _ === item.id))
+    res.status(204).end()
+  },
+
+  [`POST ${apiPrefix}/link`] (req, res) {
+    const newData = req.body
+    const cookie = req.headers.cookie || ''
+    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+    const token = JSON.parse(cookies.token)
+    const curAuthor = queryArray(authorList, token.id, 'id')
+    const newLink = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
+    newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
+
+    linkDataBase.unshift(newLink)
+
+    res.status(200).end()
+  },
+
+  [`GET ${apiPrefix}/link/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(linkDataBase, id, 'id')
+    if (data) {
+      const result = { link: data }
+      res.status(200).json(result)
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`DELETE ${apiPrefix}/link/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(linkDataBase, id, 'id')
+    if (data) {
+      linkDataBase = linkDataBase.filter(item => item.id !== id)
+      res.status(204).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`PUT ${apiPrefix}/link/:id`] (req, res) {
+    const { id } = req.params
+    let isExist = false
+
+    const newData = req.body
+    const cookie = req.headers.cookie || ''
+    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+    const token = JSON.parse(cookies.token)
+
+    const curAuthor = queryArray(authorList, token.id, 'id')
+    const newLink = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
+    newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
+
+    linkDataBase = linkDataBase.map((item) => {
+      if (item.id === id) {
+        isExist = true
+        newLink.createdate = item.createdate
+        return Object.assign({}, item, newLink)
+      }
+
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`GET ${apiPrefix}/medias`] (req, res) {
+    const { query } = req
+    let { pageSize, page } = query
+    pageSize = pageSize || 10
+    page = page || 1
+
+    let newData = mediaDataBase
+    res.status(200).json({
+      data: newData.slice((page - 1) * pageSize, page * pageSize),
+      total: newData.length,
+    })
+  },
+
+  [`DELETE ${apiPrefix}/medias`] (req, res) {
+    const { ids } = req.body
+    mediaDataBase = mediaDataBase.filter(item => !ids.some(_ => _ === item.id))
+    res.status(204).end()
+  },
+
+  [`POST ${apiPrefix}/media`] (req, res) {
+    const newData = req.body
+    const cookie = req.headers.cookie || ''
+    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+    const token = JSON.parse(cookies.token)
+    const curAuthor = queryArray(authorList, token.id, 'id')
+    const newMedia = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
+    newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
+
+    mediaDataBase.unshift(newMedia)
+
+    res.status(200).end()
+  },
+
+  [`GET ${apiPrefix}/media/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(mediaDataBase, id, 'id')
+    if (data) {
+      const result = { media: data }
+      res.status(200).json(result)
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`DELETE ${apiPrefix}/media/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(mediaDataBase, id, 'id')
+    if (data) {
+      mediaDataBase = mediaDataBase.filter(item => item.id !== id)
+      res.status(204).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`PUT ${apiPrefix}/media/:id`] (req, res) {
+    const { id } = req.params
+    let isExist = false
+
+    const newData = req.body
+    const cookie = req.headers.cookie || ''
+    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+    const token = JSON.parse(cookies.token)
+
+    const curAuthor = queryArray(authorList, token.id, 'id')
+    const newMedia = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
+    newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
+
+    mediaDataBase = mediaDataBase.map((item) => {
+      if (item.id === id) {
+        isExist = true
+        newMedia.createdate = item.createdate
+        return Object.assign({}, item, newMedia)
       }
 
       return item

@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Radio, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { EditableTagGroup } from 'components'
 
 const FormItem = Form.Item
+const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -14,7 +16,7 @@ const formItemLayout = {
 }
 
 const modal = ({
-  item = {},
+  item,
   onOk,
   form: {
     getFieldDecorator,
@@ -44,7 +46,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分组名" hasFeedback {...formItemLayout}>
+        <FormItem label="分类名" hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -54,26 +56,15 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="分类" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: item.catalog,
-            rules: [
-              {
-                required: true,
-                type: 'number',
-              },
-            ],
-          })(
-            <Radio.Group>
-              <Radio value={1}>管理员组</Radio>
-              <Radio value={0}>用户组</Radio>
-            </Radio.Group>
-          )}
+        <FormItem label="父类" {...formItemLayout}>
+          {getFieldDecorator('parent', {
+            initialValue: item.parent,
+          })(<EditableTagGroup />)}
         </FormItem>
-        <FormItem label="描述" hasFeedback {...formItemLayout}>
+        <FormItem label="描述" {...formItemLayout}>
           {getFieldDecorator('description', {
             initialValue: item.description,
-          })(<Input />)}
+          })(<TextArea rows={3} cols={3} />)}
         </FormItem>
       </Form>
     </Modal>

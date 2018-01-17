@@ -6,21 +6,21 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Media = ({ location, dispatch, media, loading }) => {
+const Catalog = ({ location, dispatch, media, loading }) => {
   const { list, pagination, currentItem, modalVisible, modalType } = media
   const { pageSize } = pagination
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: currentItem,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['media/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `media/${modalType}`,
-        payload: data,
+        type: `media/${modalType}Catalog`,
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel () {
@@ -48,7 +48,7 @@ const Media = ({ location, dispatch, media, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'media/delete',
+        type: 'media/deleteCatalog',
         payload: id,
       })
     },
@@ -107,11 +107,11 @@ const Media = ({ location, dispatch, media, loading }) => {
   )
 }
 
-Media.propTypes = {
+Catalog.propTypes = {
   media: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ media, loading }) => ({ media, loading }))(Media)
+export default connect(({ media, loading }) => ({ media, loading }))(Catalog)
