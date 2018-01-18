@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const User = ({ location, dispatch, user, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = user
+  const { list, pagination, currentItem, modalVisible } = user
   const { pageSize } = pagination
 
   const modalProps = {
@@ -15,12 +15,12 @@ const User = ({ location, dispatch, user, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['user/update'],
-    title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
+    title: '新建用户',
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `user/${modalType}User`,
-        payload: { id: currentItem.id, ...data },
+        type: 'user/createUser',
+        payload: { ...data },
       })
     },
     onCancel () {
@@ -50,15 +50,6 @@ const User = ({ location, dispatch, user, loading }) => {
       dispatch({
         type: 'user/deleteUser',
         payload: id,
-      })
-    },
-    onEditItem (item) {
-      dispatch({
-        type: 'user/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
       })
     },
   }
@@ -91,9 +82,6 @@ const User = ({ location, dispatch, user, loading }) => {
     onAdd () {
       dispatch({
         type: 'user/showModal',
-        payload: {
-          modalType: 'create',
-        },
       })
     },
   }

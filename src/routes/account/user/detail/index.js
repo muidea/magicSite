@@ -4,21 +4,21 @@ import { connect } from 'dva'
 import styles from './index.less'
 
 const Detail = ({ userDetail }) => {
-  const { name, description, parent, author, createdate } = userDetail
+  const { account, password, nickName, email, group } = userDetail
 
   return (<div className="content-inner">
     <div className={styles.content}>
       <div className={styles.item}>
-        <div>名称</div>
-        <div>{name}</div>
+        <div>账号</div>
+        <div>{account}</div>
       </div>
       <div className={styles.item}>
-        <div>描述</div>
-        <div>{description}</div>
+        <div>昵称</div>
+        <div>{nickName}</div>
       </div>
       <div className={styles.item}>
-        <div>创建时间</div>
-        <div>{createdate}</div>
+        <div>EMail</div>
+        <div>{email}</div>
       </div>
     </div>
   </div>)

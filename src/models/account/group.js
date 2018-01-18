@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
-import { queryAllGroup, deleteGroup, multiDeleteGroup } from 'services/account/group'
+import { routerRedux } from 'dva/router'
+import { queryAllGroup, queryGroup, createGroup, updateGroup, deleteGroup, multiDeleteGroup } from 'services/account/group'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -7,8 +8,10 @@ export default modelExtend(pageModel, {
   namespace: 'group',
 
   state: {
-    currentItem: {},
+    currentItem: { id: -1, name: '', descrption: '', catalog: 0 },
     selectedRowKeys: [],
+    modalVisible: false,
+    modalType: 'create',
   },
 
   subscriptions: {
@@ -43,8 +46,8 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteGroup ({ payload }, { call, put, select }) {
-      const data = yield call(deleteGroup, { id: payload })
+    * queryGroup ({ payload }, { call, put, select }) {
+      const data = yield call(queryGroup, { id: payload })
       const { selectedRowKeys } = yield select(_ => _.group)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -54,17 +57,56 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteGroup ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteGroup, payload)
+    * createGroup ({ payload }, { call, put }) {
+      const data = yield call(createGroup, payload)
       if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllGroup' })
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/account/group'))
+      } else {
+        throw data
+      }
+    },
+
+    * updateGroup ({ payload }, { call, put }) {
+      const data = yield call(updateGroup, payload)
+      if (data.success) {
+        yield put({ type: 'hideModal' })
+        yield put(routerRedux.push('/account/group'))
       } else {
         throw data
       }
     },
   },
 
-  reducers: {
+  * deleteGroup ({ payload }, { call, put, select }) {
+    const data = yield call(deleteGroup, { id: payload })
+    const { selectedRowKeys } = yield select(_ => _.group)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+      yield put({ type: 'queryAllGroup' })
+    } else {
+      throw data
+    }
   },
+
+  * multiDeleteGroup ({ payload }, { call, put }) {
+    const data = yield call(multiDeleteGroup, payload)
+    if (data.success) {
+      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+      yield put({ type: 'queryAllGroup' })
+    } else {
+      throw data
+    }
+  },
+
+  reducers: {
+    showModal (state, { payload }) {
+      return { ...state, ...payload, modalVisible: true }
+    },
+
+    hideModal (state) {
+      return { ...state, currentItem: { id: -1, name: '', descrption: '', catalog: 0 }, modalVisible: false }
+    },
+  },
+
 })

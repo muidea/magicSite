@@ -8,9 +8,7 @@ export default {
   state: {
     name: '',
     description: '',
-    parent: [],
-    author: {},
-    createdate: '',
+    catalog: 0,
   },
 
   subscriptions: {
@@ -47,15 +45,13 @@ export default {
     queryGroupSuccess (state, { payload }) {
       const { data } = payload
       const { group } = data
-      const { name, description, parent, author, createdate } = group
+      const { name, description, catalog } = group
 
       return {
         ...state,
         name,
         description,
-        parent,
-        author,
-        createdate,
+        catalog,
       }
     },
   },

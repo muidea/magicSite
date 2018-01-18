@@ -6,11 +6,11 @@ export default {
   namespace: 'userDetail',
 
   state: {
-    name: '',
-    description: '',
-    parent: [],
-    author: {},
-    createdate: '',
+    account: '',
+    password: '',
+    nickName: '',
+    email: '',
+    group: [],
   },
 
   subscriptions: {
@@ -47,15 +47,15 @@ export default {
     queryUserSuccess (state, { payload }) {
       const { data } = payload
       const { user } = data
-      const { name, description, parent, author, createdate } = user
+      const { account, password, nickName, email, group } = user
 
       return {
         ...state,
-        name,
-        description,
-        parent,
-        author,
-        createdate,
+        account,
+        password,
+        nickName,
+        email,
+        group,
       }
     },
   },

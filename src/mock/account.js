@@ -5,9 +5,9 @@ const { apiPrefix } = config
 
 
 const internalGroupList = [
-  { id: '1', name: '访客组' },
-  { id: '2', name: '用户组' },
-  { id: '3', name: '管理组' },
+  { id: '1', name: '平台访客组', description: '普通的访问者的描述信息', catalog: 0 },
+  { id: '2', name: '平台用户组', description: '注册用户的描述信息', catalog: 1 },
+  { id: '3', name: '平台管理组', description: '管理用户的描述信息', catalog: 2 },
 ]
 
 Mock.Random.extend({
@@ -41,7 +41,6 @@ let groupListData = Mock.mock({
     },
   ],
 })
-
 
 const constructGroupDataBase = (database) => {
   for (let item of internalGroupList) {

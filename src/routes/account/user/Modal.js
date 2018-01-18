@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
-import { EditableTagGroup } from 'components'
 
 const FormItem = Form.Item
-const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -46,9 +44,9 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分类名" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: item.name,
+        <FormItem label="账号" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('account', {
+            initialValue: item.account,
             rules: [
               {
                 required: true,
@@ -56,15 +54,10 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="父类" {...formItemLayout}>
-          {getFieldDecorator('parent', {
-            initialValue: item.parent,
-          })(<EditableTagGroup />)}
-        </FormItem>
-        <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<TextArea rows={3} cols={3} />)}
+        <FormItem label="EMail" {...formItemLayout}>
+          {getFieldDecorator('email', {
+            initialValue: item.email,
+          })(<Input />)}
         </FormItem>
       </Form>
     </Modal>

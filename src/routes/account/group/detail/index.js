@@ -4,7 +4,7 @@ import { connect } from 'dva'
 import styles from './index.less'
 
 const Detail = ({ groupDetail }) => {
-  const { name, description, parent, author, createdate } = groupDetail
+  const { name, description, catalog } = groupDetail
 
   return (<div className="content-inner">
     <div className={styles.content}>
@@ -17,8 +17,8 @@ const Detail = ({ groupDetail }) => {
         <div>{description}</div>
       </div>
       <div className={styles.item}>
-        <div>创建时间</div>
-        <div>{createdate}</div>
+        <div>类型</div>
+        <div>{catalog}</div>
       </div>
     </div>
   </div>)

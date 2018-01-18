@@ -118,7 +118,7 @@ let database = [
     bpid: '31',
     name: '用户详情',
     icon: 'idcard',
-    route: '/account/user/:id',
+    route: '/account/user/view/:id',
   },
   {
     id: '32',
@@ -134,7 +134,7 @@ let database = [
     bpid: '32',
     name: '分组详情',
     icon: 'solution',
-    route: '/account/group/:id',
+    route: '/account/group/view/:id',
   },
   {
     id: '4',

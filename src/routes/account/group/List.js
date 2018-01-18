@@ -14,7 +14,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: '确认删除分类?',
+        title: '确认删除分组?',
         onOk () {
           onDeleteItem(record.id)
         },
@@ -33,19 +33,30 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <img alt={'avatar'} width={24} src={text} />
       },
     }, {
-      title: '分类名',
+      title: '名称',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
         return <Link to={`/account/group/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '分类',
-      dataIndex: 'group',
-      key: 'group',
+      title: '类型',
+      dataIndex: 'catalog',
+      key: 'catalog',
       width: 100,
       render: (text, record) => {
-        return record.group > 0 ? '管理员组' : '用户组'
+        let val = '访客'
+        switch (record.catalog) {
+          case 1:
+            val = '用户'
+            break
+          case 2:
+            val = '管理'
+            break
+          default:
+            break
+        }
+        return val
       },
     }, {
       title: '描述',

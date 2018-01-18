@@ -61,7 +61,7 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/account/user')],
       component: () => import('./routes/account/user/'),
     }, {
-      path: '/account/user/:id',
+      path: '/account/user/view/:id',
       models: () => [import('./models/account/user/detail')],
       component: () => import('./routes/account/user/detail/'),
     }, {
@@ -69,7 +69,7 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/account/group')],
       component: () => import('./routes/account/group/'),
     }, {
-      path: '/account/group/:id',
+      path: '/account/group/view/:id',
       models: () => [import('./models/account/group/detail')],
       component: () => import('./routes/account/group/detail/'),
     }, {
