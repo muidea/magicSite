@@ -76,27 +76,27 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-  },
 
-  * deleteGroup ({ payload }, { call, put, select }) {
-    const data = yield call(deleteGroup, { id: payload })
-    const { selectedRowKeys } = yield select(_ => _.group)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-      yield put({ type: 'queryAllGroup' })
-    } else {
-      throw data
-    }
-  },
+    * deleteGroup ({ payload }, { call, put, select }) {
+      const data = yield call(deleteGroup, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.group)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllGroup' })
+      } else {
+        throw data
+      }
+    },
 
-  * multiDeleteGroup ({ payload }, { call, put }) {
-    const data = yield call(multiDeleteGroup, payload)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-      yield put({ type: 'queryAllGroup' })
-    } else {
-      throw data
-    }
+    * multiDeleteGroup ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteGroup, payload)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllGroup' })
+      } else {
+        throw data
+      }
+    },
   },
 
   reducers: {

@@ -76,27 +76,27 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-  },
 
-  * deleteCatalog ({ payload }, { call, put, select }) {
-    const data = yield call(deleteCatalog, { id: payload })
-    const { selectedRowKeys } = yield select(_ => _.catalog)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-      yield put({ type: 'queryAllCatalog' })
-    } else {
-      throw data
-    }
-  },
+    * deleteCatalog ({ payload }, { call, put, select }) {
+      const data = yield call(deleteCatalog, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.catalog)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllCatalog' })
+      } else {
+        throw data
+      }
+    },
 
-  * multiDeleteCatalog ({ payload }, { call, put }) {
-    const data = yield call(multiDeleteCatalog, payload)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-      yield put({ type: 'queryAllCatalog' })
-    } else {
-      throw data
-    }
+    * multiDeleteCatalog ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteCatalog, payload)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllCatalog' })
+      } else {
+        throw data
+      }
+    },
   },
 
   reducers: {

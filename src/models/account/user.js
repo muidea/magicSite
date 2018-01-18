@@ -75,28 +75,28 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-  },
 
-  * deleteUser ({ payload }, { call, put, select }) {
-    console.log(payload)
-    const data = yield call(deleteUser, { id: payload })
-    const { selectedRowKeys } = yield select(_ => _.user)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-      yield put({ type: 'queryAllUser' })
-    } else {
-      throw data
-    }
-  },
+    * deleteUser ({ payload }, { call, put, select }) {
+      console.log(payload)
+      const data = yield call(deleteUser, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.user)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllUser' })
+      } else {
+        throw data
+      }
+    },
 
-  * multiDeleteUser ({ payload }, { call, put }) {
-    const data = yield call(multiDeleteUser, payload)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-      yield put({ type: 'queryAllUser' })
-    } else {
-      throw data
-    }
+    * multiDeleteUser ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteUser, payload)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllUser' })
+      } else {
+        throw data
+      }
+    },
   },
 
   reducers: {

@@ -76,29 +76,28 @@ export default modelExtend(pageModel, {
         throw data
       }
     },
-  },
 
-  * deleteMedia ({ payload }, { call, put, select }) {
-    const data = yield call(deleteMedia, { id: payload })
-    const { selectedRowKeys } = yield select(_ => _.media)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-      yield put({ type: 'queryAllMedia' })
-    } else {
-      throw data
-    }
-  },
+    * deleteMedia ({ payload }, { call, put, select }) {
+      const data = yield call(deleteMedia, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.media)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllMedia' })
+      } else {
+        throw data
+      }
+    },
 
-  * multiDeleteMedia ({ payload }, { call, put }) {
-    const data = yield call(multiDeleteMedia, payload)
-    if (data.success) {
-      yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-      yield put({ type: 'queryAllMedia' })
-    } else {
-      throw data
-    }
+    * multiDeleteMedia ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteMedia, payload)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllMedia' })
+      } else {
+        throw data
+      }
+    },
   },
-
   reducers: {
     showModal (state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
