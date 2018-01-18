@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { EditableTagGroup } from 'components'
 
 const FormItem = Form.Item
-const { TextArea } = Input;
-const RadioGroup = Radio.Group;
+const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -16,7 +16,7 @@ const formItemLayout = {
 }
 
 const modal = ({
-  item = {},
+  item,
   onOk,
   form: {
     getFieldDecorator,
@@ -46,43 +46,25 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分组名" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('group_name', {
+        <FormItem label="分类名" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
               {
                 required: true,
-                message: '分组名不能为空',
               },
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="描述" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('group_description', {
-            initialValue: item.description,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<TextArea rows={4} />)}
+        <FormItem label="父类" {...formItemLayout}>
+          {getFieldDecorator('parent', {
+            initialValue: item.parent,
+          })(<EditableTagGroup />)}
         </FormItem>
-        <FormItem label="分类" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('group_catalog', {
-            initialValue: item.catalog.id,
-            rules: [
-              {
-                required: true,
-                message: '分类必须选择',
-              },
-            ],
-          })(
-            <RadioGroup>
-            <Radio value={1}>注册用户</Radio>
-            <Radio value={2}>特权用户</Radio>
-            <Radio value={3}>系统管理员</Radio>
-            </RadioGroup>
-          )}
+        <FormItem label="描述" {...formItemLayout}>
+          {getFieldDecorator('description', {
+            initialValue: item.description,
+          })(<TextArea rows={3} cols={3} />)}
         </FormItem>
       </Form>
     </Modal>
