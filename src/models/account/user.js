@@ -77,7 +77,6 @@ export default modelExtend(pageModel, {
     },
 
     * deleteUser ({ payload }, { call, put, select }) {
-      console.log(payload)
       const data = yield call(deleteUser, { id: payload })
       const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {

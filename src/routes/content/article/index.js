@@ -58,7 +58,6 @@ const Article = ({ location, dispatch, article, loading }) => {
       ...location.query,
     },
     onFilterChange (value) {
-      console.log(value)
       dispatch(routerRedux.push({
         pathname: location.pathname,
         search: queryString.stringify({
