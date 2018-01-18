@@ -42,7 +42,7 @@ let articlesListData = Mock.mock({
     {
       id: '@id',
       title: '@ctitle(5,10)',
-      content: '@ctitle(50,200)',
+      content: '@cparagraph',
       createdate: '@datetime',
       catalog () { return Mock.Random.catalogArray() },
       author () { return Mock.Random.authorInfo() },
@@ -57,8 +57,8 @@ let catalogsListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
-      name: '@name',
-      description: '@ctitle(50,200)',
+      name: '@ctitle',
+      description: '@cparagraph',
       parent: [],
       createdate: '@datetime',
       author () { return Mock.Random.authorInfo() },
@@ -73,8 +73,8 @@ let linksListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
-      name: '@name',
-      description: '@ctitle(50,200)',
+      name: '@ctitle',
+      description: '@cparagraph',
       parent: [],
       createdate: '@datetime',
       author () { return Mock.Random.authorInfo() },
@@ -89,8 +89,8 @@ let mediasListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
-      name: '@name',
-      description: '@ctitle(50,200)',
+      name: '@ctitle',
+      description: '@cparagraph',
       parent: [],
       createdate: '@datetime',
       author () { return Mock.Random.authorInfo() },
@@ -165,7 +165,7 @@ const NOTFOUND = {
 }
 
 module.exports = {
-  [`GET ${apiPrefix}/articles`] (req, res) {
+  [`GET ${apiPrefix}/content/articles`] (req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
@@ -189,14 +189,14 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/articles`] (req, res) {
+  [`DELETE ${apiPrefix}/content/articles`] (req, res) {
     const { ids } = req.body
     articleDataBase = articleDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/article`] (req, res) {
+  [`POST ${apiPrefix}/content/article`] (req, res) {
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
@@ -212,7 +212,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/article/:id`] (req, res) {
+  [`GET ${apiPrefix}/content/article/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(articleDataBase, id, 'id')
     if (data) {
@@ -223,7 +223,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/article/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/content/article/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(articleDataBase, id, 'id')
     if (data) {
@@ -234,7 +234,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/article/:id`] (req, res) {
+  [`PUT ${apiPrefix}/content/article/:id`] (req, res) {
     const { id } = req.params
     let isExist = false
 
@@ -265,7 +265,7 @@ module.exports = {
     }
   },
 
-  [`GET ${apiPrefix}/catalogs`] (req, res) {
+  [`GET ${apiPrefix}/content/catalogs`] (req, res) {
     const { query } = req
     let { pageSize, page } = query
     pageSize = pageSize || 10
@@ -278,14 +278,14 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/catalogs`] (req, res) {
+  [`DELETE ${apiPrefix}/content/catalogs`] (req, res) {
     const { ids } = req.body
     catalogDataBase = catalogDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/catalog`] (req, res) {
+  [`POST ${apiPrefix}/content/catalog`] (req, res) {
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
@@ -299,7 +299,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/catalog/:id`] (req, res) {
+  [`GET ${apiPrefix}/content/catalog/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(catalogDataBase, id, 'id')
     if (data) {
@@ -310,7 +310,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/catalog/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/content/catalog/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(catalogDataBase, id, 'id')
     if (data) {
@@ -321,7 +321,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/catalog/:id`] (req, res) {
+  [`PUT ${apiPrefix}/content/catalog/:id`] (req, res) {
     const { id } = req.params
     let isExist = false
 
@@ -351,7 +351,7 @@ module.exports = {
     }
   },
 
-  [`GET ${apiPrefix}/links`] (req, res) {
+  [`GET ${apiPrefix}/content/links`] (req, res) {
     const { query } = req
     let { pageSize, page } = query
     pageSize = pageSize || 10
@@ -364,13 +364,13 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/links`] (req, res) {
+  [`DELETE ${apiPrefix}/content/links`] (req, res) {
     const { ids } = req.body
     linkDataBase = linkDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
-  [`POST ${apiPrefix}/link`] (req, res) {
+  [`POST ${apiPrefix}/content/link`] (req, res) {
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
@@ -384,7 +384,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/link/:id`] (req, res) {
+  [`GET ${apiPrefix}/content/link/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(linkDataBase, id, 'id')
     if (data) {
@@ -395,7 +395,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/link/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/content/link/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(linkDataBase, id, 'id')
     if (data) {
@@ -406,7 +406,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/link/:id`] (req, res) {
+  [`PUT ${apiPrefix}/content/link/:id`] (req, res) {
     const { id } = req.params
     let isExist = false
 
@@ -436,7 +436,7 @@ module.exports = {
     }
   },
 
-  [`GET ${apiPrefix}/medias`] (req, res) {
+  [`GET ${apiPrefix}/content/medias`] (req, res) {
     const { query } = req
     let { pageSize, page } = query
     pageSize = pageSize || 10
@@ -449,13 +449,13 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/medias`] (req, res) {
+  [`DELETE ${apiPrefix}/content/medias`] (req, res) {
     const { ids } = req.body
     mediaDataBase = mediaDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
-  [`POST ${apiPrefix}/media`] (req, res) {
+  [`POST ${apiPrefix}/content/media`] (req, res) {
     const newData = req.body
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
@@ -469,7 +469,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/media/:id`] (req, res) {
+  [`GET ${apiPrefix}/content/media/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(mediaDataBase, id, 'id')
     if (data) {
@@ -480,7 +480,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/media/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/content/media/:id`] (req, res) {
     const { id } = req.params
     const data = queryArray(mediaDataBase, id, 'id')
     if (data) {
@@ -491,7 +491,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/media/:id`] (req, res) {
+  [`PUT ${apiPrefix}/content/media/:id`] (req, res) {
     const { id } = req.params
     let isExist = false
 

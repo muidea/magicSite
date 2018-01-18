@@ -12,16 +12,16 @@ const EnumRoleType = {
 
 const userPermission = {
   DEFAULT: {
-    visit: ['1', '5', '6','61', '7', '8', '9', '91', '92','93','94','95','96', '10', '101', '11' ],
-    module:['common','content'],
+    visit: ['1', '5', '6', '61', '7', '8', '9', '91', '92', '93', '94', '95', '96', '10', '101', '11'],
+    module: ['common', 'content'],
     role: EnumRoleType.DEFAULT,
   },
   ADMIN: {
-    module:['common','system','content','account','authority'],
+    module: ['common', 'system', 'content', 'account', 'authority'],
     role: EnumRoleType.ADMIN,
   },
   DEVELOPER: {
-    module:['common','system','content','account'],
+    module: ['common', 'system', 'content', 'account'],
     role: EnumRoleType.DEVELOPER,
   },
 }
@@ -56,7 +56,7 @@ const SessionID = 'aeelzsjdaaafdcp3ucuntzvaoef906zr'
 
 module.exports = {
 
-  [`POST ${apiPrefix}/cas/user`] (req, res) {
+  [`POST ${apiPrefix}/cas/user`](req, res) {
     const { user_account, user_password } = req.body
     const user = adminUsers.filter(item => item.account === user_account)
 
@@ -67,7 +67,7 @@ module.exports = {
         maxAge: 900000,
         httpOnly: true,
       })
-      res.json({ errorCode: 0, reason: '', sessionID: SessionID, authToken: AuthToken, user:{id: user[0].id, name: user[0].name, account: user[0].account, email: user[0].email} })
+      res.json({ errorCode: 0, reason: '', sessionID: SessionID, authToken: AuthToken, user: { id: user[0].id, name: user[0].name, account: user[0].account, email: user[0].email } })
     } else {
       res.status(400).end()
     }
@@ -75,9 +75,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/cas/user`] (req, res) {
     const { sessionID, authToken } = req.body
-    if (sessionID == SessionID && authToken == AuthToken) {
+    if (sessionID === SessionID && authToken === AuthToken) {
       res.clearCookie('token')
-      res.json({ errorCode: 0, reason: '' })  
+      res.json({ errorCode: 0, reason: '' })
     } else {
       res.status(400).end()
     }
@@ -95,15 +95,15 @@ module.exports = {
       return
     }
 
-    if (authToken != AuthToken || (sessionID != SessionID)) {
+    if (authToken !== AuthToken || (sessionID !== SessionID)) {
       res.json({ errorCode: -1, reason: 'Illegal authToken' })
-      return      
+      return
     }
     const token = JSON.parse(cookies.token)
     if (token) {
       response.errorCode = token.deadline > new Date().getTime() ? 0 : -1
     }
-    if (response.errorCode == 0) {
+    if (response.errorCode === 0) {
       const userItem = adminUsers.filter(_ => _.id === token.id)
       if (userItem.length > 0) {
         accountInfo.Permissions = userItem[0].permissions

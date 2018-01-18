@@ -1,8 +1,17 @@
 import { request, config } from 'utils'
+
 const { api } = config
 const { group, groups } = api
 
-export async function query (params) {
+export async function queryAllGroup (params) {
+  return request({
+    url: groups,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function queryGroup (params) {
   return request({
     url: group,
     method: 'get',
@@ -10,7 +19,7 @@ export async function query (params) {
   })
 }
 
-export async function create (params) {
+export async function createGroup (params) {
   return request({
     url: group.replace('/:id', ''),
     method: 'post',
@@ -18,7 +27,7 @@ export async function create (params) {
   })
 }
 
-export async function remove (params) {
+export async function deleteGroup (params) {
   return request({
     url: group,
     method: 'delete',
@@ -26,7 +35,7 @@ export async function remove (params) {
   })
 }
 
-export async function multiRemove (params) {
+export async function multiDeleteGroup (params) {
   return request({
     url: groups,
     method: 'delete',
@@ -34,10 +43,10 @@ export async function multiRemove (params) {
   })
 }
 
-export async function update (params) {
+export async function updateGroup (params) {
   return request({
     url: group,
-    method: 'patch',
+    method: 'put',
     data: params,
   })
 }

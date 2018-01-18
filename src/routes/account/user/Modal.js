@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { EditableTagGroup } from 'components'
 
 const FormItem = Form.Item
+const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -14,7 +16,7 @@ const formItemLayout = {
 }
 
 const modal = ({
-  item = {},
+  item,
   onOk,
   form: {
     getFieldDecorator,
@@ -44,38 +46,25 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="账号" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('user_account', {
-            initialValue: item.account,
-            rules: [
-              {
-                required: true,
-                message: '账号不能为空',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="昵称" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('user_name', {
+        <FormItem label="分类名" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
               {
-                required: false,
+                required: true,
               },
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="邮箱" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('user_email', {
-            initialValue: item.email,
-            rules: [
-              {
-                required: true,
-                pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
-                message: '无效E-mail!',
-              },
-            ],
-          })(<Input />)}
+        <FormItem label="父类" {...formItemLayout}>
+          {getFieldDecorator('parent', {
+            initialValue: item.parent,
+          })(<EditableTagGroup />)}
+        </FormItem>
+        <FormItem label="描述" {...formItemLayout}>
+          {getFieldDecorator('description', {
+            initialValue: item.description,
+          })(<TextArea rows={3} cols={3} />)}
         </FormItem>
       </Form>
     </Modal>

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
+import { Link } from 'dva/router'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
-import classnames from 'classnames'
 import { DropOption } from '../../../components'
-import { Link } from 'dva/router'
 
 const confirm = Modal.confirm
 
@@ -14,7 +14,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: '确认删除当前记录?',
+        title: '确认删除分类?',
         onOk () {
           onDeleteItem(record.id)
         },
@@ -24,45 +24,42 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: 'Avatar',
+      title: '图标',
       dataIndex: 'avatar',
       key: 'avatar',
       width: 64,
       className: styles.avatar,
-      render: (text) => <img alt={'avatar'} width={24} src={text} />,
+      render: (text) => {
+        return <img alt={'avatar'} width={24} src={text} />
+      },
     }, {
-      title: '账号',
-      dataIndex: 'account',
-      key: 'account',
-      render: (text, record) => <Link to={`/account/user/${record.id}`}>{text}</Link>,
-    }, {
-      title: '昵称',
+      title: '分类名',
       dataIndex: 'name',
       key: 'name',
+      render: (text, record) => {
+        return <Link to={`/content/user/view/${record.id}`}>{text}</Link>
+      },
     }, {
-      title: '邮箱',
-      dataIndex: 'email',
-      key: 'email',
+      title: '分类',
+      dataIndex: 'user',
+      key: 'user',
+      width: 100,
+      render: (text, record) => {
+        return record.user > 0 ? '管理员组' : '用户组'
+      },
     }, {
-      title: '注册时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
     }, {
       title: '操作',
       key: 'operation',
-      width: 100,
+      width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '编辑' }, { key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
-
-  const getBodyWrapperProps = {
-    page: location.query.page,
-    current: tableProps.pagination.current,
-  }
-
-  const getBodyWrapper = body => { return body }
 
   return (
     <div>
@@ -74,7 +71,6 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         columns={columns}
         simple
         rowKey={record => record.id}
-        getBodyWrapper={getBodyWrapper}
       />
     </div>
   )

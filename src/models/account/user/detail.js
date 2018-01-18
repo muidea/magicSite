@@ -1,34 +1,38 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from 'services/account/user'
+import { queryUser } from 'services/account/user'
 
 export default {
 
   namespace: 'userDetail',
 
   state: {
-    data: {},
+    name: '',
+    description: '',
+    parent: [],
+    author: {},
+    createdate: '',
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {
-        const match = pathToRegexp('/account/user/:id').exec(location.pathname)
+      history.listen((location) => {
+        const match = pathToRegexp('/account/user/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
+          dispatch({ type: 'queryUser', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    *query ({
+    * queryUser ({
       payload,
     }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(queryUser, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryUserSuccess',
           payload: {
             data: other,
           },
@@ -40,11 +44,18 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
+    queryUserSuccess (state, { payload }) {
       const { data } = payload
+      const { user } = data
+      const { name, description, parent, author, createdate } = user
+
       return {
         ...state,
-        data,
+        name,
+        description,
+        parent,
+        author,
+        createdate,
       }
     },
   },

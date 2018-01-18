@@ -1,34 +1,38 @@
 import pathToRegexp from 'path-to-regexp'
-import { query } from 'services/account/group'
+import { queryGroup } from 'services/account/group'
 
 export default {
 
   namespace: 'groupDetail',
 
   state: {
-    data: {},
+    name: '',
+    description: '',
+    parent: [],
+    author: {},
+    createdate: '',
   },
 
   subscriptions: {
     setup ({ dispatch, history }) {
-      history.listen(() => {
-        const match = pathToRegexp('/account/group/:id').exec(location.pathname)
+      history.listen((location) => {
+        const match = pathToRegexp('/account/group/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'query', payload: { id: match[1] } })
+          dispatch({ type: 'queryGroup', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    *query ({
+    * queryGroup ({
       payload,
     }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(queryGroup, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryGroupSuccess',
           payload: {
             data: other,
           },
@@ -40,11 +44,18 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
+    queryGroupSuccess (state, { payload }) {
       const { data } = payload
+      const { group } = data
+      const { name, description, parent, author, createdate } = group
+
       return {
         ...state,
-        data,
+        name,
+        description,
+        parent,
+        author,
+        createdate,
       }
     },
   },

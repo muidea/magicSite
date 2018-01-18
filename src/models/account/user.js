@@ -1,21 +1,13 @@
-/* global window */
 import modelExtend from 'dva-model-extend'
-import { config } from 'utils'
-import { create, remove, multiRemove, update } from 'services/account/user'
-import * as usersService from 'services/account/users'
+import { queryAllUser, deleteUser, multiDeleteUser } from 'services/account/user'
 import queryString from 'query-string'
 import { pageModel } from '../common'
-
-const { query } = usersService
-const { prefix } = config
 
 export default modelExtend(pageModel, {
   namespace: 'user',
 
   state: {
     currentItem: {},
-    modalVisible: false,
-    modalType: 'create',
     selectedRowKeys: [],
   },
 
@@ -24,7 +16,7 @@ export default modelExtend(pageModel, {
       history.listen((location) => {
         if (location.pathname === '/account/user') {
           dispatch({
-            type: 'query',
+            type: 'queryAllUser',
             payload: queryString.parse(location.search),
           })
         }
@@ -34,11 +26,11 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * query ({ payload = {} }, { call, put }) {
-      const data = yield call(query, payload)
+    * queryAllUser ({ payload = {} }, { call, put }) {
+      const data = yield call(queryAllUser, payload)
       if (data) {
         yield put({
-          type: 'querySuccess',
+          type: 'queryAllSuccess',
           payload: {
             list: data.data,
             pagination: {
@@ -51,59 +43,28 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * delete ({ payload }, { call, put, select }) {
-      const data = yield call(remove, { id: payload })
+    * deleteUser ({ payload }, { call, put, select }) {
+      const data = yield call(deleteUser, { id: payload })
       const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
-        yield put({ type: 'updateState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'query' })
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllUser' })
       } else {
         throw data
       }
     },
 
-    * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(multiRemove, payload)
+    * multiDeleteUser ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteUser, payload)
       if (data.success) {
-        yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'query' })
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
+        yield put({ type: 'queryAllUser' })
       } else {
         throw data
       }
     },
-
-    * create ({ payload }, { call, put }) {
-      const data = yield call(create, payload)
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
-    },
-
-    * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ user }) => user.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
-    },
-
   },
 
   reducers: {
-
-    showModal (state, { payload }) {
-      return { ...state, ...payload, modalVisible: true }
-    },
-
-    hideModal (state) {
-      return { ...state, modalVisible: false }
-    },
   },
 })

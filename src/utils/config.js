@@ -1,5 +1,7 @@
 const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
+const ContentApiV1 = '/api/v1/content'
+const AccountApiV1 = '/api/v1/account'
 
 module.exports = {
   name: 'MagicCenter',
@@ -16,18 +18,18 @@ module.exports = {
     userLogin: `${APIV1}/cas/user`,
     userLogout: `${APIV1}/cas/user`,
     userInfo: `${APIV1}/cas/user`,
-    users: `${APIV1}/users`,
-    user: `${APIV1}/user/:id`,
-    groups: `${APIV1}/groups`,
-    group: `${APIV1}/group/:id`,
-    articles: `${APIV1}/articles`,
-    article: `${APIV1}/article/:id`,
-    catalogs: `${APIV1}/catalogs`,
-    catalog: `${APIV1}/catalog/:id`,
-    links: `${APIV1}/links`,
-    link: `${APIV1}/link/:id`,
-    medias: `${APIV1}/medias`,
-    media: `${APIV1}/media/:id`,
+    articles: `${ContentApiV1}/articles`,
+    article: `${ContentApiV1}/article/:id`,
+    catalogs: `${ContentApiV1}/catalogs`,
+    catalog: `${ContentApiV1}/catalog/:id`,
+    links: `${ContentApiV1}/links`,
+    link: `${ContentApiV1}/link/:id`,
+    medias: `${ContentApiV1}/medias`,
+    media: `${ContentApiV1}/media/:id`,
+    users: `${AccountApiV1}/users`,
+    user: `${AccountApiV1}/user/:id`,
+    groups: `${AccountApiV1}/groups`,
+    group: `${AccountApiV1}/group/:id`,
     systemInfo: `${APIV1}/system/config/`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,

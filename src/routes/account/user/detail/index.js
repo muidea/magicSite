@@ -4,26 +4,28 @@ import { connect } from 'dva'
 import styles from './index.less'
 
 const Detail = ({ userDetail }) => {
-  const { data } = userDetail
-  const content = []
-  for (let key in data) {
-    if ({}.hasOwnProperty.call(data, key)) {
-      content.push(<div key={key} className={styles.item}>
-        <div>{key}</div>
-        <div>{String(data[key])}</div>
-      </div>)
-    }
-  }
+  const { name, description, parent, author, createdate } = userDetail
+
   return (<div className="content-inner">
     <div className={styles.content}>
-      {content}
+      <div className={styles.item}>
+        <div>名称</div>
+        <div>{name}</div>
+      </div>
+      <div className={styles.item}>
+        <div>描述</div>
+        <div>{description}</div>
+      </div>
+      <div className={styles.item}>
+        <div>创建时间</div>
+        <div>{createdate}</div>
+      </div>
     </div>
   </div>)
 }
 
 Detail.propTypes = {
   userDetail: PropTypes.object,
-  loading: PropTypes.bool,
 }
 
 export default connect(({ userDetail, loading }) => ({ userDetail, loading: loading.models.userDetail }))(Detail)

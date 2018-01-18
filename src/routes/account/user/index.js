@@ -2,30 +2,25 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Row, Col, Button, Popconfirm } from 'antd'
-import { Page } from 'components'
-import queryString from 'query-string'
 import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-
 const User = ({ location, dispatch, user, loading }) => {
-  location.query = queryString.parse(location.search)
-  const { list, pagination, currentItem, modalVisible, modalType, selectedRowKeys } = user
+  const { list, pagination, currentItem, modalVisible, modalType } = user
   const { pageSize } = pagination
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: currentItem,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['user/update'],
-    title: `${modalType === 'create' ? '新建用户' : '编辑用户'}`,
+    title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `user/${modalType}`,
-        payload: data,
+        type: `user/${modalType}User`,
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel () {
@@ -44,16 +39,16 @@ const User = ({ location, dispatch, user, loading }) => {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        search: queryString.stringify({
+        query: {
           ...query,
           page: page.current,
           pageSize: page.pageSize,
-        }),
+        },
       }))
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'user/deleteUser',
         payload: id,
       })
     },
@@ -66,32 +61,31 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       })
     },
-    rowSelection: {
-      selectedRowKeys,
-      onChange: (keys) => {
-        dispatch({
-          type: 'user/updateState',
-          payload: {
-            selectedRowKeys: keys,
-          },
-        })
-      },
-    },
   }
 
   const filterProps = {
-    selectedRowKeys,
     filter: {
       ...location.query,
     },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: queryString.stringify({
+        query: {
           ...value,
           page: 1,
           pageSize,
-        }),
+        },
+      }))
+    },
+    onSearch (fieldsValue) {
+      fieldsValue.keyword.length ? dispatch(routerRedux.push({
+        pathname: '/user',
+        query: {
+          field: fieldsValue.field,
+          keyword: fieldsValue.keyword,
+        },
+      })) : dispatch(routerRedux.push({
+        pathname: '/user',
       }))
     },
     onAdd () {
@@ -102,22 +96,14 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       })
     },
-    onDeleteItems () {
-      dispatch({
-        type: 'user/multiDelete',
-        payload: {
-          ids: selectedRowKeys,
-        },
-      })      
-    },
   }
 
   return (
-    <Page inner>
+    <div className="content-inner">
       <Filter {...filterProps} />
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
-    </Page>
+    </div>
   )
 }
 

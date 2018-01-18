@@ -1,4 +1,3 @@
-const qs = require('qs')
 const Mock = require('mockjs')
 const config = require('../utils/config')
 
@@ -92,9 +91,9 @@ module.exports = {
   [`POST ${apiPrefix}/user`] (req, res) {
     const newData = req.body
 
-    const newUser = {id: Mock.mock('@id'), account: newData.user_account, name: newData.user_name, email: newData.user_email, createTime: Mock.mock('@now')}
+    const newUser = { id: Mock.mock('@id'), account: newData.user_account, name: newData.user_name, email: newData.user_email, createTime: Mock.mock('@now') }
     newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
-    
+
     database.unshift(newUser)
 
     res.status(200).end()

@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, DatePicker, Input, Popconfirm } from 'antd'
+import { Form, Button, Row, Col, Input } from 'antd'
 
 const Search = Input.Search
-const { RangePicker } = DatePicker
 
 const ColProps = {
   xs: 24,
@@ -23,8 +20,6 @@ const TwoColProps = {
 const Filter = ({
   onAdd,
   onFilterChange,
-  onDeleteItems,
-  selectedRowKeys,
   filter,
   form: {
     getFieldDecorator,
@@ -33,10 +28,6 @@ const Filter = ({
   },
 }) => {
   const handleFields = (fields) => {
-    const { createTime } = fields
-    if (createTime.length) {
-      fields.createTime = [createTime[0].format('YYYY-MM-DD'), createTime[1].format('YYYY-MM-DD')]
-    }
     return fields
   }
 
@@ -61,53 +52,21 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
-    let fields = getFieldsValue()
-    fields[key] = values
-    fields = handleFields(fields)
-    onFilterChange(fields)
-  }
-
-  const handleDeleteItems = () => {
-    onDeleteItems()
-  }
-
-  const { account } = filter
-
-  let initialCreateTime = []
-  if (filter.createTime && filter.createTime[0]) {
-    initialCreateTime[0] = moment(filter.createTime[0])
-  }
-  if (filter.createTime && filter.createTime[1]) {
-    initialCreateTime[1] = moment(filter.createTime[1])
-  }
+  const { name } = filter
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 7 }} md={{ span: 7 }}>
-        {getFieldDecorator('account', { initialValue: account })(<Search placeholder="查找账号" size="large" onSearch={handleSubmit} />)}
+      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
+        {getFieldDecorator('name', { initialValue: name })(<Search placeholder="分类名" size="large" onSearch={handleSubmit} />)}
       </Col>
-      <Col {...ColProps} xl={{ span: 7 }} md={{ span: 7 }} sm={{ span: 7 }}>
-        <FilterItem label="注册时间">
-          {getFieldDecorator('createTime', { initialValue: initialCreateTime })(
-            <RangePicker style={{ width: '100%' }} size="large" onChange={handleChange.bind(null, 'createTime')} />
-          )}
-        </FilterItem>
-      </Col>
-      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 10 }} sm={{ span: 10 }}>
+      <Col {...TwoColProps} xl={{ span: 4 }} md={{ span: 16 }} sm={{ span: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
-            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>
+            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>搜索</Button>
             <Button size="large" onClick={handleReset}>重置</Button>
           </div>
           <div>
-            {
-            selectedRowKeys.length > 0 &&
-              <Popconfirm title={'确认删除选中项?'} placement="left" onConfirm={handleDeleteItems}>
-                <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
-              </Popconfirm>
-          }            
-          <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
+            <Button size="large" type="ghost" onClick={onAdd}>新增</Button>
           </div>
         </div>
       </Col>
@@ -116,9 +75,8 @@ const Filter = ({
 }
 
 Filter.propTypes = {
-  selectedRowKeys: PropTypes.array,
-  onDeleteItems: PropTypes.func,
   onAdd: PropTypes.func,
+  isMotion: PropTypes.bool,
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
