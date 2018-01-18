@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryCatalog } from 'services/content/link'
+import { queryLink } from 'services/content/link'
 
 export default {
 
@@ -7,8 +7,9 @@ export default {
 
   state: {
     name: '',
-    description: '',
-    parent: [],
+    url: '',
+    logo: '',
+    catalog: [],
     author: {},
     createdate: '',
   },
@@ -18,21 +19,21 @@ export default {
       history.listen((location) => {
         const match = pathToRegexp('/content/link/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'queryCatalog', payload: { id: match[1] } })
+          dispatch({ type: 'queryLink', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    * queryCatalog ({
+    * queryLink ({
       payload,
     }, { call, put }) {
-      const data = yield call(queryCatalog, payload)
+      const data = yield call(queryLink, payload)
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
-          type: 'queryCatalogSuccess',
+          type: 'queryLinkSuccess',
           payload: {
             data: other,
           },
@@ -44,17 +45,18 @@ export default {
   },
 
   reducers: {
-    queryCatalogSuccess (state, { payload }) {
+    queryLinkSuccess (state, { payload }) {
       const { data } = payload
       const { link } = data
-      const { name, description, parent, author, createdate } = link
+      const { name, url, logo, catalog, creater, createdate } = link
 
       return {
         ...state,
         name,
-        description,
-        parent,
-        author,
+        url,
+        logo,
+        catalog,
+        creater,
         createdate,
       }
     },

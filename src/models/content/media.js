@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'media',
 
   state: {
-    currentItem: { id: -1, name: '', descrption: '', parent: [] },
+    currentItem: { id: -1, name: '', url: '', descrption: '', catalog: [] },
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -104,7 +104,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, currentItem: { id: -1, name: '', descrption: '', parent: [] }, modalVisible: false }
+      return { ...state, currentItem: { id: -1, name: '', url: '', descrption: '', catalog: [] }, modalVisible: false }
     },
   },
 

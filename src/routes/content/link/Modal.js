@@ -46,7 +46,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分类名" hasFeedback {...formItemLayout}>
+        <FormItem label="名称" hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -56,15 +56,20 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="父类" {...formItemLayout}>
-          {getFieldDecorator('parent', {
-            initialValue: item.parent,
-          })(<EditableTagGroup />)}
+        <FormItem label="URL" {...formItemLayout}>
+          {getFieldDecorator('url', {
+            initialValue: item.url,
+          })(<TextArea rows={2} cols={3} />)}
         </FormItem>
-        <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<TextArea rows={3} cols={3} />)}
+        <FormItem label="Logo" {...formItemLayout}>
+          {getFieldDecorator('logo', {
+            initialValue: item.logo,
+          })(<TextArea rows={2} cols={3} />)}
+        </FormItem>
+        <FormItem label="分类" {...formItemLayout}>
+          {getFieldDecorator('catalog', {
+            initialValue: item.catalog,
+          })(<EditableTagGroup />)}
         </FormItem>
       </Form>
     </Modal>

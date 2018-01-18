@@ -74,10 +74,11 @@ let linksListData = Mock.mock({
     {
       id: '@id',
       name: '@ctitle',
-      description: '@cparagraph',
-      parent: [],
+      url: '@url',
+      logo: '@url',
       createdate: '@datetime',
-      author () { return Mock.Random.authorInfo() },
+      catalog () { return Mock.Random.catalogArray() },
+      creater () { return Mock.Random.authorInfo() },
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
       },
@@ -90,10 +91,11 @@ let mediasListData = Mock.mock({
     {
       id: '@id',
       name: '@ctitle',
+      url: '@url',
       description: '@cparagraph',
-      parent: [],
       createdate: '@datetime',
-      author () { return Mock.Random.authorInfo() },
+      catalog () { return Mock.Random.catalogArray() },
+      creater () { return Mock.Random.authorInfo() },
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1))
       },
@@ -204,7 +206,7 @@ module.exports = {
 
     const curAuthor = queryArray(authorList, token.id, 'id')
     const curCatalog = selectArray(catalogList, newData.article_catalog, 'id')
-    const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, parent: curCatalog, author: curAuthor, createdate: Mock.mock('@now') }
+    const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, createdate: Mock.mock('@now') }
     newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
 
     articleDataBase.unshift(newArticle)
@@ -376,7 +378,7 @@ module.exports = {
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const token = JSON.parse(cookies.token)
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const newLink = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
+    const newLink = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor, createdate: Mock.mock('@now') }
     newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
 
     linkDataBase.unshift(newLink)
@@ -416,7 +418,7 @@ module.exports = {
     const token = JSON.parse(cookies.token)
 
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const newLink = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
+    const newLink = { id, name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor }
     newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
 
     linkDataBase = linkDataBase.map((item) => {
@@ -461,7 +463,7 @@ module.exports = {
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const token = JSON.parse(cookies.token)
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const newMedia = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
+    const newMedia = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor, createdate: Mock.mock('@now') }
     newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
 
     mediaDataBase.unshift(newMedia)
@@ -501,7 +503,7 @@ module.exports = {
     const token = JSON.parse(cookies.token)
 
     const curAuthor = queryArray(authorList, token.id, 'id')
-    const newMedia = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
+    const newMedia = { id, name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor }
     newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
 
     mediaDataBase = mediaDataBase.map((item) => {

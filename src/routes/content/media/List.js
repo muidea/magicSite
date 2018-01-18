@@ -14,7 +14,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       onEditItem(record)
     } else if (e.key === '2') {
       confirm({
-        title: '确认删除分类?',
+        title: '确认删除文件?',
         onOk () {
           onDeleteItem(record.id)
         },
@@ -33,24 +33,21 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <img alt={'avatar'} width={24} src={text} />
       },
     }, {
-      title: '分类名',
+      title: '名称',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
         return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '分类',
-      dataIndex: 'media',
-      key: 'media',
+      title: 'URL',
+      dataIndex: 'url',
+      key: 'url',
       width: 100,
-      render: (text, record) => {
-        return record.media > 0 ? '管理员组' : '用户组'
-      },
     }, {
       title: '描述',
       dataIndex: 'description',
-      key: 'description',
+      key: 'logo',
     }, {
       title: '操作',
       key: 'operation',
