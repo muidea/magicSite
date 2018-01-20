@@ -35,6 +35,8 @@ module.exports = {
     acl: `${AuthorityApiV1}/acl/:id`,
     modules: `${AuthorityApiV1}/modules`,
     module: `${AuthorityApiV1}/module/:id`,
+    authUsers: `${AuthorityApiV1}/users`,
+    authUser: `${AuthorityApiV1}/user/:id`,
     systemInfo: `${APIV1}/system/config/`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,

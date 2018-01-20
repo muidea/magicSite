@@ -14,15 +14,6 @@ const List = ({ onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '图标',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: (text) => {
-        return <img alt={'avatar'} width={24} src={text} />
-      },
-    }, {
       title: 'URL',
       dataIndex: 'url',
       key: 'url',
@@ -34,6 +25,9 @@ const List = ({ onEditItem, location, ...tableProps }) => {
       title: '所属模块',
       dataIndex: 'module',
       key: 'module',
+      render: (text, record) => {
+        return record.module.name
+      },
     }, {
       title: '操作',
       key: 'operation',

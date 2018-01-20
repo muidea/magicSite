@@ -27,13 +27,9 @@ const List = ({ onEditItem, location, ...tableProps }) => {
       dataIndex: 'account',
       key: 'account',
     }, {
-      title: '分组',
-      dataIndex: 'group',
-      key: 'group',
-    }, {
-      title: '权限组',
-      dataIndex: 'authgroup',
-      key: 'authgroup',
+      title: '模块列表',
+      dataIndex: 'module',
+      key: 'module',
     }, {
       title: '操作',
       key: 'operation',
