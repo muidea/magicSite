@@ -54,7 +54,7 @@ let database = [
     bpid: '2',
     mpid: '2',
     name: '分类管理',
-    icon: 'folder',
+    icon: 'tag-o',
     route: '/content/catalog',
   },
   {
@@ -125,7 +125,7 @@ let database = [
     bpid: '3',
     mpid: '3',
     name: '分组信息',
-    icon: 'tag-o',
+    icon: 'folder',
     route: '/account/group',
   },
   {

@@ -10,9 +10,7 @@ const confirm = Modal.confirm
 
 const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
-    if (e.key === '1') {
-      onEditItem(record)
-    } else if (e.key === '2') {
+    if (e.key === '2') {
       confirm({
         title: '确认删除文件?',
         onOk () {
@@ -53,7 +51,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '2', name: '删除' }]} />
       },
     },
   ]

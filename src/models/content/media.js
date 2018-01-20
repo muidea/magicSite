@@ -11,7 +11,6 @@ export default modelExtend(pageModel, {
     currentItem: { id: -1, name: '', url: '', descrption: '', catalog: [] },
     selectedRowKeys: [],
     modalVisible: false,
-    modalType: 'create',
   },
 
   subscriptions: {

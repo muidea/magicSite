@@ -56,15 +56,15 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="父类" {...formItemLayout}>
-          {getFieldDecorator('parent', {
-            initialValue: item.parent,
-          })(<EditableTagGroup />)}
-        </FormItem>
         <FormItem label="描述" {...formItemLayout}>
           {getFieldDecorator('description', {
             initialValue: item.description,
           })(<TextArea rows={3} cols={3} />)}
+        </FormItem>
+        <FormItem label="父类" {...formItemLayout}>
+          {getFieldDecorator('parent', {
+            initialValue: item.parent,
+          })(<EditableTagGroup />)}
         </FormItem>
       </Form>
     </Modal>
