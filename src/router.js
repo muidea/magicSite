@@ -89,6 +89,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/authority/module')],
       component: () => import('./routes/authority/module/'),
     }, {
+      path: '/authority/user',
+      models: () => [import('./models/authority/user')],
+      component: () => import('./routes/authority/user/'),
+    }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],
       component: () => import('./routes/system/config/'),

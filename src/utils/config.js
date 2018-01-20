@@ -2,6 +2,7 @@ const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
 const ContentApiV1 = '/api/v1/content'
 const AccountApiV1 = '/api/v1/account'
+const AuthorityApiV1 = '/api/v1/authority'
 
 module.exports = {
   name: 'MagicCenter',
@@ -30,6 +31,10 @@ module.exports = {
     user: `${AccountApiV1}/user/:id`,
     groups: `${AccountApiV1}/groups`,
     group: `${AccountApiV1}/group/:id`,
+    acls: `${AuthorityApiV1}/acls`,
+    acl: `${AuthorityApiV1}/acl/:id`,
+    modules: `${AuthorityApiV1}/modules`,
+    module: `${AuthorityApiV1}/module/:id`,
     systemInfo: `${APIV1}/system/config/`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,

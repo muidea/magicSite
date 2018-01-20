@@ -23,17 +23,17 @@ const List = ({ onEditItem, location, ...tableProps }) => {
         return <img alt={'avatar'} width={24} src={text} />
       },
     }, {
-      title: '模块ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '账号',
+      dataIndex: 'account',
+      key: 'account',
     }, {
-      title: '模块名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '分组',
+      dataIndex: 'group',
+      key: 'group',
     }, {
-      title: '模块描述',
-      dataIndex: 'description',
-      key: 'description',
+      title: '权限组',
+      dataIndex: 'authgroup',
+      key: 'authgroup',
     }, {
       title: '操作',
       key: 'operation',

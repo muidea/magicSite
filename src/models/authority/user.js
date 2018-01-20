@@ -1,11 +1,11 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllModule, queryModule, createModule, updateModule, deleteModule, multiDeleteModule } from 'services/authority/module'
+import { queryAllUser, queryUser, createUser, updateUser, deleteUser, multiDeleteUser } from 'services/authority/user'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
-  namespace: 'module',
+  namespace: 'user',
 
   state: {
     currentItem: { id: -1, name: '', descrption: '', parent: [] },
@@ -17,9 +17,9 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/authority/module') {
+        if (location.pathname === '/authority/user') {
           dispatch({
-            type: 'queryAllModule',
+            type: 'queryAllUser',
             payload: queryString.parse(location.search),
           })
         }
@@ -29,8 +29,8 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllModule ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllModule, payload)
+    * queryAllUser ({ payload = {} }, { call, put }) {
+      const data = yield call(queryAllUser, payload)
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -46,53 +46,53 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryModule ({ payload }, { call, put, select }) {
-      const data = yield call(queryModule, { id: payload })
-      const { selectedRowKeys } = yield select(_ => _.module)
+    * queryUser ({ payload }, { call, put, select }) {
+      const data = yield call(queryUser, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllModule' })
+        yield put({ type: 'queryAllUser' })
       } else {
         throw data
       }
     },
 
-    * createModule ({ payload }, { call, put }) {
-      const data = yield call(createModule, payload)
+    * createUser ({ payload }, { call, put }) {
+      const data = yield call(createUser, payload)
       if (data.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/module'))
+        yield put(routerRedux.push('/authority/user'))
       } else {
         throw data
       }
     },
 
-    * updateModule ({ payload }, { call, put }) {
-      const data = yield call(updateModule, payload)
+    * updateUser ({ payload }, { call, put }) {
+      const data = yield call(updateUser, payload)
       if (data.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/module'))
+        yield put(routerRedux.push('/authority/user'))
       } else {
         throw data
       }
     },
 
-    * deleteModule ({ payload }, { call, put, select }) {
-      const data = yield call(deleteModule, { id: payload })
-      const { selectedRowKeys } = yield select(_ => _.module)
+    * deleteUser ({ payload }, { call, put, select }) {
+      const data = yield call(deleteUser, { id: payload })
+      const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllModule' })
+        yield put({ type: 'queryAllUser' })
       } else {
         throw data
       }
     },
 
-    * multiDeleteModule ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteModule, payload)
+    * multiDeleteUser ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteUser, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllModule' })
+        yield put({ type: 'queryAllUser' })
       } else {
         throw data
       }

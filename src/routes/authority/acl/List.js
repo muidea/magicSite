@@ -1,21 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
 import { Table } from 'antd'
 import styles from './List.less'
-import classnames from 'classnames'
 import { DropOption } from '../../../components'
-import { Link } from 'dva/router'
 
 const List = ({ onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
-    } else if (e.key === '2') {
     }
   }
 
   const columns = [
     {
+      title: '图标',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      width: 64,
+      className: styles.avatar,
+      render: (text) => {
+        return <img alt={'avatar'} width={24} src={text} />
+      },
+    }, {
       title: 'URL',
       dataIndex: 'url',
       key: 'url',
@@ -30,19 +37,12 @@ const List = ({ onEditItem, location, ...tableProps }) => {
     }, {
       title: '操作',
       key: 'operation',
-      width: 100,
+      width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '编辑' }, { key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }]} />
       },
     },
   ]
-
-  const getBodyWrapperProps = {
-    page: location.query.page,
-    current: tableProps.pagination.current,
-  }
-
-  const getBodyWrapper = body => { return body }
 
   return (
     <div>
@@ -54,7 +54,6 @@ const List = ({ onEditItem, location, ...tableProps }) => {
         columns={columns}
         simple
         rowKey={record => record.id}
-        getBodyWrapper={getBodyWrapper}
       />
     </div>
   )

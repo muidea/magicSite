@@ -2,17 +2,33 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
-import { Row, Col, Button, Popconfirm } from 'antd'
-import { Page } from 'components'
-import queryString from 'query-string'
 import List from './List'
 import Filter from './Filter'
-
+import Modal from './Modal'
 
 const Acl = ({ location, dispatch, acl, loading }) => {
-  location.query = queryString.parse(location.search)
-  const { list, pagination, currentItem } = acl
+  const { list, pagination, currentItem, modalVisible, modalType } = acl
   const { pageSize } = pagination
+
+  const modalProps = {
+    item: currentItem,
+    visible: modalVisible,
+    maskClosable: false,
+    confirmLoading: loading.effects['acl/update'],
+    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    wrapClassName: 'vertical-center-modal',
+    onOk (data) {
+      dispatch({
+        type: `acl/${modalType}Acl`,
+        payload: { id: currentItem.id, ...data },
+      })
+    },
+    onCancel () {
+      dispatch({
+        type: 'acl/hideModal',
+      })
+    },
+  }
 
   const listProps = {
     dataSource: list,
@@ -23,12 +39,27 @@ const Acl = ({ location, dispatch, acl, loading }) => {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        search: queryString.stringify({
+        query: {
           ...query,
           page: page.current,
           pageSize: page.pageSize,
-        }),
+        },
       }))
+    },
+    onDeleteItem (id) {
+      dispatch({
+        type: 'acl/deleteAcl',
+        payload: id,
+      })
+    },
+    onEditItem (item) {
+      dispatch({
+        type: 'acl/showModal',
+        payload: {
+          modalType: 'update',
+          currentItem: item,
+        },
+      })
     },
   }
 
@@ -39,20 +70,40 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: queryString.stringify({
+        query: {
           ...value,
           page: 1,
           pageSize,
-        }),
+        },
       }))
+    },
+    onSearch (fieldsValue) {
+      fieldsValue.keyword.length ? dispatch(routerRedux.push({
+        pathname: '/acl',
+        query: {
+          field: fieldsValue.field,
+          keyword: fieldsValue.keyword,
+        },
+      })) : dispatch(routerRedux.push({
+        pathname: '/acl',
+      }))
+    },
+    onAdd () {
+      dispatch({
+        type: 'acl/showModal',
+        payload: {
+          modalType: 'create',
+        },
+      })
     },
   }
 
   return (
-    <Page inner>
+    <div className="content-inner">
       <Filter {...filterProps} />
       <List {...listProps} />
-    </Page>
+      {modalVisible && <Modal {...modalProps} />}
+    </div>
   )
 }
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { FilterItem } from '../../../components'
-import { Form, Button, Row, Col, Input, Popconfirm } from 'antd'
+import { Form, Button, Row, Col, Input } from 'antd'
 
 const Search = Input.Search
 
@@ -54,25 +52,21 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
-    let fields = getFieldsValue()
-    fields[key] = values
-    fields = handleFields(fields)
-    onFilterChange(fields)
-  }
-
-  const { account } = filter
+  const { name } = filter
 
   return (
     <Row gutter={24}>
-      <Col {...ColProps} xl={{ span: 7 }} md={{ span: 7 }}>
-        {getFieldDecorator('account', { initialValue: account })(<Search placeholder="查找账号" size="large" onSearch={handleSubmit} />)}
+      <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
+        {getFieldDecorator('name', { initialValue: name })(<Search placeholder="请输入URL Pattern" size="large" onSearch={handleSubmit} />)}
       </Col>
-      <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 10 }} sm={{ span: 10 }}>
+      <Col {...TwoColProps} xl={{ span: 4 }} md={{ span: 16 }} sm={{ span: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div >
-            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>
+            <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>搜索</Button>
             <Button size="large" onClick={handleReset}>重置</Button>
+          </div>
+          <div>
+            <Button size="large" type="ghost" onClick={onAdd}>新增</Button>
           </div>
         </div>
       </Col>
@@ -82,6 +76,7 @@ const Filter = ({
 
 Filter.propTypes = {
   onAdd: PropTypes.func,
+  isMotion: PropTypes.bool,
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,

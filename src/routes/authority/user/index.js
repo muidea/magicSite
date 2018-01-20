@@ -6,33 +6,33 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Module = ({ location, dispatch, module, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = module
+const User = ({ location, dispatch, user, loading }) => {
+  const { list, pagination, currentItem, modalVisible, modalType } = user
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['module/update'],
+    confirmLoading: loading.effects['user/update'],
     title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `module/${modalType}Module`,
+        type: `user/${modalType}User`,
         payload: { id: currentItem.id, ...data },
       })
     },
     onCancel () {
       dispatch({
-        type: 'module/hideModal',
+        type: 'user/hideModal',
       })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['module/query'],
+    loading: loading.effects['user/query'],
     pagination,
     location,
     onChange (page) {
@@ -48,13 +48,13 @@ const Module = ({ location, dispatch, module, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'module/deleteModule',
+        type: 'user/deleteUser',
         payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'module/showModal',
+        type: 'user/showModal',
         payload: {
           modalType: 'update',
           currentItem: item,
@@ -79,18 +79,18 @@ const Module = ({ location, dispatch, module, loading }) => {
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/module',
+        pathname: '/user',
         query: {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
       })) : dispatch(routerRedux.push({
-        pathname: '/module',
+        pathname: '/user',
       }))
     },
     onAdd () {
       dispatch({
-        type: 'module/showModal',
+        type: 'user/showModal',
         payload: {
           modalType: 'create',
         },
@@ -107,11 +107,11 @@ const Module = ({ location, dispatch, module, loading }) => {
   )
 }
 
-Module.propTypes = {
-  module: PropTypes.object,
+User.propTypes = {
+  user: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ module, loading }) => ({ module, loading }))(Module)
+export default connect(({ user, loading }) => ({ user, loading }))(User)
