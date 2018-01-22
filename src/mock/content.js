@@ -37,7 +37,7 @@ Mock.Random.extend({
   },
 })
 
-let articlesListData = Mock.mock({
+let contentArticlesListData = Mock.mock({
   'data|50-80': [
     {
       id: '@id',
@@ -53,7 +53,7 @@ let articlesListData = Mock.mock({
   ],
 })
 
-let catalogsListData = Mock.mock({
+let contentCatalogsListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
@@ -69,7 +69,7 @@ let catalogsListData = Mock.mock({
   ],
 })
 
-let linksListData = Mock.mock({
+let contentLinksListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
@@ -86,7 +86,7 @@ let linksListData = Mock.mock({
   ],
 })
 
-let mediasListData = Mock.mock({
+let contentMediasListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
@@ -113,12 +113,12 @@ const constructCatalogDataBase = (database) => {
   return database
 }
 
-let articleDataBase = articlesListData.data
-let catalogDataBase = catalogsListData.data
-let linkDataBase = linksListData.data
-let mediaDataBase = mediasListData.data
+let contentArticleDataBase = contentArticlesListData.data
+let contentCatalogDataBase = contentCatalogsListData.data
+let contentLinkDataBase = contentLinksListData.data
+let contentMediaDataBase = contentMediasListData.data
 
-catalogDataBase = constructCatalogDataBase(catalogDataBase)
+contentCatalogDataBase = constructCatalogDataBase(contentCatalogDataBase)
 
 // 查询指定的对象
 const queryArray = (array, key, keyAlias = 'key') => {
@@ -173,7 +173,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = articleDataBase
+    let newData = contentArticleDataBase
     for (let key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
@@ -193,7 +193,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/articles`] (req, res) {
     const { ids } = req.body
-    articleDataBase = articleDataBase.filter(item => !ids.some(_ => _ === item.id))
+    contentArticleDataBase = contentArticleDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -209,14 +209,14 @@ module.exports = {
     const newArticle = { id: Mock.mock('@id'), title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor, createdate: Mock.mock('@now') }
     newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
 
-    articleDataBase.unshift(newArticle)
+    contentArticleDataBase.unshift(newArticle)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/content/article/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(articleDataBase, id, 'id')
+    const data = queryArray(contentArticleDataBase, id, 'id')
     if (data) {
       const result = { article: data }
       res.status(200).json(result)
@@ -227,9 +227,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/article/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(articleDataBase, id, 'id')
+    const data = queryArray(contentArticleDataBase, id, 'id')
     if (data) {
-      articleDataBase = articleDataBase.filter(item => item.id !== id)
+      contentArticleDataBase = contentArticleDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -250,7 +250,7 @@ module.exports = {
     const newArticle = { id, title: newData.article_title, content: newData.article_content, catalog: curCatalog, author: curAuthor }
     newArticle.avatar = newArticle.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newArticle.title.substr(0, 1))
 
-    articleDataBase = articleDataBase.map((item) => {
+    contentArticleDataBase = contentArticleDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         newArticle.createdate = item.createdate
@@ -273,7 +273,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = catalogDataBase
+    let newData = contentCatalogDataBase
     res.status(200).json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
@@ -282,7 +282,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/catalogs`] (req, res) {
     const { ids } = req.body
-    catalogDataBase = catalogDataBase.filter(item => !ids.some(_ => _ === item.id))
+    contentCatalogDataBase = contentCatalogDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -296,14 +296,14 @@ module.exports = {
     const newCatalog = { id: Mock.mock('@id'), name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor, createdate: Mock.mock('@now') }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
-    catalogDataBase.unshift(newCatalog)
+    contentCatalogDataBase.unshift(newCatalog)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/content/catalog/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(catalogDataBase, id, 'id')
+    const data = queryArray(contentCatalogDataBase, id, 'id')
     if (data) {
       const result = { catalog: data }
       res.status(200).json(result)
@@ -314,9 +314,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/catalog/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(catalogDataBase, id, 'id')
+    const data = queryArray(contentCatalogDataBase, id, 'id')
     if (data) {
-      catalogDataBase = catalogDataBase.filter(item => item.id !== id)
+      contentCatalogDataBase = contentCatalogDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -336,7 +336,7 @@ module.exports = {
     const newCatalog = { id, name: newData.name, description: newData.description, parent: newData.parent, author: curAuthor }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
-    catalogDataBase = catalogDataBase.map((item) => {
+    contentCatalogDataBase = contentCatalogDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         newCatalog.createdate = item.createdate
@@ -359,7 +359,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = linkDataBase
+    let newData = contentLinkDataBase
     res.status(200).json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
@@ -368,7 +368,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/links`] (req, res) {
     const { ids } = req.body
-    linkDataBase = linkDataBase.filter(item => !ids.some(_ => _ === item.id))
+    contentLinkDataBase = contentLinkDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -381,14 +381,14 @@ module.exports = {
     const newLink = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor, createdate: Mock.mock('@now') }
     newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
 
-    linkDataBase.unshift(newLink)
+    contentLinkDataBase.unshift(newLink)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/content/link/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(linkDataBase, id, 'id')
+    const data = queryArray(contentLinkDataBase, id, 'id')
     if (data) {
       const result = { link: data }
       res.status(200).json(result)
@@ -399,9 +399,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/link/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(linkDataBase, id, 'id')
+    const data = queryArray(contentLinkDataBase, id, 'id')
     if (data) {
-      linkDataBase = linkDataBase.filter(item => item.id !== id)
+      contentLinkDataBase = contentLinkDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -421,7 +421,7 @@ module.exports = {
     const newLink = { id, name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor }
     newLink.avatar = newLink.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newLink.name.substr(0, 1))
 
-    linkDataBase = linkDataBase.map((item) => {
+    contentLinkDataBase = contentLinkDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         newLink.createdate = item.createdate
@@ -444,7 +444,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = mediaDataBase
+    let newData = contentMediaDataBase
     res.status(200).json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
@@ -453,7 +453,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/medias`] (req, res) {
     const { ids } = req.body
-    mediaDataBase = mediaDataBase.filter(item => !ids.some(_ => _ === item.id))
+    contentMediaDataBase = contentMediaDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -466,14 +466,14 @@ module.exports = {
     const newMedia = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor, createdate: Mock.mock('@now') }
     newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
 
-    mediaDataBase.unshift(newMedia)
+    contentMediaDataBase.unshift(newMedia)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/content/media/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(mediaDataBase, id, 'id')
+    const data = queryArray(contentMediaDataBase, id, 'id')
     if (data) {
       const result = { media: data }
       res.status(200).json(result)
@@ -484,9 +484,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/content/media/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(mediaDataBase, id, 'id')
+    const data = queryArray(contentMediaDataBase, id, 'id')
     if (data) {
-      mediaDataBase = mediaDataBase.filter(item => item.id !== id)
+      contentMediaDataBase = contentMediaDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -506,7 +506,7 @@ module.exports = {
     const newMedia = { id, name: newData.name, description: newData.description, catalog: newData.catalog, author: curAuthor }
     newMedia.avatar = newMedia.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newMedia.name.substr(0, 1))
 
-    mediaDataBase = mediaDataBase.map((item) => {
+    contentMediaDataBase = contentMediaDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         newMedia.createdate = item.createdate

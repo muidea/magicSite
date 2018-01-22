@@ -15,7 +15,7 @@ const Module = ({ location, dispatch, module, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['module/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: '更新模块',
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -87,14 +87,6 @@ const Module = ({ location, dispatch, module, loading }) => {
       })) : dispatch(routerRedux.push({
         pathname: '/module',
       }))
-    },
-    onAdd () {
-      dispatch({
-        type: 'module/showModal',
-        payload: {
-          modalType: 'create',
-        },
-      })
     },
   }
 

@@ -16,7 +16,7 @@ Mock.Random.extend({
   },
 })
 
-let usersListData = Mock.mock({
+let accountUsersListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
@@ -30,7 +30,7 @@ let usersListData = Mock.mock({
   ],
 })
 
-let groupListData = Mock.mock({
+let accountGroupListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
@@ -52,10 +52,10 @@ const constructGroupDataBase = (database) => {
   return database
 }
 
-let userDataBase = usersListData.data
-let groupDataBase = groupListData.data
+let accountUserDataBase = accountUsersListData.data
+let accountGroupDataBase = accountGroupListData.data
 
-groupDataBase = constructGroupDataBase(groupDataBase)
+accountGroupDataBase = constructGroupDataBase(accountGroupDataBase)
 
 // 查询指定的对象
 const queryArray = (array, key, keyAlias = 'key') => {
@@ -89,7 +89,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = userDataBase
+    let newData = accountUserDataBase
     for (let key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
@@ -109,7 +109,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/account/users`] (req, res) {
     const { ids } = req.body
-    userDataBase = userDataBase.filter(item => !ids.some(_ => _ === item.id))
+    accountUserDataBase = accountUserDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -120,14 +120,14 @@ module.exports = {
     const newUser = { id: Mock.mock('@id'), account: newData.account, password: newData.password, email: newData.email, group: newData.group }
     newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
 
-    userDataBase.unshift(newUser)
+    accountUserDataBase.unshift(newUser)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/account/user/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(userDataBase, id, 'id')
+    const data = queryArray(accountUserDataBase, id, 'id')
     if (data) {
       const result = { user: data }
       res.status(200).json(result)
@@ -138,9 +138,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/account/user/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(userDataBase, id, 'id')
+    const data = queryArray(accountUserDataBase, id, 'id')
     if (data) {
-      userDataBase = userDataBase.filter(item => item.id !== id)
+      accountUserDataBase = accountUserDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -155,7 +155,7 @@ module.exports = {
     const newUser = { id, account: newData.account, password: newData.password, email: newData.email, group: newData.group }
     newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
 
-    userDataBase = userDataBase.map((item) => {
+    accountUserDataBase = accountUserDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         return Object.assign({}, item, newUser)
@@ -177,7 +177,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = groupDataBase
+    let newData = accountGroupDataBase
     res.status(200).json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
@@ -186,7 +186,7 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/account/groups`] (req, res) {
     const { ids } = req.body
-    groupDataBase = groupDataBase.filter(item => !ids.some(_ => _ === item.id))
+    accountGroupDataBase = accountGroupDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
@@ -196,14 +196,14 @@ module.exports = {
     const newCatalog = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
-    groupDataBase.unshift(newCatalog)
+    accountGroupDataBase.unshift(newCatalog)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/account/group/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(groupDataBase, id, 'id')
+    const data = queryArray(accountGroupDataBase, id, 'id')
     if (data) {
       const result = { group: data }
       res.status(200).json(result)
@@ -214,9 +214,9 @@ module.exports = {
 
   [`DELETE ${apiPrefix}/account/group/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(groupDataBase, id, 'id')
+    const data = queryArray(accountGroupDataBase, id, 'id')
     if (data) {
-      groupDataBase = groupDataBase.filter(item => item.id !== id)
+      accountGroupDataBase = accountGroupDataBase.filter(item => item.id !== id)
       res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
@@ -231,7 +231,7 @@ module.exports = {
     const newCatalog = { id, name: newData.name, description: newData.description, catalog: newData.catalog }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
 
-    groupDataBase = groupDataBase.map((item) => {
+    accountGroupDataBase = accountGroupDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         return Object.assign({}, item, newCatalog)

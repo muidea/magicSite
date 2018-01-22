@@ -15,7 +15,7 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['acl/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? '新建ACL' : '修改ACL'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({

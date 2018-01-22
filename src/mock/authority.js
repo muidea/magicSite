@@ -36,7 +36,7 @@ Mock.Random.extend({
   },
 })
 
-let aclsListData = Mock.mock({
+let authorityAclsListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
@@ -48,7 +48,7 @@ let aclsListData = Mock.mock({
   ],
 })
 
-let modulesListData = Mock.mock({
+let authorityModulesListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
@@ -58,7 +58,7 @@ let modulesListData = Mock.mock({
   ],
 })
 
-let usersListData = Mock.mock({
+let authorityUsersListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
@@ -69,9 +69,9 @@ let usersListData = Mock.mock({
   ],
 })
 
-let aclDataBase = aclsListData.data
-let moduleDataBase = modulesListData.data
-let userDataBase = usersListData.data
+let authorityAclDataBase = authorityAclsListData.data
+let authorityModuleDataBase = authorityModulesListData.data
+let authorityUserDataBase = authorityUsersListData.data
 
 // 查询指定的对象
 const queryArray = (array, key, keyAlias = 'key') => {
@@ -105,7 +105,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = aclDataBase
+    let newData = authorityAclDataBase
     for (let key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
@@ -128,14 +128,14 @@ module.exports = {
 
     const newAcl = { id: Mock.mock('@id'), url: newData.url, method: newData.method, module: newData.module, authgroup: newData.authgroup }
 
-    aclDataBase.unshift(newAcl)
+    authorityAclDataBase.unshift(newAcl)
 
     res.status(200).end()
   },
 
   [`GET ${apiPrefix}/authority/acl/:id`] (req, res) {
     const { id } = req.params
-    const data = queryArray(aclDataBase, id, 'id')
+    const data = queryArray(authorityAclDataBase, id, 'id')
     if (data) {
       const result = { user: data }
       res.status(200).json(result)
@@ -152,7 +152,7 @@ module.exports = {
     const newUser = { id, account: newData.account, password: newData.password, email: newData.email, group: newData.group }
     newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
 
-    aclDataBase = aclDataBase.map((item) => {
+    authorityAclDataBase = authorityAclDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
         return Object.assign({}, item, newUser)
@@ -174,7 +174,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = moduleDataBase
+    let newData = authorityModuleDataBase
     for (let key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
@@ -198,7 +198,7 @@ module.exports = {
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = userDataBase
+    let newData = authorityUserDataBase
     for (let key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {

@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Radio, Modal } from 'antd'
+import { Form, Input, Radio, Select, Modal } from 'antd'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
-const { TextArea } = Input
+const RadioButton = Radio.Button
+const Option = Select.Option
 
 const formItemLayout = {
   labelCol: {
@@ -46,9 +47,9 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="名称" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: item.name,
+        <FormItem label="URL" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('url', {
+            initialValue: item.url,
             rules: [
               {
                 required: true,
@@ -56,19 +57,67 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<TextArea rows={3} cols={3} />)}
-        </FormItem>
-        <FormItem label="类型" {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: item.catalog,
+        <FormItem label="方法" {...formItemLayout}>
+          {getFieldDecorator('method', {
+            initialValue: item.method,
+            rules: [
+              {
+                required: true,
+              },
+            ],
           })(
             <RadioGroup>
-              <Radio value={0}>访客</Radio>
-              <Radio value={1}>用户</Radio>
-              <Radio value={2}>管理</Radio>
+              <RadioButton value={'POST'}>POST</RadioButton>
+              <RadioButton value={'GET'}>GET</RadioButton>
+              <RadioButton value={'PUT'}>PUT</RadioButton>
+              <RadioButton value={'DELETE'}>DELETE</RadioButton>
+            </RadioGroup>
+          )}
+        </FormItem>
+        <FormItem label="权限组" {...formItemLayout}>
+          {getFieldDecorator('authgroup', {
+            initialValue: item.authgroup,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(
+            <RadioGroup>
+              <RadioButton value={0}>访客组</RadioButton>
+              <RadioButton value={1}>用户组</RadioButton>
+              <RadioButton value={2}>维护组</RadioButton>
+            </RadioGroup>
+          )}
+        </FormItem>
+        <FormItem label="所属模块" {...formItemLayout}>
+          {getFieldDecorator('module', {
+            initialValue: item.module,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(
+            <Select defaultValue="lucy" style={{ width: 120 }}>
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
+          )}
+        </FormItem>
+        <FormItem label="状态" {...formItemLayout}>
+          {getFieldDecorator('status', {
+            initialValue: item.status,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+          })(
+            <RadioGroup>
+              <RadioButton value={0}>启用</RadioButton>
+              <RadioButton value={1}>停用</RadioButton>
             </RadioGroup>
           )}
         </FormItem>
