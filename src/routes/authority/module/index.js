@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Module = ({ location, dispatch, module, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType } = module
+  const { list, pagination, currentItem, modalVisible } = module
   const { pageSize } = pagination
 
   const modalProps = {
@@ -15,11 +15,11 @@ const Module = ({ location, dispatch, module, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['module/update'],
-    title: '更新模块',
+    title: '更新模块用户信息',
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `module/${modalType}Module`,
+        type: 'module/updateModule',
         payload: { id: currentItem.id, ...data },
       })
     },

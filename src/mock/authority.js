@@ -52,7 +52,7 @@ let authorityModulesListData = Mock.mock({
     {
       id: '@id',
       name: '@cname',
-      description: '@cparagraph',
+      user: [],
     },
   ],
 })
@@ -203,6 +203,40 @@ module.exports = {
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
     })
+  },
+
+  [`GET ${apiPrefix}/authority/module/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(authorityModuleDataBase, id, 'id')
+    if (data) {
+      const result = { module: data }
+      res.status(200).json(result)
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`PUT ${apiPrefix}/authority/module/:id`] (req, res) {
+    const { id } = req.params
+    let isExist = false
+
+    const newData = req.body
+    const newModule = { id, name: newData.name, user: newData.user }
+
+    authorityModuleDataBase = authorityModuleDataBase.map((item) => {
+      if (item.id === id) {
+        isExist = true
+        return Object.assign({}, item, newModule)
+      }
+
+      return item
+    })
+
+    if (isExist) {
+      res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
   },
 
   [`GET ${apiPrefix}/authority/users`] (req, res) {
