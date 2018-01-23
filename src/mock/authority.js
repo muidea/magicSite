@@ -8,6 +8,7 @@ const internalModuleList = [
   { id: '1', name: 'Magic CAS', description: '普通的访问者的描述信息' },
   { id: '2', name: 'Magic CMS', description: '注册用户的描述信息' },
   { id: '3', name: 'Magic Blog', description: '管理用户的描述信息' },
+  { id: '4', name: 'Magic Test', description: '管理用户的描述信息' },
 ]
 
 const internalMethodList = [
@@ -23,6 +24,12 @@ const internalAuthGroupList = [
   { id: 2, name: '维护组' },
 ]
 
+const internalUserList = [
+  { id: 0, name: 'admin' },
+  { id: 1, name: 'ywz' },
+  { id: 2, name: 'guest' },
+]
+
 Mock.Random.extend({
   moduleInfo () {
     return this.pick(internalModuleList)
@@ -32,6 +39,12 @@ Mock.Random.extend({
   },
   authGroupInfo () {
     return this.pick(internalAuthGroupList)
+  },
+  userInfo () {
+    return this.shuffle(internalUserList)
+  },
+  userModuleInfo () {
+    return this.shuffle(internalModuleList)
   },
 })
 
@@ -52,7 +65,7 @@ let authorityModulesListData = Mock.mock({
     {
       id: '@id',
       name: '@cname',
-      user: [],
+      user () { return Mock.Random.userInfo() },
     },
   ],
 })
@@ -62,7 +75,7 @@ let authorityUsersListData = Mock.mock({
     {
       id: '@id',
       account: '@name',
-      module () { return Mock.Random.moduleInfo() },
+      module () { return Mock.Random.userModuleInfo() },
       avatar () { return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.account.substr(0, 1)) },
     },
   ],
