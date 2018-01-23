@@ -76,7 +76,7 @@ const modal = ({
         </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {getFieldDecorator('authgroup', {
-            initialValue: item.authgroup,
+            initialValue: item.authgroup.id,
             rules: [
               {
                 required: true,
@@ -92,17 +92,17 @@ const modal = ({
         </FormItem>
         <FormItem label="所属模块" {...formItemLayout}>
           {getFieldDecorator('module', {
-            initialValue: item.module,
+            initialValue: item.module.id,
             rules: [
               {
                 required: true,
               },
             ],
           })(
-            <Select defaultValue="lucy" style={{ width: 120 }}>
-              <Option value="jack">Jack</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="Yiminghe">yiminghe</Option>
+            <Select defaultValue="1" style={{ width: 120 }}>
+              <Option value="1">Magic CAS</Option>
+              <Option value="2">Magic CMS</Option>
+              <Option value="3">Magic Blog</Option>
             </Select>
           )}
         </FormItem>

@@ -1,14 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { Table } from 'antd'
+import { Table, Modal } from 'antd'
 import styles from './List.less'
 import { DropOption } from '../../../components'
 
-const List = ({ onEditItem, location, ...tableProps }) => {
+const confirm = Modal.confirm
+
+const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
+    }
+    if (e.key === '2') {
+      confirm({
+        title: '确认删除分组?',
+        onOk () {
+          onDeleteItem(record.id)
+        },
+      })
     }
   }
 
@@ -22,6 +32,13 @@ const List = ({ onEditItem, location, ...tableProps }) => {
       dataIndex: 'method',
       key: 'method',
     }, {
+      title: '权限组',
+      dataIndex: 'authgroup',
+      key: 'authgroup',
+      render: (text, record) => {
+        return record.authgroup.name
+      },
+    }, {
       title: '所属模块',
       dataIndex: 'module',
       key: 'module',
@@ -33,7 +50,7 @@ const List = ({ onEditItem, location, ...tableProps }) => {
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
@@ -55,6 +72,7 @@ const List = ({ onEditItem, location, ...tableProps }) => {
 
 List.propTypes = {
   onEditItem: PropTypes.func,
+  onDeleteItem: PropTypes.func,
   location: PropTypes.object,
 }
 

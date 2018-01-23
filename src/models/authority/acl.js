@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'acl',
 
   state: {
-    currentItem: { id: -1, name: '', descrption: '', parent: [] },
+    currentItem: { id: -1, url: '', method: '', module: { id: '' }, authgroup: { id: -1 } },
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -105,7 +105,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, currentItem: { id: -1, name: '', descrption: '', parent: [] }, modalVisible: false }
+      return { ...state, currentItem: { id: -1, url: '', method: '', module: { id: '' }, authgroup: { id: -1 } }, modalVisible: false }
     },
   },
 

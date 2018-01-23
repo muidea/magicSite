@@ -5,9 +5,9 @@ const { apiPrefix } = config
 
 
 const internalModuleList = [
-  { id: '1', name: '平台访客组', description: '普通的访问者的描述信息' },
-  { id: '2', name: '平台用户组', description: '注册用户的描述信息' },
-  { id: '3', name: '平台管理组', description: '管理用户的描述信息' },
+  { id: '1', name: 'Magic CAS', description: '普通的访问者的描述信息' },
+  { id: '2', name: 'Magic CMS', description: '注册用户的描述信息' },
+  { id: '3', name: 'Magic Blog', description: '管理用户的描述信息' },
 ]
 
 const internalMethodList = [
@@ -18,10 +18,9 @@ const internalMethodList = [
 ]
 
 const internalAuthGroupList = [
-  'POST',
-  'GET',
-  'PUT',
-  'DELETE',
+  { id: 0, name: '访客组' },
+  { id: 1, name: '用户组' },
+  { id: 2, name: '维护组' },
 ]
 
 Mock.Random.extend({
@@ -126,7 +125,9 @@ module.exports = {
   [`POST ${apiPrefix}/authority/acl`] (req, res) {
     const newData = req.body
 
-    const newAcl = { id: Mock.mock('@id'), url: newData.url, method: newData.method, module: newData.module, authgroup: newData.authgroup }
+    const authgroup = queryArray(internalAuthGroupList, newData.authgroup, 'id')
+    const module = queryArray(internalModuleList, newData.module, 'id')
+    const newAcl = { id: Mock.mock('@id'), url: newData.url, method: newData.method, module, authgroup, status: newData.status }
 
     authorityAclDataBase.unshift(newAcl)
 
@@ -149,13 +150,14 @@ module.exports = {
     let isExist = false
 
     const newData = req.body
-    const newUser = { id, account: newData.account, password: newData.password, email: newData.email, group: newData.group }
-    newUser.avatar = newUser.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newUser.account.substr(0, 1))
+    const authgroup = queryArray(internalAuthGroupList, newData.authgroup, 'id')
+    const module = queryArray(internalModuleList, newData.module, 'id')
+    const newAcl = { id, url: newData.url, method: newData.method, module, authgroup, status: newData.status }
 
     authorityAclDataBase = authorityAclDataBase.map((item) => {
       if (item.id === id) {
         isExist = true
-        return Object.assign({}, item, newUser)
+        return Object.assign({}, item, newAcl)
       }
 
       return item
@@ -163,6 +165,17 @@ module.exports = {
 
     if (isExist) {
       res.status(201).end()
+    } else {
+      res.status(404).json(NOTFOUND)
+    }
+  },
+
+  [`DELETE ${apiPrefix}/authority/acl/:id`] (req, res) {
+    const { id } = req.params
+    const data = queryArray(authorityAclDataBase, id, 'id')
+    if (data) {
+      authorityAclDataBase = authorityAclDataBase.filter(item => item.id !== id)
+      res.status(204).end()
     } else {
       res.status(404).json(NOTFOUND)
     }
