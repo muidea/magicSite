@@ -1,8 +1,10 @@
 const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
-const ContentApiV1 = '/api/v1/content'
-const AccountApiV1 = '/api/v1/account'
-const AuthorityApiV1 = '/api/v1/authority'
+const CasApi = '/api/v2/cas'
+const ContentApi = '/api/v2/content'
+const AccountApi = '/api/v2/account'
+const AuthorityApi = '/api/v2/authority'
+const SystemInfoApi = '/api/v2/system'
 
 module.exports = {
   name: 'MagicCenter',
@@ -16,28 +18,28 @@ module.exports = {
   APIV1,
   APIV2,
   api: {
-    userLogin: `${APIV1}/cas/user`,
-    userLogout: `${APIV1}/cas/user`,
-    userInfo: `${APIV1}/cas/user`,
-    articles: `${ContentApiV1}/articles`,
-    article: `${ContentApiV1}/article/:id`,
-    catalogs: `${ContentApiV1}/catalogs`,
-    catalog: `${ContentApiV1}/catalog/:id`,
-    links: `${ContentApiV1}/links`,
-    link: `${ContentApiV1}/link/:id`,
-    medias: `${ContentApiV1}/medias`,
-    media: `${ContentApiV1}/media/:id`,
-    users: `${AccountApiV1}/users`,
-    user: `${AccountApiV1}/user/:id`,
-    groups: `${AccountApiV1}/groups`,
-    group: `${AccountApiV1}/group/:id`,
-    acls: `${AuthorityApiV1}/acls`,
-    acl: `${AuthorityApiV1}/acl/:id`,
-    modules: `${AuthorityApiV1}/modules`,
-    module: `${AuthorityApiV1}/module/:id`,
-    authUsers: `${AuthorityApiV1}/users`,
-    authUser: `${AuthorityApiV1}/user/:id`,
-    systemInfo: `${APIV1}/system/config/`,
+    userLogin: `${CasApi}/user/`,
+    userLogout: `${CasApi}/user/`,
+    userInfo: `${CasApi}/user/`,
+    articles: `${ContentApi}/articles/`,
+    article: `${ContentApi}/article/:id`,
+    catalogs: `${ContentApi}/catalogs/`,
+    catalog: `${ContentApi}/catalog/:id`,
+    links: `${ContentApi}/links/`,
+    link: `${ContentApi}/link/:id`,
+    medias: `${ContentApi}/medias/`,
+    media: `${ContentApi}/media/:id`,
+    users: `${AccountApi}/users/`,
+    user: `${AccountApi}/user/:id`,
+    groups: `${AccountApi}/groups/`,
+    group: `${AccountApi}/group/:id`,
+    acls: `${AuthorityApi}/acls/`,
+    acl: `${AuthorityApi}/acl/:id`,
+    modules: `${AuthorityApi}/modules/`,
+    module: `${AuthorityApi}/module/:id`,
+    authUsers: `${AuthorityApi}/users/`,
+    authUser: `${AuthorityApi}/user/:id`,
+    systemInfo: `${SystemInfoApi}/config/`,
     posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
