@@ -25,7 +25,6 @@ let accountUsersListData = Mock.mock({
       nickName: '@name',
       email: '@email',
       group () { return Mock.Random.groupInfo() },
-      avatar () { return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.account.substr(0, 1)) },
     },
   ],
 })
@@ -37,15 +36,12 @@ let accountGroupListData = Mock.mock({
       name: '@name',
       description: '@paragraph',
       catalog: '@integer(0, 2)',
-      avatar () { return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.name.substr(0, 1)) },
     },
   ],
 })
 
 const constructGroupDataBase = (database) => {
   for (let item of internalGroupList) {
-    item.avatar = Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', item.name.substr(0, 1))
-
     database.push(item)
   }
 

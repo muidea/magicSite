@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Media = ({ location, dispatch, media, loading }) => {
-  const { list, pagination, currentItem, modalVisible } = media
+  const { list, pagination, currentItem, selectedRowKeys, modalVisible } = media
   const { pageSize } = pagination
 
   const modalProps = {
@@ -51,6 +51,17 @@ const Media = ({ location, dispatch, media, loading }) => {
         type: 'media/deleteMedia',
         payload: id,
       })
+    },
+    rowSelection: {
+      selectedRowKeys,
+      onChange: (keys) => {
+        dispatch({
+          type: 'media/updateModelState',
+          payload: {
+            selectedRowKeys: keys,
+          },
+        })
+      },
     },
   }
 

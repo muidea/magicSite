@@ -76,7 +76,6 @@ let authorityUsersListData = Mock.mock({
       id: '@id',
       account: '@name',
       module () { return Mock.Random.userModuleInfo() },
-      avatar () { return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.account.substr(0, 1)) },
     },
   ],
 })

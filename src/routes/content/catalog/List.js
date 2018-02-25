@@ -24,15 +24,6 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '图标',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 64,
-      className: styles.avatar,
-      render: (text) => {
-        return <img alt={'avatar'} width={24} src={text} />
-      },
-    }, {
       title: '分类名',
       dataIndex: 'name',
       key: 'name',

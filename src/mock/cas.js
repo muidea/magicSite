@@ -1,5 +1,4 @@
 const qs = require('qs')
-const Mock = require('mockjs')
 const config = require('../utils/config')
 
 const { apiPrefix } = config
@@ -56,11 +55,11 @@ const SessionID = 'aeelzsjdaaafdcp3ucuntzvaoef906zr'
 
 module.exports = {
 
-  [`POST ${apiPrefix}/cas/user`](req, res) {
-    const { user_account, user_password } = req.body
-    const user = adminUsers.filter(item => item.account === user_account)
+  [`POST ${apiPrefix}/cas/user`] (req, res) {
+    const { account, password } = req.body
+    const user = adminUsers.filter(item => item.account === account)
 
-    if (user.length > 0 && user[0].password === user_password) {
+    if (user.length > 0 && user[0].password === password) {
       const now = new Date()
       now.setDate(now.getDate() + 1)
       res.cookie('token', JSON.stringify({ id: user[0].id, deadline: now.getTime() }), {

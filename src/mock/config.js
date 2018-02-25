@@ -1,47 +1,45 @@
-const qs = require('qs')
-const Mock = require('mockjs')
 const config = require('../utils/config')
+
 const { apiPrefix } = config
 
 const systemconfig = {
-    siteName: 'Magic System',
-    siteDomain: 'muidea.com',
-    siteDescription: '这是站点描述，放在这里占坑，看看效果怎样',
-    emailServer: 'smtp.126.com',
-    emailAccount: 'rangh@126.com',
-    emailPassword: '******',
-  }
-
+  siteName: 'Magic System',
+  siteDomain: 'muidea.com',
+  siteDescription: '这是站点描述，放在这里占坑，看看效果怎样',
+  emailServer: 'smtp.126.com',
+  emailAccount: 'rangh@126.com',
+  emailPassword: '******',
+}
 
 module.exports = {
   [`GET ${apiPrefix}/system/config/`] (req, res) {
-    res.status(200).json({systemInfo: systemconfig})
+    res.status(200).json({ systemInfo: systemconfig })
   },
 
   [`PUT ${apiPrefix}/system/config/`] (req, res) {
-    const newData = req.body
-    if (newData['site-name']) {
-      systemconfig.siteName = newData['site-name']
+    const { siteName, siteDomain, siteDescription, emailServer, emailAccount, emailPassword } = req.body
+    if (siteName) {
+      systemconfig.siteName = siteName
     }
-    if (newData['site-domain']) {
-      systemconfig.siteDomain = newData['site-domain']
+    if (siteDomain) {
+      systemconfig.siteDomain = siteDomain
     }
-    if (newData['site-description']) {
-      systemconfig.siteDescription = newData['site-description']
+    if (siteDescription) {
+      systemconfig.siteDescription = siteDescription
     }
-    if (newData['email-server']) {
-      systemconfig.emailServer = newData['email-server']
+    if (emailServer) {
+      systemconfig.emailServer = emailServer
     }
-    if (newData['email-account']) {
-      systemconfig.emailAccount = newData['email-account']
+    if (emailAccount) {
+      systemconfig.emailAccount = emailAccount
     }
-    if (newData['email-password']) {
-      systemconfig.emailPassword = newData['email-password']
+    if (emailPassword) {
+      systemconfig.emailPassword = emailPassword
     }
 
-    res.status(200).json({systemInfo: systemconfig})
+    res.status(200).json({ systemInfo: systemconfig })
   },
 
 
-} 
+}
 

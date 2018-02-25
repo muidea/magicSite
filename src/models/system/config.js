@@ -1,10 +1,5 @@
-import { routerRedux } from 'dva/router'
-import { parse } from 'qs'
-import config from 'config'
 import queryString from 'query-string'
 import { querySystemInfo, updateSystemInfo } from 'services/system/config'
-
-const { prefix } = config
 
 export default {
   namespace: 'config',
@@ -28,14 +23,14 @@ export default {
     },
 
   },
-  
+
   effects: {
     * querySystemInfo ({
       payload = {},
     }, { call, put }) {
       const data = yield call(querySystemInfo, payload)
       const { success, message, status, ...other } = data
-      
+
       if (success) {
         yield put({
           type: 'refreshSystemInfo',
@@ -46,33 +41,32 @@ export default {
       }
     },
 
-  * updateSystemInfo ({ payload }, { call, put }) {
-    const data = yield call(updateSystemInfo, payload)
-    const { success, message, status, ...other } = data
-    
-    if (success) {
-      yield put({
-        type: 'refreshSystemInfo',
-        payload: other,
-      })
-      yield put({
-        type: 'hideModal'
-      })
+    * updateSystemInfo ({ payload }, { call, put }) {
+      const data = yield call(updateSystemInfo, payload)
+      const { success, message, status, ...other } = data
 
-    } else {
-      throw data
-    }    
-  },
+      if (success) {
+        yield put({
+          type: 'refreshSystemInfo',
+          payload: other,
+        })
+        yield put({
+          type: 'hideModal',
+        })
+      } else {
+        throw data
+      }
+    },
 
   },
 
   reducers: {
-    refreshSystemInfo (state, { payload } ) {
+    refreshSystemInfo (state, { payload }) {
       const { systemInfo } = payload
 
       return {
         ...state,
-        systemInfo: systemInfo,
+        systemInfo,
       }
     },
 
