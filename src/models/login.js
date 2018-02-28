@@ -29,7 +29,7 @@ export default {
           yield put(routerRedux.push('/dashboard'))
         }
       } else {
-        throw data
+        yield put(routerRedux.push('/login'))
       }
     },
   },

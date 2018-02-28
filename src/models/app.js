@@ -2,9 +2,7 @@
 /* global document */
 /* global location */
 import { routerRedux } from 'dva/router'
-import { parse } from 'qs'
 import config from 'config'
-import { EnumRoleType } from 'enums'
 import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
 import queryString from 'query-string'
@@ -14,12 +12,9 @@ const { prefix } = config
 export default {
   namespace: 'app',
   state: {
-    sessionID: window.localStorage.getItem(`${prefix}SessionID`),
-    authToken: window.localStorage.getItem(`${prefix}AuthToken`),
+    sessionID: window.localStorage.getItem(`${prefix}sessionID`),
+    authToken: window.localStorage.getItem(`${prefix}authToken`),
     accountInfo: {},
-    permissions: {
-      visit: [],
-    },
     menu: [
       {
         id: 1,
@@ -62,60 +57,30 @@ export default {
     },
 
   },
-  
+
   effects: {
     * query ({
       payload,
     }, { call, put, select }) {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
-      const { errorCode, accountInfo } = yield call(queryStatus, { sessionID, authToken, ...payload })
-      if (errorCode == 0 && accountInfo) {
+      const data = yield call(queryStatus, { sessionID, authToken, ...payload })
+      const { ErrCode } = data
+      if (ErrCode === 0) {
+        const { accountInfo } = data
         const { list } = yield call(menusService.query)
-        const { Permissions } = accountInfo
-        let menu = list
-        if (Permissions.role === EnumRoleType.ADMIN || Permissions.role === EnumRoleType.DEVELOPER) {
-          Permissions.visit = list.map(item => item.id)
-        } else {
-          menu = list.filter((item) => {
-            const cases = [
-              Permissions.visit.includes(item.id),
-              item.mpid ? Permissions.visit.includes(item.mpid) || item.mpid === '-1' : true,
-              item.bpid ? Permissions.visit.includes(item.bpid) : true,
-            ]
-            return cases.every(_ => _)
-          })
-        }
 
-      let availableMenu = new Array()
-      let avalible = false
-      menu.forEach((value, index, menu) => {
-        if (value.module) {
-          if (Permissions.module.some((val)=>{ return val == value.module })) {
-            availableMenu.push(value)
-            avalible = true  
-          } else {
-            avalible = false
-          }
-        } else if (avalible) {
-          availableMenu.push(value)
-        } else {
-        }
-      });
-      menu = availableMenu
-
-       yield put({
+        yield put({
           type: 'updateState',
           payload: {
-            accountInfo: accountInfo,
-            permissions: Permissions,
-            menu,
+            accountInfo,
+            menu: list,
           },
-       })
-       if (location.pathname === '/login') {
-         yield put(routerRedux.push({
+        })
+        if (location.pathname === '/login') {
+          yield put(routerRedux.push({
             pathname: '/dashboard',
-         }))
-       }
+          }))
+        }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({
           pathname: '/login',
@@ -152,23 +117,23 @@ export default {
   reducers: {
 
     updateState (state, { payload }) {
-      const {sessionID, authToken} = payload
+      const { sessionID, authToken } = payload
 
       if (sessionID && authToken) {
         window.localStorage.setItem(`${prefix}SessionID`, sessionID)
-        window.localStorage.setItem(`${prefix}AuthToken`, authToken)  
+        window.localStorage.setItem(`${prefix}AuthToken`, authToken)
       }
-      
+
       return {
         ...state,
         ...payload,
       }
     },
 
-    clearStatus(state) {
+    clearStatus (state) {
       window.localStorage.removeItem(`${prefix}SessionID`)
       window.localStorage.removeItem(`${prefix}AuthToken`)
-      
+
       return {
         ...state,
         sessionID: '',
@@ -176,7 +141,7 @@ export default {
         accountInfo: {},
         permissions: {
           visit: [],
-        },        
+        },
       }
     },
 

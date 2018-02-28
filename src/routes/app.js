@@ -2,7 +2,6 @@
 import React from 'react'
 import NProgress from 'nprogress'
 import PropTypes from 'prop-types'
-import pathToRegexp from 'path-to-regexp'
 import { connect } from 'dva'
 import { Layout, Loader } from 'components'
 import { classnames, config } from 'utils'
@@ -18,12 +17,12 @@ const { Header, Bread, Footer, Sider, styles } = Layout
 let lastHref
 
 const App = ({ children, dispatch, app, loading, location }) => {
-  const { accountInfo, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu, permissions } = app
+  const { accountInfo, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu } = app
   let { pathname } = location
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`
+  const { user } = accountInfo
   const { iconFontJS, iconFontCSS, logo } = config
-  const current = menu.filter(item => pathToRegexp(item.route || '').exec(pathname))
-  const hasPermission = current.length ? permissions.visit.includes(current[0].id) : false
+  const hasPermission = true
   const href = window.location.href
 
   if (lastHref !== href) {
@@ -36,7 +35,7 @@ const App = ({ children, dispatch, app, loading, location }) => {
 
   const headerProps = {
     menu,
-    accountInfo,
+    user,
     location,
     siderFold,
     isNavbar,
