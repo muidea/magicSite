@@ -20,7 +20,6 @@ const App = ({ children, dispatch, app, loading, location }) => {
   const { accountInfo, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu } = app
   let { pathname } = location
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`
-  const { user } = accountInfo
   const { iconFontJS, iconFontCSS, logo } = config
   const hasPermission = true
   const href = window.location.href
@@ -35,7 +34,7 @@ const App = ({ children, dispatch, app, loading, location }) => {
 
   const headerProps = {
     menu,
-    user,
+    accountInfo,
     location,
     siderFold,
     isNavbar,

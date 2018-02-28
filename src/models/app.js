@@ -14,7 +14,7 @@ export default {
   state: {
     sessionID: window.localStorage.getItem(`${prefix}sessionID`),
     authToken: window.localStorage.getItem(`${prefix}authToken`),
-    accountInfo: {},
+    accountInfo: { },
     menu: [
       {
         id: 1,
@@ -62,9 +62,10 @@ export default {
     * query ({
       payload,
     }, { call, put, select }) {
-      const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
-      const data = yield call(queryStatus, { sessionID, authToken, ...payload })
+      const { locationPathname } = yield select(_ => _.app)
+      const data = yield call(queryStatus, { ...payload })
       const { errorCode } = data
+      console.log(data)
       if (errorCode === 0) {
         const { accountInfo } = data
         const { list } = yield call(menusService.query)

@@ -22,7 +22,13 @@ export default {
           },
         })
         const { from } = locationQuery
-        yield put({ type: 'app/query' })
+        yield put({
+          type: 'app/query',
+          payload: {
+            sessionID,
+            authToken,
+          },
+        })
         if (from && from !== '/login') {
           yield put(routerRedux.push(from))
         } else {
