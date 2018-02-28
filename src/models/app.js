@@ -64,8 +64,8 @@ export default {
     }, { call, put, select }) {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
-      const { ErrCode } = data
-      if (ErrCode === 0) {
+      const { errorCode } = data
+      if (errorCode === 0) {
         const { accountInfo } = data
         const { list } = yield call(menusService.query)
 

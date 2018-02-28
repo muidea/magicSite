@@ -32,7 +32,7 @@ const Login = ({
       </div>
       <form>
         <FormItem hasFeedback>
-          {getFieldDecorator('Account', {
+          {getFieldDecorator('account', {
             rules: [
               {
                 required: true,
@@ -42,7 +42,7 @@ const Login = ({
           })(<Input size="large" onPressEnter={handleOk} placeholder="账号" />)}
         </FormItem>
         <FormItem hasFeedback>
-          {getFieldDecorator('Password', {
+          {getFieldDecorator('password', {
             rules: [
               {
                 required: true,
