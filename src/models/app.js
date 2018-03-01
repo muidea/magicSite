@@ -65,7 +65,6 @@ export default {
       const { locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { ...payload })
       const { errorCode } = data
-      console.log(data)
       if (errorCode === 0) {
         const { accountInfo } = data
         const { list } = yield call(menusService.query)

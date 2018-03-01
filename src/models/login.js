@@ -9,10 +9,9 @@ export default {
   effects: {
     * login ({
       payload,
-    }, { put, call, select }) {
+    }, { put, call }) {
       const data = yield call(login, payload)
       const { errorCode, sessionID, authToken } = data
-      const { locationQuery } = yield select(_ => _.app)
       if (errorCode === 0) {
         yield put({
           type: 'app/updateState',
@@ -21,7 +20,6 @@ export default {
             authToken,
           },
         })
-        const { from } = locationQuery
         yield put({
           type: 'app/query',
           payload: {
@@ -29,11 +27,6 @@ export default {
             authToken,
           },
         })
-        if (from && from !== '/login') {
-          yield put(routerRedux.push(from))
-        } else {
-          yield put(routerRedux.push('/dashboard'))
-        }
       } else {
         yield put(routerRedux.push('/login'))
       }

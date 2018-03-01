@@ -47,8 +47,6 @@ const Acl = ({ location, dispatch, acl, loading }) => {
       }))
     },
     onDeleteItem (id) {
-      console.log('onDeleteItem')
-
       dispatch({
         type: 'acl/deleteAcl',
         payload: id,
