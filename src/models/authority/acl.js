@@ -29,8 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllAcl ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllAcl, payload)
+    * queryAllAcl ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllAcl, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -47,7 +48,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryAcl ({ payload }, { call, put, select }) {
-      const data = yield call(queryAcl, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAcl, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.acl)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -57,8 +59,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createAcl ({ payload }, { call, put }) {
-      const data = yield call(createAcl, payload)
+    * createAcl ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createAcl, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/acl'))
@@ -67,8 +70,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateAcl ({ payload }, { call, put }) {
-      const data = yield call(updateAcl, payload)
+    * updateAcl ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateAcl, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/acl'))
@@ -78,7 +82,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteAcl ({ payload }, { call, put, select }) {
-      const data = yield call(deleteAcl, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteAcl, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.acl)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -88,8 +93,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteAcl ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteAcl, payload)
+    * multiDeleteAcl ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteAcl, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllAcl' })

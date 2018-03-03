@@ -1,4 +1,3 @@
-import { parse } from 'qs'
 import modelExtend from 'dva-model-extend'
 import { query } from 'services/dashboard'
 import { model } from 'models/common'
@@ -23,8 +22,9 @@ export default modelExtend(model, {
   effects: {
     * query ({
       payload,
-    }, { call, put }) {
-      const data = yield call(query, parse(payload))
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(query, { authToken, ...payload })
       yield put({
         type: 'updateModelState',
         payload: data,

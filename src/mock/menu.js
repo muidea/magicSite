@@ -187,6 +187,14 @@ let database = [
 module.exports = {
 
   [`GET ${apiPrefix}/menus`] (req, res) {
-    res.status(200).json(database)
+    const { query } = req
+    const { authToken } = query
+    console.log(query)
+
+    if (authToken) {
+      res.status(200).json({ list: database, errorCode: 0 })
+    } else {
+      res.status(200).json({ errorCode: 2 })
+    }
   },
 }

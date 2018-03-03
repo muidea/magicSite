@@ -25,8 +25,9 @@ export default {
   effects: {
     * queryGroup ({
       payload,
-    }, { call, put }) {
-      const data = yield call(queryGroup, payload)
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryGroup, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({

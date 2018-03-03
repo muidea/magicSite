@@ -28,8 +28,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllMedia ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllMedia, payload)
+    * queryAllMedia ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllMedia, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -46,7 +47,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryMedia ({ payload }, { call, put, select }) {
-      const data = yield call(queryMedia, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryMedia, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.media)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -56,8 +58,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createMedia ({ payload }, { call, put }) {
-      const data = yield call(createMedia, payload)
+    * createMedia ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createMedia, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/media'))
@@ -66,8 +69,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateMedia ({ payload }, { call, put }) {
-      const data = yield call(updateMedia, payload)
+    * updateMedia ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateMedia, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/media'))
@@ -77,7 +81,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteMedia ({ payload }, { call, put, select }) {
-      const data = yield call(deleteMedia, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteMedia, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.media)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -87,8 +92,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteMedia ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteMedia, payload)
+    * multiDeleteMedia ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteMedia, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllMedia' })

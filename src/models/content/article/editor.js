@@ -29,8 +29,9 @@ export default {
   effects: {
     * resetModel ({
       payload,
-    }, { call, put }) {
-      const catalogsInfo = yield call(queryAllCatalog, payload)
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const catalogsInfo = yield call(queryAllCatalog, { authToken, ...payload })
       const { data } = catalogsInfo
 
       yield put({
@@ -44,9 +45,10 @@ export default {
 
     * queryArticle ({
       payload,
-    }, { call, put }) {
-      const catalogsInfo = yield call(queryAllCatalog, payload)
-      const articleData = yield call(queryArticle, payload)
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const catalogsInfo = yield call(queryAllCatalog, { authToken, ...payload })
+      const articleData = yield call(queryArticle, { authToken, ...payload })
       const { data } = catalogsInfo
       const { success, article } = articleData
 
@@ -63,8 +65,9 @@ export default {
       }
     },
 
-    * createArticle ({ payload }, { call, put }) {
-      const data = yield call(createArticle, payload)
+    * createArticle ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createArticle, { authToken, ...payload })
       if (data.success) {
         yield put(routerRedux.push('/content/article'))
       } else {
@@ -72,8 +75,9 @@ export default {
       }
     },
 
-    * updateArticle ({ payload }, { call, put }) {
-      const data = yield call(updateArticle, payload)
+    * updateArticle ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateArticle, { authToken, ...payload })
       if (data.success) {
         yield put(routerRedux.push('/content/article'))
       } else {

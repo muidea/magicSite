@@ -28,8 +28,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllUser ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllUser, payload)
+    * queryAllUser ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllUser, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -46,7 +47,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryUser ({ payload }, { call, put, select }) {
-      const data = yield call(queryUser, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryUser, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -56,8 +58,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createUser ({ payload }, { call, put }) {
-      const data = yield call(createUser, payload)
+    * createUser ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createUser, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/user'))
@@ -66,8 +69,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateUser ({ payload }, { call, put }) {
-      const data = yield call(updateUser, payload)
+    * updateUser ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateUser, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/user'))
@@ -77,7 +81,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteUser ({ payload }, { call, put, select }) {
-      const data = yield call(deleteUser, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteUser, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.user)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -87,8 +92,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteUser ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteUser, payload)
+    * multiDeleteUser ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteUser, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllUser' })

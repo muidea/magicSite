@@ -12,8 +12,8 @@ const { prefix } = config
 export default {
   namespace: 'app',
   state: {
-    sessionID: window.localStorage.getItem(`${prefix}sessionID`),
-    authToken: window.localStorage.getItem(`${prefix}authToken`),
+    sessionID: window.localStorage.getItem(`${prefix}SessionID`),
+    authToken: window.localStorage.getItem(`${prefix}AuthToken`),
     accountInfo: { },
     menu: [
       {
@@ -32,7 +32,6 @@ export default {
     locationQuery: {},
   },
   subscriptions: {
-
     setupHistory ({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
@@ -62,24 +61,27 @@ export default {
     * query ({
       payload,
     }, { call, put, select }) {
-      const { locationPathname } = yield select(_ => _.app)
-      const data = yield call(queryStatus, { ...payload })
-      const { errorCode } = data
-      if (errorCode === 0) {
-        const { accountInfo } = data
-        const { list } = yield call(menusService.query)
+      const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
+      const data = yield call(queryStatus, { sessionID, authToken, ...payload })
+      if (data.errorCode === 0) {
+        const { userInfo } = data
+        const { list, errorCode } = yield call(menusService.query, { authToken: userInfo.authToken })
 
-        yield put({
-          type: 'updateState',
-          payload: {
-            accountInfo,
-            menu: list,
-          },
-        })
-        if (location.pathname === '/login') {
-          yield put(routerRedux.push({
-            pathname: '/dashboard',
-          }))
+        if (errorCode === 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              sessionID: data.sessionID,
+              authToken: userInfo.authToken,
+              userInfo,
+              menu: list,
+            },
+          })
+          if (location.pathname === '/login') {
+            yield put(routerRedux.push({
+              pathname: '/dashboard',
+            }))
+          }
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({

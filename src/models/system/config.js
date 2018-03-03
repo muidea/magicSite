@@ -26,9 +26,10 @@ export default {
 
   effects: {
     * querySystemInfo ({
-      payload = {},
-    }, { call, put }) {
-      const data = yield call(querySystemInfo, payload)
+      payload,
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(querySystemInfo, { authToken, ...payload })
       const { success, message, status, ...other } = data
 
       if (success) {
@@ -41,8 +42,9 @@ export default {
       }
     },
 
-    * updateSystemInfo ({ payload }, { call, put }) {
-      const data = yield call(updateSystemInfo, payload)
+    * updateSystemInfo ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateSystemInfo, { authToken, ...payload })
       const { success, message, status, ...other } = data
 
       if (success) {

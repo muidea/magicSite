@@ -28,8 +28,9 @@ export default {
   effects: {
     * queryMedia ({
       payload,
-    }, { call, put }) {
-      const data = yield call(queryMedia, payload)
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryMedia, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({

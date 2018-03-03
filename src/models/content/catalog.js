@@ -29,8 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllCatalog ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllCatalog, payload)
+    * queryAllCatalog ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllCatalog, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -47,7 +48,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryCatalog ({ payload }, { call, put, select }) {
-      const data = yield call(queryCatalog, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryCatalog, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.catalog)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -57,8 +59,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createCatalog ({ payload }, { call, put }) {
-      const data = yield call(createCatalog, payload)
+    * createCatalog ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createCatalog, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/catalog'))
@@ -67,8 +70,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateCatalog ({ payload }, { call, put }) {
-      const data = yield call(updateCatalog, payload)
+    * updateCatalog ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateCatalog, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/catalog'))
@@ -78,7 +82,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteCatalog ({ payload }, { call, put, select }) {
-      const data = yield call(deleteCatalog, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteCatalog, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.catalog)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })

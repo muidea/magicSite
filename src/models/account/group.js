@@ -29,8 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllGroup ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllGroup, payload)
+    * queryAllGroup ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllGroup, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -47,7 +48,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryGroup ({ payload }, { call, put, select }) {
-      const data = yield call(queryGroup, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryGroup, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.group)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -57,8 +59,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createGroup ({ payload }, { call, put }) {
-      const data = yield call(createGroup, payload)
+    * createGroup ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createGroup, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/group'))
@@ -67,8 +70,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateGroup ({ payload }, { call, put }) {
-      const data = yield call(updateGroup, payload)
+    * updateGroup ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateGroup, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/group'))
@@ -78,7 +82,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteGroup ({ payload }, { call, put, select }) {
-      const data = yield call(deleteGroup, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteGroup, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.group)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -88,8 +93,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteGroup ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteGroup, payload)
+    * multiDeleteGroup ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteGroup, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllGroup' })

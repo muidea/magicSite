@@ -29,8 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllLink ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllLink, payload)
+    * queryAllLink ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllLink, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -47,7 +48,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryLink ({ payload }, { call, put, select }) {
-      const data = yield call(queryLink, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryLink, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -57,8 +59,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createLink ({ payload }, { call, put }) {
-      const data = yield call(createLink, payload)
+    * createLink ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createLink, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/link'))
@@ -67,8 +70,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateLink ({ payload }, { call, put }) {
-      const data = yield call(updateLink, payload)
+    * updateLink ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateLink, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/link'))
@@ -78,7 +82,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteLink ({ payload }, { call, put, select }) {
-      const data = yield call(deleteLink, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteLink, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -88,8 +93,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteLink ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteLink, payload)
+    * multiDeleteLink ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteLink, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllLink' })

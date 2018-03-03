@@ -27,8 +27,9 @@ export default {
   effects: {
     * queryArticle ({
       payload,
-    }, { call, put }) {
-      const data = yield call(queryArticle, payload)
+    }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryArticle, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({

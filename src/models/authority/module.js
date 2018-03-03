@@ -28,8 +28,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllModule ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllModule, payload)
+    * queryAllModule ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllModule, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -46,7 +47,8 @@ export default modelExtend(pageModel, {
     },
 
     * queryModule ({ payload }, { call, put, select }) {
-      const data = yield call(queryModule, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryModule, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.module)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -56,8 +58,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createModule ({ payload }, { call, put }) {
-      const data = yield call(createModule, payload)
+    * createModule ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(createModule, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/module'))
@@ -66,8 +69,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateModule ({ payload }, { call, put }) {
-      const data = yield call(updateModule, payload)
+    * updateModule ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(updateModule, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/module'))
@@ -77,7 +81,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteModule ({ payload }, { call, put, select }) {
-      const data = yield call(deleteModule, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteModule, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.module)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -87,8 +92,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteModule ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteModule, payload)
+    * multiDeleteModule ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteModule, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllModule' })

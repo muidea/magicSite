@@ -77,6 +77,8 @@ export default function request (options) {
     }
   }
 
+  console.log(options)
+
   return fetch(options).then((response) => {
     const { statusText, status } = response
     let data = response.data
@@ -85,6 +87,9 @@ export default function request (options) {
         list: data,
       }
     }
+
+    console.log(data)
+
     return Promise.resolve({
       success: true,
       message: statusText,

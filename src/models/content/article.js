@@ -26,8 +26,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllArticle ({ payload = {} }, { call, put }) {
-      const data = yield call(queryAllArticle, payload)
+    * queryAllArticle ({ payload = {} }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryAllArticle, { authToken })
       if (data) {
         yield put({
           type: 'queryAllSuccess',
@@ -44,7 +45,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteArticle ({ payload }, { call, put, select }) {
-      const data = yield call(deleteArticle, { id: payload })
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(deleteArticle, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.article)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -54,8 +56,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteArticle ({ payload }, { call, put }) {
-      const data = yield call(multiDeleteArticle, payload)
+    * multiDeleteArticle ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(multiDeleteArticle, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllArticle' })
