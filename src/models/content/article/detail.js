@@ -6,11 +6,11 @@ export default {
   namespace: 'articleDetail',
 
   state: {
-    title: '',
+    name: '',
     content: '',
     catalog: [],
-    author: {},
-    createdate: '',
+    creater: {},
+    createDate: '',
   },
 
   subscriptions: {
@@ -35,7 +35,7 @@ export default {
         yield put({
           type: 'queryArticleSuccess',
           payload: {
-            data: other,
+            ...other,
           },
         })
       } else {
@@ -46,17 +46,16 @@ export default {
 
   reducers: {
     queryArticleSuccess (state, { payload }) {
-      const { data } = payload
-      const { article } = data
-      const { title, content, catalog, author, createdate } = article
+      const { article } = payload
+      const { name, content, catalog, creater, createDate } = article
 
       return {
         ...state,
-        title,
+        name,
         content,
         catalog,
-        author,
-        createdate,
+        creater,
+        createDate,
       }
     },
   },

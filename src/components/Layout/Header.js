@@ -7,7 +7,7 @@ import Menus from './Menu'
 
 const SubMenu = Menu.SubMenu
 
-const Header = ({ accountInfo, logout, switchSider, siderFold, isNavbar, menuPopoverVisible, location, switchMenuPopover, navOpenKeys, changeOpenKeys, menu }) => {
+const Header = ({ onlineUser, logout, switchSider, siderFold, isNavbar, menuPopoverVisible, location, switchMenuPopover, navOpenKeys, changeOpenKeys, menu }) => {
   let handleClickMenu = e => e.key === 'logout' && logout()
   const menusProps = {
     menu,
@@ -44,7 +44,7 @@ const Header = ({ accountInfo, logout, switchSider, siderFold, isNavbar, menuPop
             }}
             title={<span>
               <Icon type="user" />
-              {accountInfo.name}
+              {onlineUser.name}
             </span>}
           >
             <Menu.Item key="logout">
@@ -59,7 +59,7 @@ const Header = ({ accountInfo, logout, switchSider, siderFold, isNavbar, menuPop
 
 Header.propTypes = {
   menu: PropTypes.array,
-  accountInfo: PropTypes.object,
+  onlineUser: PropTypes.object,
   logout: PropTypes.func,
   switchSider: PropTypes.func,
   siderFold: PropTypes.bool,

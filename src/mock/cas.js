@@ -88,7 +88,7 @@ module.exports = {
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const response = {}
-    const accountInfo = {}
+    const onlineUser = {}
     if (!cookies.token) {
       res.json({ errorCode: -1, reason: 'Not Login' })
       return
@@ -105,15 +105,15 @@ module.exports = {
     if (response.errorCode === 0) {
       const userItem = adminUsers.filter(_ => _.id === token.id)
       if (userItem.length > 0) {
-        accountInfo.Permissions = userItem[0].permissions
-        accountInfo.LoginTime = '1505907360'
-        accountInfo.UpdateTime = '1505907360'
-        accountInfo.Address = '127.0.0.1'
-        accountInfo.Name = userItem[0].name
-        accountInfo.ID = userItem[0].id
+        onlineUser.Permissions = userItem[0].permissions
+        onlineUser.LoginTime = '1505907360'
+        onlineUser.UpdateTime = '1505907360'
+        onlineUser.Address = '127.0.0.1'
+        onlineUser.Name = userItem[0].name
+        onlineUser.ID = userItem[0].id
       }
     }
-    response.accountInfo = accountInfo
+    response.onlineUser = onlineUser
     res.json(response)
   },
 

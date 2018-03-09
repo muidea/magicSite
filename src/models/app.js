@@ -14,7 +14,7 @@ export default {
   state: {
     sessionID: window.localStorage.getItem(`${prefix}SessionID`),
     authToken: window.localStorage.getItem(`${prefix}AuthToken`),
-    accountInfo: { },
+    onlineUser: { },
     menu: [
       {
         id: 1,
@@ -64,16 +64,16 @@ export default {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
       if (data.errorCode === 0) {
-        const { userInfo } = data
-        const { list, errorCode } = yield call(menusService.query, { authToken: userInfo.authToken })
+        const { onlineUser } = data
+        const { list, errorCode } = yield call(menusService.query, { authToken: onlineUser.authToken })
 
         if (errorCode === 0) {
           yield put({
             type: 'updateState',
             payload: {
               sessionID: data.sessionID,
-              authToken: userInfo.authToken,
-              userInfo,
+              authToken: onlineUser.authToken,
+              onlineUser,
               menu: list,
             },
           })
@@ -140,7 +140,7 @@ export default {
         ...state,
         sessionID: '',
         authToken: '',
-        accountInfo: {},
+        onlineUser: {},
         permissions: {
           visit: [],
         },
