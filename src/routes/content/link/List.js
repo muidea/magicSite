@@ -31,14 +31,23 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <Link to={`/content/link/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: 'URL',
-      dataIndex: 'url',
-      key: 'url',
-      width: 100,
+      title: '分类',
+      dataIndex: 'catalog',
+      key: 'catalog',
+      render: (text, record) => {
+        let catalogVal = ''
+        for (let item of record.catalog) {
+          catalogVal += item.name
+          catalogVal += ', '
+        }
+
+        return <span>{catalogVal}</span>
+      },
     }, {
-      title: 'Logo',
-      dataIndex: 'logo',
-      key: 'logo',
+      title: '作者',
+      dataIndex: 'creater',
+      key: 'creater',
+      render: (text, record) => <span>{record.creater.name}</span>,
     }, {
       title: '操作',
       key: 'operation',

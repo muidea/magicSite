@@ -25,7 +25,7 @@ module.exports = {
     article: `${ContentApi}/article/:id`,
     catalogs: `${ContentApi}/catalog/`,
     catalog: `${ContentApi}/catalog/:id`,
-    links: `${ContentApi}/links/`,
+    links: `${ContentApi}/link/`,
     link: `${ContentApi}/link/:id`,
     medias: `${ContentApi}/media/`,
     media: `${ContentApi}/media/:id`,

@@ -34,14 +34,20 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
-      width: 100,
       render: (text, record) => {
-        return record.catalog > 0 ? '管理员组' : '用户组'
+        let catalogVal = ''
+        for (let item of record.catalog) {
+          catalogVal += item.name
+          catalogVal += ', '
+        }
+
+        return <span>{catalogVal}</span>
       },
     }, {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
+      title: '作者',
+      dataIndex: 'creater',
+      key: 'creater',
+      render: (text, record) => <span>{record.creater.name}</span>,
     }, {
       title: '操作',
       key: 'operation',
