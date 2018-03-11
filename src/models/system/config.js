@@ -6,7 +6,7 @@ export default {
   state: {
     modalVisible: false,
     modalType: 'updateSite',
-    systemInfo: {
+    systemProperty: {
     },
   },
 
@@ -64,11 +64,11 @@ export default {
 
   reducers: {
     refreshSystemInfo (state, { payload }) {
-      const { systemInfo } = payload
+      const { systemProperty } = payload
 
       return {
         ...state,
-        systemInfo,
+        systemProperty,
       }
     },
 

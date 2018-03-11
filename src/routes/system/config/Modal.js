@@ -49,8 +49,8 @@ const modal = ({
       {type === 'updateSite' &&
         <Form layout="horizontal">
           <FormItem label="名称" {...formItemLayout}>
-            {getFieldDecorator('siteName', {
-              initialValue: item.siteName,
+            {getFieldDecorator('name', {
+              initialValue: item.name,
               rules: [
                 {
                   required: true,
@@ -59,8 +59,8 @@ const modal = ({
             })(<Input />)}
           </FormItem>
           <FormItem label="域名" {...formItemLayout}>
-            {getFieldDecorator('siteDomain', {
-              initialValue: item.siteDomain,
+            {getFieldDecorator('domain', {
+              initialValue: item.domain,
               rules: [
                 {
                   required: true,
@@ -69,8 +69,8 @@ const modal = ({
             })(<Input />)}
           </FormItem>
           <FormItem label="描述" {...formItemLayout}>
-            {getFieldDecorator('siteDescription', {
-              initialValue: item.siteDescription,
+            {getFieldDecorator('description', {
+              initialValue: item.description,
               rules: [
                 {
                   required: true,
@@ -83,7 +83,7 @@ const modal = ({
       {type === 'updateSystem' &&
         <Form layout="horizontal">
           <FormItem label="邮件服务器" {...formItemLayout}>
-            {getFieldDecorator('emailServer', {
+            {getFieldDecorator('mailServer', {
               initialValue: item.emailServer,
               rules: [
                 {
@@ -93,7 +93,7 @@ const modal = ({
             })(<Input />)}
           </FormItem>
           <FormItem label="邮件账号" {...formItemLayout}>
-            {getFieldDecorator('emailAccount', {
+            {getFieldDecorator('mailAccount', {
               initialValue: item.emailAccount,
               rules: [
                 {
@@ -103,7 +103,7 @@ const modal = ({
             })(<Input />)}
           </FormItem>
           <FormItem label="账号密码" {...formItemLayout}>
-            {getFieldDecorator('emailPassword', {
+            {getFieldDecorator('mailPassword', {
               initialValue: item.emailPassword,
               rules: [
                 {

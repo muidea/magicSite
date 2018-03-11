@@ -35,11 +35,11 @@ export default modelExtend(pageModel, {
         yield put({
           type: 'queryAllSuccess',
           payload: {
-            list: data.data,
+            list: data.user,
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
-              total: data.total,
+              total: data.user.length,
             },
           },
         })
