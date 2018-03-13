@@ -64,7 +64,7 @@ const modal = ({
         <FormItem label="父类" {...formItemLayout}>
           {getFieldDecorator('parent', {
             initialValue: item.parent,
-          })(<EditableTagGroup />)}
+          })(<EditableTagGroup readOnly={false} />)}
         </FormItem>
       </Form>
     </Modal>

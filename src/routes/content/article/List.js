@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
-import { DropOption } from '../../../components'
+import { DropOption, EditableTagGroup } from '../../../components'
 
 const confirm = Modal.confirm
 
@@ -33,13 +33,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       dataIndex: 'catalog',
       key: 'catalog',
       render: (text, record) => {
-        let catalogVal = ''
-        for (let item of record.catalog) {
-          catalogVal += item.name
-          catalogVal += ', '
-        }
-
-        return <span>{catalogVal}</span>
+        return <EditableTagGroup readOnly value={record.catalog} />
       },
     }, {
       title: '作者',

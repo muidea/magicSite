@@ -76,13 +76,13 @@ export default class EditableTagGroup extends Component {
         {value.map((tag) => {
           const isLongTag = tag.name.length > 20
           const tagElem = (
-            <Tag key={tag.name} closable afterClose={() => this.handleClose(tag.name)}>
+            <Tag key={tag.name} closable={!this.props.readOnly} afterClose={() => this.handleClose(tag.name)}>
               {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
             </Tag>
           )
           return isLongTag ? <Tooltip title={tag.name} key={tag.name}>{tagElem}</Tooltip> : tagElem
         })}
-        {inputVisible && (
+        {inputVisible && !this.props.readOnly && (
           <Input
             ref={this.saveInputRef}
             type="text"
@@ -94,7 +94,7 @@ export default class EditableTagGroup extends Component {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && (
+        {!inputVisible && !this.props.readOnly && (
           <Tag
             onClick={this.showInput}
             style={{ background: '#fff', borderStyle: 'dashed' }}
@@ -109,5 +109,6 @@ export default class EditableTagGroup extends Component {
 
 EditableTagGroup.propTypes = {
   value: PropTypes.array,
+  readOnly: PropTypes.bool,
   onChange: PropTypes.func,
 }
