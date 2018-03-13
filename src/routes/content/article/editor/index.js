@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { RichEditor } from 'components'
-import { Form, Input, Checkbox, Button } from 'antd'
+import { RichEditor, EditableTagGroup } from 'components'
+import { Form, Input, Button } from 'antd'
 import styles from './index.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input
-const CheckboxGroup = Checkbox.Group
 
 const formItemLayout = {
   labelCol: {
@@ -40,8 +39,8 @@ const ArticleEditor = ({
     setFieldsValue,
     getFieldsValue,
   } }) => {
-  const { article, catalogs, actionType } = articleEditor
-  const { id, title, content, catalog } = article
+  const { article, actionType } = articleEditor
+  const { id, name, content, catalog } = article
 
   const onHandleSummit = () => {
     validateFields((errors) => {
@@ -63,19 +62,15 @@ const ArticleEditor = ({
   }
 
   const onEditorValueChange = (value) => {
-    setFieldsValue({ article_content: value })
-  }
-
-  const onCheckBoxStateChange = (checkedValues) => {
-    setFieldsValue({ article_catalog: checkedValues })
+    setFieldsValue({ content: value })
   }
 
   return (<div className="content-inner">
     <div className={styles.content}>
       <Form layout="horizontal">
         <FormItem label="标题" {...formItemLayout}>
-          {getFieldDecorator('article_title', {
-            initialValue: title,
+          {getFieldDecorator('name', {
+            initialValue: name,
             rules: [
               {
                 required: true,
@@ -85,7 +80,7 @@ const ArticleEditor = ({
           })(<Input />)}
         </FormItem>
         <FormItem label="内容" {...formItemLayout}>
-          {getFieldDecorator('article_content', {
+          {getFieldDecorator('content', {
             initialValue: content,
             rules: [
               {
@@ -103,7 +98,7 @@ const ArticleEditor = ({
           />
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
-          {getFieldDecorator('article_catalog', {
+          {getFieldDecorator('catalog', {
             initialValue: catalog,
             rules: [
               {
@@ -111,8 +106,7 @@ const ArticleEditor = ({
                 message: '分类必须选择',
               },
             ],
-          })(<Input style={{ display: 'none' }} />)}
-          <CheckboxGroup options={catalogs} value={catalog} onChange={onCheckBoxStateChange} />
+          })(<EditableTagGroup readOnly={false} />)}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>

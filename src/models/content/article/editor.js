@@ -1,7 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { routerRedux } from 'dva/router'
 import { queryArticle, createArticle, updateArticle } from 'services/content/article'
-import { queryAllCatalog } from 'services/content/catalog'
 
 export default {
 
@@ -9,7 +8,6 @@ export default {
 
   state: {
     article: { content: '', catalog: [] },
-    catalogs: [],
     actionType: 'create',
   },
 
@@ -29,16 +27,11 @@ export default {
   effects: {
     * resetModel ({
       payload,
-    }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const catalogsInfo = yield call(queryAllCatalog, { authToken, ...payload })
-      const { data } = catalogsInfo
-
+    }, { put }) {
       yield put({
         type: 'resetState',
         payload: {
           ...payload,
-          catalogList: data,
         },
       })
     },
@@ -47,9 +40,7 @@ export default {
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const catalogsInfo = yield call(queryAllCatalog, { authToken, ...payload })
       const articleData = yield call(queryArticle, { authToken, ...payload })
-      const { data } = catalogsInfo
       const { success, article } = articleData
 
       if (success) {
@@ -57,7 +48,6 @@ export default {
           type: 'updateState',
           payload: {
             article,
-            catalogList: data,
           },
         })
       } else {
@@ -88,63 +78,22 @@ export default {
 
   reducers: {
     resetState (state, { payload }) {
-      const { catalogList } = payload
       const article = { id: -1, title: '', content: '', catalog: [] }
-      const catalogs = []
-      if (catalogList) {
-        for (let item of catalogList) {
-          catalogs.unshift({ value: item.id, label: item.name })
-        }
-      }
-
       return {
         ...state,
         ...payload,
         article,
-        catalogs,
         actionType: 'create',
       }
     },
 
     updateState (state, { payload }) {
-      const { article, catalogList } = payload
-      let catalogs = []
-      const { catalog } = article
-
-      let catalogIDs = []
-      if (catalog) {
-        for (let val of catalog) {
-          catalogIDs.push(val.id)
-        }
-      }
-
-      if (catalogList) {
-        for (let item of catalogList) {
-          catalogs.unshift({ value: item.id, label: item.name })
-        }
-      }
-
+      const { article } = payload
       return {
         ...state,
-        article: { ...article, catalog: catalogIDs },
-        catalogs,
+        article,
         actionType: 'update',
       }
     },
-
-    updateEditorContent (state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      }
-    },
-
-    updateEditorState (state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      }
-    },
-
   },
 }

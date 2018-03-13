@@ -99,7 +99,7 @@ export default class EditableTagGroup extends Component {
             onClick={this.showInput}
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
-            <Icon type="plus" /> 新增
+            <Icon type="plus" /> 添加
           </Tag>
         )}
       </div>
