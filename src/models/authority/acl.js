@@ -33,14 +33,20 @@ export default modelExtend(pageModel, {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllAcl, { authToken })
       if (data) {
+        const { acl } = data
+        let totalCount = 0
+        if (acl) {
+          totalCount = acl.length
+        }
+
         yield put({
           type: 'queryAllSuccess',
           payload: {
-            list: data.data,
+            list: acl,
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
-              total: data.total,
+              total: Number(totalCount) || 0,
             },
           },
         })

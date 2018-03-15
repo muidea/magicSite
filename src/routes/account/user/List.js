@@ -30,8 +30,8 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
       },
     }, {
       title: '昵称',
-      dataIndex: 'nickName',
-      key: 'nickName',
+      dataIndex: 'name',
+      key: 'name',
       width: 100,
     }, {
       title: 'EMail',
