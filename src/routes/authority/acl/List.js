@@ -32,20 +32,6 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
       dataIndex: 'method',
       key: 'method',
     }, {
-      title: '权限组',
-      dataIndex: 'authgroup',
-      key: 'authgroup',
-      render: (text, record) => {
-        return record.authgroup.name
-      },
-    }, {
-      title: '所属模块',
-      dataIndex: 'module',
-      key: 'module',
-      render: (text, record) => {
-        return record.module.name
-      },
-    }, {
       title: '操作',
       key: 'operation',
       width: 80,
