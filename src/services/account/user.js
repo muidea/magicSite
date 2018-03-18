@@ -21,7 +21,7 @@ export async function queryUser (params) {
 
 export async function createUser (params) {
   return request({
-    url: user.replace('/:id', ''),
+    url: user.replace(':id', ''),
     method: 'post',
     data: params,
   })

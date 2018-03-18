@@ -21,7 +21,7 @@ export async function queryArticle (params) {
 
 export async function createArticle (params) {
   return request({
-    url: article.replace('/:id', ''),
+    url: article.replace(':id', ''),
     method: 'post',
     data: params,
   })

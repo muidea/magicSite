@@ -21,7 +21,7 @@ export async function queryCatalog (params) {
 
 export async function createCatalog (params) {
   return request({
-    url: catalog.replace('/:id', ''),
+    url: catalog.replace(':id', ''),
     method: 'post',
     data: params,
   })

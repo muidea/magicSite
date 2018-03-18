@@ -21,7 +21,7 @@ export async function queryGroup (params) {
 
 export async function createGroup (params) {
   return request({
-    url: group.replace('/:id', ''),
+    url: group.replace(':id', ''),
     method: 'post',
     data: params,
   })

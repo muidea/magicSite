@@ -21,7 +21,7 @@ export async function queryAcl (params) {
 
 export async function createAcl (params) {
   return request({
-    url: acl.replace('/:id', ''),
+    url: acl.replace(':id', ''),
     method: 'post',
     data: params,
   })

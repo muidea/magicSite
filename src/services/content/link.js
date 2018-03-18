@@ -21,7 +21,7 @@ export async function queryLink (params) {
 
 export async function createLink (params) {
   return request({
-    url: link.replace('/:id', ''),
+    url: link.replace(':id', ''),
     method: 'post',
     data: params,
   })

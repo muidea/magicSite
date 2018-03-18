@@ -77,6 +77,27 @@ export default function request (options) {
     }
   }
 
+  if (options.url) {
+    if (options.data) {
+      const { id, authToken } = options.data
+      let url = options.url
+      if (id) {
+        delete options.data.id
+        url = url.replace(':id', id)
+      }
+
+      if (authToken) {
+        delete options.data.authToken
+        url = url.concat('?authToken='.concat(authToken))
+      }
+
+      options = {
+        ...options,
+        url,
+      }
+    }
+  }
+
   console.log(options)
 
   return fetch(options).then((response) => {

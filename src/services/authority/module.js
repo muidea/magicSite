@@ -21,7 +21,7 @@ export async function queryModule (params) {
 
 export async function createModule (params) {
   return request({
-    url: module.replace('/:id', ''),
+    url: module.replace(':id', ''),
     method: 'post',
     data: params,
   })

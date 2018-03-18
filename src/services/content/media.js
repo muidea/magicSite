@@ -21,7 +21,7 @@ export async function queryMedia (params) {
 
 export async function createMedia (params) {
   return request({
-    url: media.replace('/:id', ''),
+    url: media.replace(':id', ''),
     method: 'post',
     data: params,
   })
