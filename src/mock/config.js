@@ -7,7 +7,7 @@ const systemconfig = {
   siteDomain: 'muidea.com',
   siteDescription: '这是站点描述，放在这里占坑，看看效果怎样',
   emailServer: 'smtp.126.com',
-  emailAccount: 'rangh@126.com',
+  emailAccount: 'admin@muidea.com',
   emailPassword: '******',
 }
 
