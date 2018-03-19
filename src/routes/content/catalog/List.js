@@ -31,7 +31,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <Link to={`/content/catalog/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '分类',
+      title: '父类',
       dataIndex: 'catalog',
       key: 'catalog',
       render: (text, record) => {
