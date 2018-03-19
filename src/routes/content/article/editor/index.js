@@ -6,7 +6,6 @@ import { Form, Input, Button } from 'antd'
 import styles from './index.less'
 
 const FormItem = Form.Item
-const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: {
@@ -36,7 +35,6 @@ const ArticleEditor = ({
   form: {
     getFieldDecorator,
     validateFields,
-    setFieldsValue,
     getFieldsValue,
   } }) => {
   const { article, actionType } = articleEditor
@@ -61,10 +59,6 @@ const ArticleEditor = ({
     })
   }
 
-  const onEditorValueChange = (value) => {
-    setFieldsValue({ content: value })
-  }
-
   return (<div className="content-inner">
     <div className={styles.content}>
       <Form layout="horizontal">
@@ -87,15 +81,7 @@ const ArticleEditor = ({
                 required: false,
               },
             ],
-          })(<TextArea rows={3} cols={30} style={{ display: 'none' }} />)}
-          <RichEditor
-            value={content}
-            placeholder="输入内容"
-            editorStyle={{
-              minHeight: 376,
-            }}
-            onChange={onEditorValueChange}
-          />
+          })(<RichEditor placeholder="输入内容" editorStyle={{ minHeight: 376 }} />)}
         </FormItem>
         <FormItem label="分类" {...formItemLayout}>
           {getFieldDecorator('catalog', {
