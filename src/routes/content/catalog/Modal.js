@@ -62,8 +62,8 @@ const modal = ({
           })(<TextArea rows={3} cols={3} />)}
         </FormItem>
         <FormItem label="父类" {...formItemLayout}>
-          {getFieldDecorator('parent', {
-            initialValue: item.parent,
+          {getFieldDecorator('catalog', {
+            initialValue: item.catalog,
           })(<EditableTagGroup readOnly={false} />)}
         </FormItem>
       </Form>
