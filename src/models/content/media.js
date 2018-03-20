@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllMedia, queryMedia, createMedia, updateMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
+import { queryAllMedia, queryMedia, createMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -54,31 +54,22 @@ export default modelExtend(pageModel, {
 
     * queryMedia ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryMedia, { id: payload, authToken })
+      const result = yield call(queryMedia, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.media)
-      if (data.success) {
+      if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'queryAllMedia' })
       } else {
-        throw data
+        throw result
       }
     },
 
-    * createMedia ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(createMedia, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/media'))
-      } else {
-        throw data
-      }
-    },
 
-    * updateMedia ({ payload }, { call, put, select }) {
+    * saveMedia ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(updateMedia, { authToken, ...payload })
-      if (data.success) {
+      const { data } = payload
+      const result = yield call(createMedia, { authToken, ...data })
+      if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/media'))
       } else {

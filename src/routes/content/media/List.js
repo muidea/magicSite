@@ -36,7 +36,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <EditableTagGroup readOnly value={record.catalog} />
       },
     }, {
-      title: '作者',
+      title: '创建人',
       dataIndex: 'creater',
       key: 'creater',
       render: (text, record) => <span>{record.creater.name}</span>,

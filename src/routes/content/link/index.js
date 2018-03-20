@@ -19,8 +19,8 @@ const Link = ({ location, dispatch, link, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `link/${modalType}Link`,
-        payload: { id: currentItem.id, ...data },
+        type: 'link/saveLink',
+        payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {
@@ -52,13 +52,10 @@ const Link = ({ location, dispatch, link, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'link/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'link/updateLink',
+        payload: id,
       })
     },
     rowSelection: {

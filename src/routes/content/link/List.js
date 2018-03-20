@@ -11,7 +11,7 @@ const confirm = Modal.confirm
 const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
-      onEditItem(record)
+      onEditItem(record.id)
     } else if (e.key === '2') {
       confirm({
         title: '确认删除分类?',
@@ -38,7 +38,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <EditableTagGroup readOnly value={record.catalog} />
       },
     }, {
-      title: '作者',
+      title: '创建人',
       dataIndex: 'creater',
       key: 'creater',
       render: (text, record) => <span>{record.creater.name}</span>,

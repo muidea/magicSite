@@ -55,31 +55,32 @@ export default modelExtend(pageModel, {
 
     * queryLink ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryLink, { id: payload, authToken })
+      const result = yield call(queryLink, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.link)
-      if (data.success) {
+      if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'queryAllLink' })
       } else {
-        throw data
-      }
-    },
-
-    * createLink ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(createLink, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/link'))
-      } else {
-        throw data
+        throw result
       }
     },
 
     * updateLink ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(updateLink, { authToken, ...payload })
-      if (data.success) {
+      const result = yield call(queryLink, { id: payload, authToken })
+      if (result.success) {
+        const { link } = result
+        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: link } })
+      } else {
+        throw result
+      }
+    },
+
+    * saveLink ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const { action, data } = payload
+      const result = yield call(action === 'create' ? createLink : updateLink, { authToken, ...data })
+      if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/link'))
       } else {
@@ -93,18 +94,17 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'queryAllLink' })
       } else {
         throw data
       }
     },
 
-    * multiDeleteLink ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(multiDeleteLink, { authToken, ...payload })
+    * multiDeleteLink ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteLink, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'queryAllLink' })
       } else {
         throw data
       }

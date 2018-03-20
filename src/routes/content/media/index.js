@@ -19,8 +19,8 @@ const Media = ({ location, dispatch, media, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: 'media/createMedia',
-        payload: { id: currentItem.id, ...data },
+        type: 'media/saveMedia',
+        payload: { data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {
