@@ -31,28 +31,13 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <Link to={`/account/group/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '类型',
+      title: '父分组',
       dataIndex: 'catalog',
       key: 'catalog',
-      width: 100,
       render: (text, record) => {
-        let val = '访客'
-        switch (record.catalog) {
-          case 1:
-            val = '用户'
-            break
-          case 2:
-            val = '管理'
-            break
-          default:
-            break
-        }
-        return val
+        const { catalog } = record
+        return catalog.name
       },
-    }, {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
     }, {
       title: '操作',
       key: 'operation',

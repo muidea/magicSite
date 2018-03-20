@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { Link } from 'dva/router'
 import { Table, Modal } from 'antd'
 import styles from './List.less'
-import { DropOption } from '../../../components'
+import { DropOption, EditableTagGroup } from '../../../components'
 
 const confirm = Modal.confirm
 
@@ -29,14 +29,12 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '昵称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 100,
-    }, {
-      title: 'EMail',
-      dataIndex: 'email',
-      key: 'email',
+      title: '分组',
+      dataIndex: 'group',
+      key: 'group',
+      render: (text, record) => {
+        return <EditableTagGroup readOnly value={record.group} />
+      },
     }, {
       title: '操作',
       key: 'operation',
