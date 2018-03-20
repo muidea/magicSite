@@ -55,31 +55,32 @@ export default modelExtend(pageModel, {
 
     * queryCatalog ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryCatalog, { id: payload, authToken })
+      const result = yield call(queryCatalog, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.catalog)
-      if (data.success) {
+      if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'queryAllCatalog' })
       } else {
-        throw data
-      }
-    },
-
-    * createCatalog ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(createCatalog, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/catalog'))
-      } else {
-        throw data
+        throw result
       }
     },
 
     * updateCatalog ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(updateCatalog, { authToken, ...payload })
-      if (data.success) {
+      const result = yield call(queryCatalog, { id: payload, authToken })
+      if (result.success) {
+        const { catalog } = result
+        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: catalog } })
+      } else {
+        throw result
+      }
+    },
+
+    * saveCatalog ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const { action, data } = payload
+      const result = yield call(action === 'create' ? createCatalog : updateCatalog, { authToken, ...data })
+      if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/catalog'))
       } else {

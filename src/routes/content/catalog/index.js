@@ -19,8 +19,8 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `catalog/${modalType}Catalog`,
-        payload: { id: currentItem.id, ...data },
+        type: 'catalog/saveCatalog',
+        payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {
@@ -52,13 +52,10 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'catalog/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'catalog/updateCatalog',
+        payload: id,
       })
     },
     rowSelection: {
