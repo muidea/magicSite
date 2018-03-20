@@ -10,8 +10,8 @@ export default {
     url: '',
     logo: '',
     catalog: [],
-    author: {},
-    createdate: '',
+    creater: {},
+    createDate: '',
   },
 
   subscriptions: {
@@ -49,16 +49,10 @@ export default {
     queryLinkSuccess (state, { payload }) {
       const { data } = payload
       const { link } = data
-      const { name, url, logo, catalog, creater, createdate } = link
 
       return {
         ...state,
-        name,
-        url,
-        logo,
-        catalog,
-        creater,
-        createdate,
+        ...link,
       }
     },
   },

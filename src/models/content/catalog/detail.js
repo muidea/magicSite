@@ -8,9 +8,9 @@ export default {
   state: {
     name: '',
     description: '',
-    parent: [],
-    author: {},
-    createdate: '',
+    catalog: [],
+    creater: {},
+    createDate: '',
   },
 
   subscriptions: {
@@ -48,15 +48,10 @@ export default {
     queryCatalogSuccess (state, { payload }) {
       const { data } = payload
       const { catalog } = data
-      const { name, description, parent, author, createdate } = catalog
 
       return {
         ...state,
-        name,
-        description,
-        parent,
-        author,
-        createdate,
+        ...catalog,
       }
     },
   },

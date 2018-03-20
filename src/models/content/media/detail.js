@@ -11,7 +11,7 @@ export default {
     description: '',
     catalog: [],
     creater: {},
-    createdate: '',
+    createDate: '',
   },
 
   subscriptions: {
@@ -49,16 +49,10 @@ export default {
     queryMediaSuccess (state, { payload }) {
       const { data } = payload
       const { media } = data
-      const { name, url, description, catalog, creater, createdate } = media
 
       return {
         ...state,
-        name,
-        url,
-        description,
-        catalog,
-        creater,
-        createdate,
+        ...media,
       }
     },
   },

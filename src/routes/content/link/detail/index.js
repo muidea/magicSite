@@ -1,15 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Tag } from 'antd'
 import styles from './index.less'
+import { EditableTagGroup } from '../../../../components'
 
 const Detail = ({ linkDetail }) => {
-  const { name, url, logo, catalog, createdate } = linkDetail
-  const catalogTags = []
-  for (let val of catalog) {
-    catalogTags.push(<Tag key={val.id}>{val.name}</Tag>)
-  }
+  const { name, url, logo, catalog, createDate, creater } = linkDetail
 
   return (<div className="content-inner">
     <div className={styles.content}>
@@ -18,7 +14,8 @@ const Detail = ({ linkDetail }) => {
         <div>{name}</div>
       </div>
       <div className={styles.item}>
-        <div>{catalogTags}</div>
+        <div>分类</div>
+        <div><EditableTagGroup readOnly value={catalog} /></div>
       </div>
       <div className={styles.item}>
         <div>URL</div>
@@ -30,7 +27,11 @@ const Detail = ({ linkDetail }) => {
       </div>
       <div className={styles.item}>
         <div>创建时间</div>
-        <div>{createdate}</div>
+        <div>{createDate}</div>
+      </div>
+      <div className={styles.item}>
+        <div>创建人</div>
+        <div>{creater.name}</div>
       </div>
     </div>
   </div>)
