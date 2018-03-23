@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { Table, Tag, Tooltip } from 'antd'
+import { Link } from 'dva/router'
+import { Table } from 'antd'
 import styles from './List.less'
-import { DropOption } from '../../../components'
+import { DropOption, EditableTagGroup } from '../../../components'
 
 const List = ({ onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
@@ -14,26 +15,18 @@ const List = ({ onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '账号',
-      dataIndex: 'account',
-      key: 'account',
+      title: '用户',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => {
+        return <Link to={`/authority/user/view/${record.id}`}>{text}</Link>
+      },
     }, {
       title: '模块列表',
       dataIndex: 'module',
       key: 'module',
       render: (text, record) => {
-        const content = []
-        if (record.module) {
-          for (let tag of record.module) {
-            const isLongTag = tag.name.length > 20
-            const tagElem = (
-              <Tag key={tag.name}> {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name} </Tag>
-            )
-            content.push(isLongTag ? <Tooltip title={tag.name} key={tag.name}>{tagElem}</Tooltip> : tagElem)
-          }
-        }
-
-        return content
+        return <EditableTagGroup readOnly value={record.module} />
       },
     }, {
       title: '操作',

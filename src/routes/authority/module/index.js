@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Module = ({ location, dispatch, module, loading }) => {
-  const { list, pagination, currentItem, modalVisible } = module
+  const { list, pagination, currentItem, selectedRowKeys, modalVisible } = module
   const { pageSize } = pagination
 
   const modalProps = {
@@ -60,6 +60,17 @@ const Module = ({ location, dispatch, module, loading }) => {
           currentItem: item,
         },
       })
+    },
+    rowSelection: {
+      selectedRowKeys,
+      onChange: (keys) => {
+        dispatch({
+          type: 'user/updateModelState',
+          payload: {
+            selectedRowKeys: keys,
+          },
+        })
+      },
     },
   }
 
