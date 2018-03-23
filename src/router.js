@@ -73,25 +73,29 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/account/group/detail')],
       component: () => import('./routes/account/group/detail/'),
     }, {
-      path: '/user',
-      models: () => [import('./models/user')],
-      component: () => import('./routes/user/'),
-    }, {
-      path: '/user/:id',
-      models: () => [import('./models/user/detail')],
-      component: () => import('./routes/user/detail/'),
-    }, {
       path: '/authority/acl',
       models: () => [import('./models/authority/acl')],
       component: () => import('./routes/authority/acl/'),
+    }, {
+      path: '/authority/acl/view/:id',
+      models: () => [import('./models/authority/acl/detail')],
+      component: () => import('./routes/authority/acl/detail/'),
     }, {
       path: '/authority/module',
       models: () => [import('./models/authority/module')],
       component: () => import('./routes/authority/module/'),
     }, {
+      path: '/authority/module/view/:id',
+      models: () => [import('./models/authority/module/detail')],
+      component: () => import('./routes/authority/module/detail/'),
+    }, {
       path: '/authority/user',
       models: () => [import('./models/authority/user')],
       component: () => import('./routes/authority/user/'),
+    }, {
+      path: '/authority/user/view/:id',
+      models: () => [import('./models/authority/user/detail')],
+      component: () => import('./routes/authority/user/detail/'),
     }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],
