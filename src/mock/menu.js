@@ -46,7 +46,7 @@ let database = [
     mpid: '-1',
     bpid: '21',
     name: '文章详情',
-    icon: 'file-text',
+    icon: 'book',
     route: '/content/article/view/:id',
   },
   {
@@ -62,7 +62,7 @@ let database = [
     mpid: '-1',
     bpid: '22',
     name: '分类详情',
-    icon: 'tag-o',
+    icon: 'book',
     route: '/content/catalog/view/:id',
   },
   {
@@ -70,7 +70,7 @@ let database = [
     bpid: '2',
     mpid: '2',
     name: '链接管理',
-    icon: 'link',
+    icon: 'share-alt',
     route: '/content/link',
   },
   {
@@ -78,7 +78,7 @@ let database = [
     mpid: '-1',
     bpid: '23',
     name: '链接详情',
-    icon: 'share-alt',
+    icon: 'book',
     route: '/content/link/view/:id',
   },
   {
@@ -86,7 +86,7 @@ let database = [
     bpid: '2',
     mpid: '2',
     name: '文件管理',
-    icon: 'picture',
+    icon: 'file',
     route: '/content/media',
   },
   {
@@ -94,7 +94,7 @@ let database = [
     mpid: '-1',
     bpid: '24',
     name: '文件详情',
-    icon: 'file',
+    icon: 'book',
     route: '/content/media/view/:id',
   },
   {
@@ -117,7 +117,7 @@ let database = [
     mpid: '-1',
     bpid: '31',
     name: '用户详情',
-    icon: 'idcard',
+    icon: 'book',
     route: '/account/user/view/:id',
   },
   {
@@ -133,7 +133,7 @@ let database = [
     mpid: '-1',
     bpid: '32',
     name: '分组详情',
-    icon: 'solution',
+    icon: 'book',
     route: '/account/group/view/:id',
   },
   {
@@ -152,6 +152,14 @@ let database = [
     route: '/authority/acl',
   },
   {
+    id: '411',
+    mpid: '-1',
+    bpid: '41',
+    name: 'ACL详情',
+    icon: 'book',
+    route: '/authority/acl/view/:id',
+  },
+  {
     id: '42',
     bpid: '4',
     mpid: '4',
@@ -160,12 +168,28 @@ let database = [
     route: '/authority/module',
   },
   {
+    id: '421',
+    mpid: '-1',
+    bpid: '42',
+    name: '模块详情',
+    icon: 'book',
+    route: '/authority/module/view/:id',
+  },
+  {
     id: '43',
     bpid: '4',
     mpid: '4',
     name: '用户管理',
     icon: 'user',
     route: '/authority/user',
+  },
+  {
+    id: '431',
+    mpid: '-1',
+    bpid: '43',
+    name: '用户详情',
+    icon: 'book',
+    route: '/authority/user/view/:id',
   },
   {
     id: '5',

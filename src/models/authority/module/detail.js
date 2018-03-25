@@ -7,7 +7,7 @@ export default {
 
   state: {
     name: '',
-    userAuthGroup: {},
+    userAuthGroup: [],
   },
 
   subscriptions: {

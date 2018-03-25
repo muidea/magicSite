@@ -9,7 +9,7 @@ const Detail = ({ moduleDetail }) => {
   return (<div className="content-inner">
     <div className={styles.content}>
       <div className={styles.item}>
-        <div>账号</div>
+        <div>模块</div>
         <div>{name}</div>
       </div>
     </div>

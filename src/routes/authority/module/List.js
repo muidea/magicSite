@@ -15,18 +15,14 @@ const List = ({ onEditItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '模块ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '模块名称',
+      dataIndex: 'name',
+      key: 'name',
       render: (text, record) => {
         return <Link to={`/authority/module/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '模块名称',
-      dataIndex: 'name',
-      key: 'name',
-    }, {
-      title: '模块用户',
+      title: '用户',
       dataIndex: 'user',
       key: 'user',
       render: (text, record) => {

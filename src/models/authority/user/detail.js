@@ -7,9 +7,8 @@ export default {
 
   state: {
     name: '',
-    userAuthGroup: {},
+    moduleAuthGroup: [],
   },
-
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
