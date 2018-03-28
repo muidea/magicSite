@@ -1,4 +1,5 @@
 import DataTable from './DataTable'
+import DescriptionList from './DescriptionList'
 import DropOption from './DropOption'
 import Iconfont from './Iconfont'
 import Search from './Search'
@@ -14,6 +15,7 @@ import layer from './layer'
 export {
   Layout,
   DataTable,
+  DescriptionList,
   DropOption,
   Iconfont,
   Search,

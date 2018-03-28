@@ -7,6 +7,10 @@ export default {
 
   state: {
     name: '',
+    account: '',
+    email: '',
+    group: [],
+    registerTime: '',
     moduleAuthGroup: [],
   },
   subscriptions: {
@@ -26,7 +30,10 @@ export default {
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryUser, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const {
+        success, message, status, ...other
+      } = data
+
       if (success) {
         yield put({
           type: 'queryUserSuccess',
