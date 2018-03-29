@@ -8,9 +8,7 @@ import styles from './index.less'
 const { Description } = DescriptionList
 
 const Detail = ({ userDetail }) => {
-  const {
-    name, account, email, group, registerTime, moduleAuthGroup,
-  } = userDetail
+  const { name, account, email, group, registerTime, moduleAuthGroup } = userDetail
 
   const authGroupColumns = [
     {
@@ -51,8 +49,6 @@ const Detail = ({ userDetail }) => {
     </div>)
 }
 
-Detail.propTypes = {
-  userDetail: PropTypes.object,
-}
+Detail.propTypes = { userDetail: PropTypes.object }
 
 export default connect(({ userDetail, loading }) => ({ userDetail, loading: loading.models.userDetail }))(Detail)

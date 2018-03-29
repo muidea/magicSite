@@ -7,6 +7,9 @@ export default {
 
   state: {
     name: '',
+    description: '',
+    type: 0,
+    status: 0,
     userAuthGroup: [],
   },
 
@@ -15,25 +18,24 @@ export default {
       history.listen((location) => {
         const match = pathToRegexp('/authority/module/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'queryModule', payload: { id: match[1] } })
+          dispatch({
+            type: 'queryModule',
+            payload: { id: match[1] },
+          })
         }
       })
     },
   },
 
   effects: {
-    * queryModule ({
-      payload,
-    }, { call, put, select }) {
+    * queryModule ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryModule, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
           type: 'queryModuleSuccess',
-          payload: {
-            data: other,
-          },
+          payload: { data: other },
         })
       } else {
         throw data

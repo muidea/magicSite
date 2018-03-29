@@ -1,39 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import styles from './index.less'
+import { DescriptionList, EditableTagGroup } from '../../../../components'
+
+const { Description } = DescriptionList
 
 const Detail = ({ aclDetail }) => {
-  const { url, method, module, authGroup, status } = aclDetail
+  const { url, method, module, status, authGroup } = aclDetail
 
-  return (<div className="content-inner">
-    <div className={styles.content}>
-      <div className={styles.item}>
-        <div>URL</div>
-        <div>{url}</div>
+  return (
+    <div className="content-inner">
+      <div>
+        <DescriptionList size="large" title="ACL信息" style={{ marginBottom: 32 }}>
+          <Description term="URL">{url}</Description>
+          <Description term="Method">{method}</Description>
+          <Description term="状态">{status.toString()}</Description>
+          <Description term="所属模块">{module.name}</Description>
+          <Description term="权限组"><EditableTagGroup readOnly value={[authGroup]} /></Description>
+        </DescriptionList>
       </div>
-      <div className={styles.item}>
-        <div>Method</div>
-        <div>{method}</div>
-      </div>
-      <div className={styles.item}>
-        <div>所属模块</div>
-        <div>{module.name}</div>
-      </div>
-      <div className={styles.item}>
-        <div>授权组</div>
-        <div>{authGroup.name}</div>
-      </div>
-      <div className={styles.item}>
-        <div>状态</div>
-        <div>{status}</div>
-      </div>
-    </div>
-  </div>)
+    </div>)
 }
 
-Detail.propTypes = {
-  aclDetail: PropTypes.object,
-}
+Detail.propTypes = { aclDetail: PropTypes.object }
 
 export default connect(({ aclDetail, loading }) => ({ aclDetail, loading: loading.models.aclDetail }))(Detail)

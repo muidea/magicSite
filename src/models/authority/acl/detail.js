@@ -8,9 +8,9 @@ export default {
   state: {
     url: '',
     method: '',
-    module: '',
+    module: {},
     status: '',
-    authGroup: {},
+    authGroup: { id: 0, name: '' },
   },
 
   subscriptions: {
@@ -25,18 +25,14 @@ export default {
   },
 
   effects: {
-    * queryAcl ({
-      payload,
-    }, { call, put, select }) {
+    * queryAcl ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAcl, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
           type: 'queryAclSuccess',
-          payload: {
-            data: other,
-          },
+          payload: { data: other },
         })
       } else {
         throw data
