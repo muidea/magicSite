@@ -86,7 +86,7 @@ let database = [
     bpid: '2',
     mpid: '2',
     name: '文件管理',
-    icon: 'file',
+    icon: 'picture',
     route: '/content/media',
   },
   {
