@@ -11,14 +11,19 @@ export default class EditableTagGroup extends Component {
 
   componentWillReceiveProps (nextProps) {
     if ('value' in nextProps) {
-      const value = nextProps.value
+      const { value } = nextProps
       this.setState({ value })
     }
   }
 
   handleClose = (removedTag) => {
-    const value = this.state.value.filter(tag => tag !== removedTag)
+    const value = this.state.value.filter(tag => tag.name !== removedTag)
     this.setState({ value })
+
+    const { onChange } = this.props
+    if (onChange) {
+      onChange(value)
+    }
   }
 
   showInput = () => {
@@ -30,9 +35,8 @@ export default class EditableTagGroup extends Component {
   }
 
   handleInputConfirm = () => {
-    const state = this.state
-    const inputValue = state.inputValue
-    let value = state.value
+    const { inputValue } = this.state
+    let { value } = this.state
     let exitFlag = false
     for (let item of value) {
       if (item.name === inputValue) {
@@ -50,7 +54,7 @@ export default class EditableTagGroup extends Component {
       inputValue: '',
     })
 
-    const onChange = this.props.onChange
+    const { onChange } = this.props
     if (onChange) {
       onChange(value)
     }

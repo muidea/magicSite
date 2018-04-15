@@ -8,12 +8,8 @@ import styles from './index.less'
 const FormItem = Form.Item
 
 const formItemLayout = {
-  labelCol: {
-    span: 1,
-  },
-  wrapperCol: {
-    span: 22,
-  },
+  labelCol: { span: 1 },
+  wrapperCol: { span: 22 },
 }
 
 const tailFormItemLayout = {
@@ -36,7 +32,8 @@ const ArticleEditor = ({
     getFieldDecorator,
     validateFields,
     getFieldsValue,
-  } }) => {
+  },
+}) => {
   const { article, actionType } = articleEditor
   const { id, name, content, catalog } = article
 
@@ -45,9 +42,7 @@ const ArticleEditor = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-      }
+      const data = { ...getFieldsValue() }
 
       dispatch({
         type: (actionType === 'create') ? 'articleEditor/createArticle' : 'articleEditor/updateArticle',
@@ -59,48 +54,47 @@ const ArticleEditor = ({
     })
   }
 
-  return (<div className="content-inner">
-    <div className={styles.content}>
-      <Form layout="horizontal">
-        <FormItem label="标题" {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: name,
-            rules: [
-              {
-                required: true,
-                message: '标题不能为空',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="内容" {...formItemLayout}>
-          {getFieldDecorator('content', {
-            initialValue: content,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<RichEditor placeholder="输入内容" editorStyle={{ minHeight: 376 }} />)}
-        </FormItem>
-        <FormItem label="分类" {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: catalog,
-            rules: [
-              {
-                required: true,
-                message: '分类必须选择',
-              },
-            ],
-          })(<EditableTagGroup readOnly={false} />)}
-        </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
-          <Button type="primary" onClick={onHandleSummit} htmlType="submit">提交</Button>
-        </FormItem>
-      </Form>
-    </div>
-  </div>)
+  return (
+    <div className="content-inner">
+      <div className={styles.content}>
+        <Form layout="horizontal">
+          <FormItem label="标题" {...formItemLayout}>
+            {getFieldDecorator('name', {
+              initialValue: name,
+              rules: [
+                {
+                  required: true,
+                  message: '标题不能为空',
+                },
+              ],
+            })(<Input />)}
+          </FormItem>
+          <FormItem label="内容" {...formItemLayout}>
+            {getFieldDecorator('content', {
+              initialValue: content,
+              rules: [
+                { required: false },
+              ],
+            })(<RichEditor placeholder="输入内容" editorStyle={{ minHeight: 376 }} />)}
+          </FormItem>
+          <FormItem label="分类" {...formItemLayout}>
+            {getFieldDecorator('catalog', {
+              initialValue: catalog,
+              rules: [
+                {
+                  required: true,
+                  message: '分类必须选择',
+                },
+              ],
+            })(<EditableTagGroup readOnly={false} />)}
+          </FormItem>
+          <FormItem {...tailFormItemLayout}>
+            <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
+            <Button type="primary" onClick={onHandleSummit} htmlType="submit">提交</Button>
+          </FormItem>
+        </Form>
+      </div>
+    </div>)
 }
 
 
