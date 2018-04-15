@@ -24,9 +24,7 @@ const Link = ({ location, dispatch, link, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'link/hideModal',
-      })
+      dispatch({ type: 'link/hideModal' })
     },
   }
 
@@ -63,18 +61,15 @@ const Link = ({ location, dispatch, link, loading }) => {
       onChange: (keys) => {
         dispatch({
           type: 'link/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -92,16 +87,18 @@ const Link = ({ location, dispatch, link, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/link',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/link' }))
     },
     onAdd () {
       dispatch({
         type: 'link/showModal',
-        payload: {
-          modalType: 'create',
-        },
+        payload: { modalType: 'create' },
+      })
+    },
+    onDeleteItems () {
+      dispatch({
+        type: 'link/multiDeleteLink',
+        payload: { ids: selectedRowKeys },
       })
     },
   }

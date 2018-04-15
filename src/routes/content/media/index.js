@@ -24,9 +24,7 @@ const Media = ({ location, dispatch, media, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'media/hideModal',
-      })
+      dispatch({ type: 'media/hideModal' })
     },
   }
 
@@ -57,18 +55,15 @@ const Media = ({ location, dispatch, media, loading }) => {
       onChange: (keys) => {
         dispatch({
           type: 'media/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -86,13 +81,15 @@ const Media = ({ location, dispatch, media, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/media',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/media' }))
     },
     onAdd () {
+      dispatch({ type: 'media/showModal' })
+    },
+    onDeleteItems () {
       dispatch({
-        type: 'media/showModal',
+        type: 'media/multiDeleteMedia',
+        payload: { ids: selectedRowKeys },
       })
     },
   }

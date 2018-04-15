@@ -24,9 +24,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'catalog/hideModal',
-      })
+      dispatch({ type: 'catalog/hideModal' })
     },
   }
 
@@ -63,18 +61,15 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
       onChange: (keys) => {
         dispatch({
           type: 'catalog/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -92,16 +87,18 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/catalog',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/catalog' }))
     },
     onAdd () {
       dispatch({
         type: 'catalog/showModal',
-        payload: {
-          modalType: 'create',
-        },
+        payload: { modalType: 'create' },
+      })
+    },
+    onDeleteItems () {
+      dispatch({
+        type: 'catalog/multiDeleteCatalog',
+        payload: { ids: selectedRowKeys },
       })
     },
   }

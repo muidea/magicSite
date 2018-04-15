@@ -35,18 +35,14 @@ const Article = ({ location, dispatch, article, loading }) => {
       })
     },
     onEditItem (id) {
-      dispatch(routerRedux.push({
-        pathname: `/content/article/edit/${id}`,
-      }))
+      dispatch(routerRedux.push({ pathname: `/content/article/edit/${id}` }))
     },
     rowSelection: {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
           type: 'article/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
@@ -54,9 +50,7 @@ const Article = ({ location, dispatch, article, loading }) => {
 
   const filterProps = {
     selectedRowKeys,
-    filter: {
-      ...location.query,
-    },
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -68,16 +62,12 @@ const Article = ({ location, dispatch, article, loading }) => {
       }))
     },
     onAdd () {
-      dispatch(routerRedux.push({
-        pathname: '/content/article/add',
-      }))
+      dispatch(routerRedux.push({ pathname: '/content/article/add' }))
     },
     onDeleteItems () {
       dispatch({
         type: 'article/multiDeleteArticle',
-        payload: {
-          ids: selectedRowKeys,
-        },
+        payload: { ids: selectedRowKeys },
       })
     },
   }

@@ -1,15 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { Form, Button, Row, Col, Input, Popconfirm } from 'antd'
 
-const Search = Input.Search
+const { Search } = Input
 const ColProps = {
   xs: 24,
   sm: 12,
-  style: {
-    marginBottom: 16,
-  },
+  style: { marginBottom: 16 },
 }
 
 const TwoColProps = {
@@ -60,14 +57,6 @@ const Filter = ({
 
   const { name } = filter
 
-  let initialCreateTime = []
-  if (filter.createTime && filter.createTime[0]) {
-    initialCreateTime[0] = moment(filter.createTime[0])
-  }
-  if (filter.createTime && filter.createTime[1]) {
-    initialCreateTime[1] = moment(filter.createTime[1])
-  }
-
   return (
     <Row gutter={24}>
       <Col {...ColProps} xl={{ span: 14 }} md={{ span: 14 }}>
@@ -82,7 +71,7 @@ const Filter = ({
           <div>
             {
               selectedRowKeys.length > 0 &&
-              <Popconfirm title={'确认删除选中项?'} placement="left" onConfirm={handleDeleteItems}>
+              <Popconfirm title="确认删除选中项?" placement="left" onConfirm={handleDeleteItems}>
                 <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
               </Popconfirm>
             }
