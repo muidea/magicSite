@@ -24,9 +24,7 @@ const Acl = ({ location, dispatch, acl, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'acl/hideModal',
-      })
+      dispatch({ type: 'acl/hideModal' })
     },
   }
 
@@ -65,19 +63,16 @@ const Acl = ({ location, dispatch, acl, loading }) => {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'user/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          type: 'acl/updateModelState',
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -95,16 +90,18 @@ const Acl = ({ location, dispatch, acl, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/acl',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/acl' }))
     },
     onAdd () {
       dispatch({
         type: 'acl/showModal',
-        payload: {
-          modalType: 'create',
-        },
+        payload: { modalType: 'create' },
+      })
+    },
+    onDeleteItems () {
+      dispatch({
+        type: 'acl/multiDeleteACL',
+        payload: { ids: selectedRowKeys },
       })
     },
   }

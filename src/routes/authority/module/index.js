@@ -24,9 +24,7 @@ const Module = ({ location, dispatch, module, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'module/hideModal',
-      })
+      dispatch({ type: 'module/hideModal' })
     },
   }
 
@@ -46,12 +44,6 @@ const Module = ({ location, dispatch, module, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
-      dispatch({
-        type: 'module/deleteModule',
-        payload: id,
-      })
-    },
     onEditItem (item) {
       dispatch({
         type: 'module/showModal',
@@ -65,19 +57,16 @@ const Module = ({ location, dispatch, module, loading }) => {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'user/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          type: 'module/updateModelState',
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -95,9 +84,7 @@ const Module = ({ location, dispatch, module, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/module',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/module' }))
     },
   }
 

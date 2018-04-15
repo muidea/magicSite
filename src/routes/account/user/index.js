@@ -24,9 +24,7 @@ const User = ({ location, dispatch, user, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'user/hideModal',
-      })
+      dispatch({ type: 'user/hideModal' })
     },
   }
 
@@ -57,18 +55,15 @@ const User = ({ location, dispatch, user, loading }) => {
       onChange: (keys) => {
         dispatch({
           type: 'user/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -86,13 +81,15 @@ const User = ({ location, dispatch, user, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/user',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/user' }))
     },
     onAdd () {
+      dispatch({ type: 'user/showModal' })
+    },
+    onDeleteItems () {
       dispatch({
-        type: 'user/showModal',
+        type: 'user/multiDeleteUser',
+        payload: { ids: selectedRowKeys },
       })
     },
   }

@@ -24,9 +24,7 @@ const Group = ({ location, dispatch, group, loading }) => {
       })
     },
     onCancel () {
-      dispatch({
-        type: 'group/hideModal',
-      })
+      dispatch({ type: 'group/hideModal' })
     },
   }
 
@@ -66,18 +64,15 @@ const Group = ({ location, dispatch, group, loading }) => {
       onChange: (keys) => {
         dispatch({
           type: 'group/updateModelState',
-          payload: {
-            selectedRowKeys: keys,
-          },
+          payload: { selectedRowKeys: keys },
         })
       },
     },
   }
 
   const filterProps = {
-    filter: {
-      ...location.query,
-    },
+    selectedRowKeys,
+    filter: { ...location.query },
     onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -95,16 +90,18 @@ const Group = ({ location, dispatch, group, loading }) => {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({
-        pathname: '/group',
-      }))
+      })) : dispatch(routerRedux.push({ pathname: '/group' }))
     },
     onAdd () {
       dispatch({
         type: 'group/showModal',
-        payload: {
-          modalType: 'create',
-        },
+        payload: { modalType: 'create' },
+      })
+    },
+    onDeleteItems () {
+      dispatch({
+        type: 'group/multiDeleteGroup',
+        payload: { ids: selectedRowKeys },
       })
     },
   }
