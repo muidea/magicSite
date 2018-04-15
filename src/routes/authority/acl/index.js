@@ -50,13 +50,10 @@ const Acl = ({ location, dispatch, acl, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'acl/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'acl/updateAcl',
+        payload: id,
       })
     },
     rowSelection: {

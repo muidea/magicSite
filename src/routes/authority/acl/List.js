@@ -6,12 +6,12 @@ import { Table, Modal } from 'antd'
 import styles from './List.less'
 import { DropOption } from '../../../components'
 
-const confirm = Modal.confirm
+const { confirm } = Modal
 
 const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
-      onEditItem(record)
+      onEditItem(record.id)
     }
     if (e.key === '2') {
       confirm({

@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'acl',
 
   state: {
-    currentItem: { id: -1, url: '', method: '', module: { id: '' }, authgroup: { id: -1 } },
+    currentItem: { id: -1, url: '', method: '', module: {}, authGroup: {}, state: 0 },
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -55,33 +55,34 @@ export default modelExtend(pageModel, {
 
     * queryAcl ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAcl, { id: payload, authToken })
+      const result = yield call(queryAcl, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.acl)
-      if (data.success) {
+      if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'queryAllAcl' })
       } else {
-        throw data
-      }
-    },
-
-    * createAcl ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(createAcl, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/acl'))
-      } else {
-        throw data
+        throw result
       }
     },
 
     * updateAcl ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(updateAcl, { authToken, ...payload })
-      if (data.success) {
+      const result = yield call(queryAcl, { id: payload, authToken })
+      if (result.success) {
+        const { acl } = result
+        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: acl } })
+      } else {
+        throw result
+      }
+    },
+
+    * saveAcl ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const { action, data } = payload
+      const result = yield call(action === 'create' ? createAcl : updateAcl, { authToken, ...data })
+      if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/acl'))
+        yield put(routerRedux.push('/content/acl'))
       } else {
         throw data
       }
@@ -99,9 +100,8 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteAcl ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(multiDeleteAcl, { authToken, ...payload })
+    * multiDeleteAcl ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteAcl, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllAcl' })
@@ -117,8 +117,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, currentItem: { id: -1, url: '', method: '', module: { id: '' }, authgroup: { id: -1 } }, modalVisible: false }
+      return { ...state, currentItem: { id: -1, url: '', method: '', module: {}, authGroup: {}, state: 0 }, modalVisible: false }
     },
   },
-
 })
