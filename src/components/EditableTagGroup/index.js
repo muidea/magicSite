@@ -68,7 +68,7 @@ export default class EditableTagGroup extends Component {
     const { value, inputVisible, inputValue } = this.state
     return (
       <div>
-        {value.map((tag) => {
+        {value && value.map((tag) => {
           const isLongTag = tag.name.length > 20
           const tagElem = (
             <Tag key={tag.name} closable={!this.props.readOnly} afterClose={() => this.handleClose(tag.name)}>

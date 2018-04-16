@@ -33,30 +33,11 @@ const fetch = (options) => {
     message.error(e.message)
   }
 
-  if (fetchType === 'JSONP') {
-    return new Promise((resolve, reject) => {
-      jsonp(url, {
-        param: `${qs.stringify(data)}&callback`,
-        name: `jsonp_${new Date().getTime()}`,
-        timeout: 4000,
-      }, (error, result) => {
-        if (error) {
-          reject(error)
-        }
-        resolve({ statusText: 'OK', status: 200, data: result })
-      })
-    })
-  }
-
   switch (method.toLowerCase()) {
     case 'get':
-      return axios.get(url, {
-        params: cloneData,
-      })
+      return axios.get(url, { params: cloneData })
     case 'delete':
-      return axios.delete(url, {
-        data: cloneData,
-      })
+      return axios.delete(url, { data: cloneData })
     case 'post':
       return axios.post(url, cloneData)
     case 'put':
@@ -79,13 +60,13 @@ export default function request (options) {
   if (options.url) {
     if (options.data) {
       const { id, authToken } = options.data
-      let url = options.url
-      if (id) {
+      let { url } = options
+      if (id !== undefined) {
         delete options.data.id
         url = url.replace(':id', id)
       }
 
-      if (authToken) {
+      if (authToken !== undefined) {
         delete options.data.authToken
         url = url.concat('?authToken='.concat(authToken))
       }
@@ -101,11 +82,9 @@ export default function request (options) {
 
   return fetch(options).then((response) => {
     const { statusText, status } = response
-    let data = response.data
+    let { data } = response
     if (data instanceof Array) {
-      data = {
-        list: data,
-      }
+      data = { list: data }
     }
 
     console.log(data)

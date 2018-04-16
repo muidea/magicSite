@@ -6,12 +6,8 @@ import { EditableTagGroup } from 'components'
 const FormItem = Form.Item
 
 const formItemLayout = {
-  labelCol: {
-    span: 6,
-  },
-  wrapperCol: {
-    span: 14,
-  },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
 }
 
 const modal = ({
@@ -49,16 +45,12 @@ const modal = ({
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
-              {
-                required: true,
-              },
+              { required: true },
             ],
           })(<Input />)}
         </FormItem>
         <FormItem label="用户" {...formItemLayout}>
-          {getFieldDecorator('user', {
-            initialValue: item.user,
-          })(<EditableTagGroup />)}
+          {getFieldDecorator('user', { })(<EditableTagGroup />)}
         </FormItem>
       </Form>
     </Modal>
