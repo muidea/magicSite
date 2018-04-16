@@ -50,13 +50,10 @@ const User = ({ location, dispatch, user, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'user/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'user/updateUser',
+        payload: id,
       })
     },
     rowSelection: {

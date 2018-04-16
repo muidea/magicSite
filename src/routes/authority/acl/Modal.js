@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Radio, Select, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { RadioItemGroup } from '../../../components'
 
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
-const RadioButton = Radio.Button
-const { Option } = Select
 
 const formItemLayout = {
   labelCol: { span: 6 },
@@ -40,6 +38,24 @@ const modal = ({
     onOk: handleOk,
   }
 
+  const methodItems = [
+    { id: 'GET', name: 'GET' },
+    { id: 'POST', name: 'POST' },
+    { id: 'PUT', name: 'PUT' },
+    { id: 'DELETE', name: 'DELETE' },
+  ]
+
+  const authGroupItems = [
+    { id: 0, name: '访客组' },
+    { id: 1, name: '用户组' },
+    { id: 2, name: '维护组' },
+  ]
+
+  const statusItems = [
+    { id: 0, name: '启用' },
+    { id: 1, name: '停用' },
+  ]
+
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
@@ -57,12 +73,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioGroup>
-            <RadioButton value="POST">POST</RadioButton>
-            <RadioButton value="GET">GET</RadioButton>
-            <RadioButton value="PUT">PUT</RadioButton>
-            <RadioButton value="DELETE">DELETE</RadioButton>
-          </RadioGroup>)}
+          })(<RadioItemGroup items={methodItems} />)}
         </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {getFieldDecorator('authGroup', {
@@ -70,11 +81,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioGroup>
-            <RadioButton value={0}>访客组</RadioButton>
-            <RadioButton value={1}>用户组</RadioButton>
-            <RadioButton value={2}>维护组</RadioButton>
-          </RadioGroup>)}
+          })(<RadioItemGroup items={authGroupItems} />)}
         </FormItem>
         <FormItem label="所属模块" {...formItemLayout}>
           {getFieldDecorator('module', {
@@ -82,11 +89,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<Select defaultValue="1" style={{ width: 120 }}>
-            <Option value="1">Magic CAS</Option>
-            <Option value="2">Magic CMS</Option>
-            <Option value="3">Magic Blog</Option>
-          </Select>)}
+          })(<RadioItemGroup />)}
         </FormItem>
         <FormItem label="状态" {...formItemLayout}>
           {getFieldDecorator('status', {
@@ -94,10 +97,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioGroup>
-            <RadioButton value={0}>启用</RadioButton>
-            <RadioButton value={1}>停用</RadioButton>
-          </RadioGroup>)}
+          })(<RadioItemGroup items={statusItems} />)}
         </FormItem>
       </Form>
     </Modal>

@@ -44,13 +44,10 @@ const Module = ({ location, dispatch, module, loading }) => {
         },
       }))
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'module/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'module/updateModule',
+        payload: id,
       })
     },
     rowSelection: {

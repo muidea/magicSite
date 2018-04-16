@@ -5,6 +5,7 @@ import Iconfont from './Iconfont'
 import Search from './Search'
 import { RichEditor, RichView } from './RichEditor'
 import EditableTagGroup from './EditableTagGroup'
+import RadioItemGroup from './RadioItemGroup'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
 import * as Layout from './Layout/index.js'
@@ -26,4 +27,5 @@ export {
   RichEditor,
   RichView,
   EditableTagGroup,
+  RadioItemGroup,
 }
