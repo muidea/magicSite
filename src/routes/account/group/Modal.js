@@ -1,18 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Radio, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
 
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
 const { TextArea } = Input
 
 const formItemLayout = {
-  labelCol: {
-    span: 6,
-  },
-  wrapperCol: {
-    span: 14,
-  },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
 }
 
 const modal = ({
@@ -50,27 +45,15 @@ const modal = ({
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
-              {
-                required: true,
-              },
+              { required: true },
             ],
           })(<Input />)}
         </FormItem>
         <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<TextArea rows={3} cols={3} />)}
+          {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={3} cols={3} />)}
         </FormItem>
-        <FormItem label="类型" {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: item.catalog,
-          })(
-            <RadioGroup>
-              <Radio value={0}>访客</Radio>
-              <Radio value={1}>用户</Radio>
-              <Radio value={2}>管理</Radio>
-            </RadioGroup>
-          )}
+        <FormItem label="父分组" {...formItemLayout}>
+          {getFieldDecorator('catalog', { initialValue: item.catalog })(<Input />)}
         </FormItem>
       </Form>
     </Modal>

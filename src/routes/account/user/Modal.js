@@ -5,12 +5,8 @@ import { Form, Input, Modal } from 'antd'
 const FormItem = Form.Item
 
 const formItemLayout = {
-  labelCol: {
-    span: 6,
-  },
-  wrapperCol: {
-    span: 14,
-  },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
 }
 
 const modal = ({
@@ -48,16 +44,15 @@ const modal = ({
           {getFieldDecorator('account', {
             initialValue: item.account,
             rules: [
-              {
-                required: true,
-              },
+              { required: true },
             ],
           })(<Input />)}
         </FormItem>
         <FormItem label="EMail" {...formItemLayout}>
-          {getFieldDecorator('email', {
-            initialValue: item.email,
-          })(<Input />)}
+          {getFieldDecorator('email', { initialValue: item.email })(<Input />)}
+        </FormItem>
+        <FormItem label="分组" {...formItemLayout}>
+          {getFieldDecorator('group', { initialValue: item.group })(<Input />)}
         </FormItem>
       </Form>
     </Modal>
