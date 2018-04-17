@@ -8,9 +8,11 @@ export default {
   state: {
     account: '',
     password: '',
-    nickName: '',
+    name: '',
     email: '',
     group: [],
+    registerTime: '',
+    status: 0,
   },
 
   subscriptions: {
@@ -25,18 +27,14 @@ export default {
   },
 
   effects: {
-    * queryUser ({
-      payload,
-    }, { call, put, select }) {
+    * queryUser ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryUser, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
           type: 'queryUserSuccess',
-          payload: {
-            data: other,
-          },
+          payload: { data: other },
         })
       } else {
         throw data
@@ -48,15 +46,10 @@ export default {
     queryUserSuccess (state, { payload }) {
       const { data } = payload
       const { user } = data
-      const { account, password, nickName, email, group } = user
 
       return {
         ...state,
-        account,
-        password,
-        nickName,
-        email,
-        group,
+        ...user,
       }
     },
   },

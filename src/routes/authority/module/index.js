@@ -19,8 +19,8 @@ const Module = ({ location, dispatch, module, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: 'module/updateModule',
-        payload: { id: currentItem.id, ...data },
+        type: 'module/saveModule',
+        payload: { data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {

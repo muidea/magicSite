@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'group',
 
   state: {
-    currentItem: { id: -1, name: '', descrption: '', catalog: 0 },
+    currentItem: { id: -1, name: '', descrption: '', catalog: {} },
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -55,31 +55,32 @@ export default modelExtend(pageModel, {
 
     * queryGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryGroup, { id: payload, authToken })
+      const result = yield call(queryGroup, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.group)
-      if (data.success) {
+      if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
         yield put({ type: 'queryAllGroup' })
       } else {
-        throw data
-      }
-    },
-
-    * createGroup ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(createGroup, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/account/group'))
-      } else {
-        throw data
+        throw result
       }
     },
 
     * updateGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(updateGroup, { authToken, ...payload })
-      if (data.success) {
+      const result = yield call(queryGroup, { id: payload, authToken })
+      if (result.success) {
+        const { group } = result
+        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: group } })
+      } else {
+        throw result
+      }
+    },
+
+    * saveGroup ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const { action, data } = payload
+      const result = yield call(action === 'create' ? createGroup : updateGroup, { authToken, ...data })
+      if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/group'))
       } else {
@@ -99,9 +100,8 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteGroup ({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(multiDeleteGroup, { authToken, ...payload })
+    * multiDeleteGroup ({ payload }, { call, put }) {
+      const data = yield call(multiDeleteGroup, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'queryAllGroup' })
@@ -117,7 +117,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, currentItem: { id: -1, name: '', descrption: '', catalog: 0 }, modalVisible: false }
+      return { ...state, currentItem: { id: -1, name: '', descrption: '', catalog: {} }, modalVisible: false }
     },
   },
 

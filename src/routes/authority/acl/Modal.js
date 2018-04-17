@@ -89,7 +89,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup />)}
+          })(<RadioItemGroup items={[{ id: item.module.id, name: item.module.name }]} />)}
         </FormItem>
         <FormItem label="状态" {...formItemLayout}>
           {getFieldDecorator('status', {

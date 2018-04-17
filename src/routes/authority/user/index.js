@@ -19,8 +19,8 @@ const User = ({ location, dispatch, user, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `user/${modalType}User`,
-        payload: { id: currentItem.id, ...data },
+        type: 'user/saveUser',
+        payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {

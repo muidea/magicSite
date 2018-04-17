@@ -1,6 +1,5 @@
 /* global window */
 import axios from 'axios'
-import qs from 'qs'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
@@ -9,7 +8,6 @@ const fetch = (options) => {
   let {
     method = 'get',
     data,
-    fetchType,
     url,
   } = options
 
@@ -18,7 +16,7 @@ const fetch = (options) => {
   try {
     let domin = ''
     if (url.match(/[a-zA-z]+:\/\/[^/]*/)) {
-      domin = url.match(/[a-zA-z]+:\/\/[^/]*/)[0]
+      [domin] = url.match(/[a-zA-z]+:\/\/[^/]*/)
       url = url.slice(domin.length)
     }
     const match = pathToRegexp.parse(url)
@@ -107,6 +105,8 @@ export default function request (options) {
       statusCode = 600
       msg = error.message || 'Network Error'
     }
-    return Promise.reject({ success: false, statusCode, message: msg })
+
+    let val = { success: false, statusCode, message: msg }
+    return Promise.reject(val)
   })
 }

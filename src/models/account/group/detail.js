@@ -8,7 +8,7 @@ export default {
   state: {
     name: '',
     description: '',
-    catalog: 0,
+    catalog: { id: 0, name: '' },
   },
 
   subscriptions: {
@@ -23,18 +23,14 @@ export default {
   },
 
   effects: {
-    * queryGroup ({
-      payload,
-    }, { call, put, select }) {
+    * queryGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryGroup, { authToken, ...payload })
       const { success, message, status, ...other } = data
       if (success) {
         yield put({
           type: 'queryGroupSuccess',
-          payload: {
-            data: other,
-          },
+          payload: { data: other },
         })
       } else {
         throw data
@@ -46,13 +42,10 @@ export default {
     queryGroupSuccess (state, { payload }) {
       const { data } = payload
       const { group } = data
-      const { name, description, catalog } = group
 
       return {
         ...state,
-        name,
-        description,
-        catalog,
+        ...group,
       }
     },
   },

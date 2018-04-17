@@ -19,8 +19,8 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `acl/${modalType}Acl`,
-        payload: { id: currentItem.id, ...data },
+        type: 'acl/saveAcl',
+        payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {

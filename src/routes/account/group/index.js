@@ -19,8 +19,8 @@ const Group = ({ location, dispatch, group, loading }) => {
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `group/${modalType}Group`,
-        payload: { id: currentItem.id, ...data },
+        type: 'group/saveGroup',
+        payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {

@@ -82,7 +82,7 @@ export default modelExtend(pageModel, {
       const result = yield call(action === 'create' ? createAcl : updateAcl, { authToken, ...data })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/acl'))
+        yield put(routerRedux.push('/authority/acl'))
       } else {
         throw data
       }
