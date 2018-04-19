@@ -12,6 +12,7 @@ const Group = ({ location, dispatch, group, loading }) => {
 
   const modalProps = {
     item: currentItem,
+    dataSource: list,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],

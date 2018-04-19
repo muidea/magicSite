@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
+import { AutoCompleteItem } from '../../../components'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -12,6 +13,7 @@ const formItemLayout = {
 
 const modal = ({
   item,
+  dataSource,
   onOk,
   form: {
     getFieldDecorator,
@@ -25,10 +27,7 @@ const modal = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-        key: item.key,
-      }
+      const data = { ...getFieldsValue() }
       onOk(data)
     })
   }
@@ -41,7 +40,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="名称" hasFeedback {...formItemLayout}>
+        <FormItem label="名称" {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -53,7 +52,16 @@ const modal = ({
           {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={3} cols={3} />)}
         </FormItem>
         <FormItem label="父分组" {...formItemLayout}>
-          {getFieldDecorator('catalog', { initialValue: item.catalog })(<Input />)}
+          {getFieldDecorator('catalog', {
+            initialValue: item.catalog,
+            rules: [
+              { required: true },
+            ],
+          })(<AutoCompleteItem
+            dataSource={dataSource}
+            isNumber
+            placeholder="input here"
+          />)}
         </FormItem>
       </Form>
     </Modal>
@@ -64,6 +72,7 @@ modal.propTypes = {
   form: PropTypes.object.isRequired,
   type: PropTypes.string,
   item: PropTypes.object,
+  dataSource: PropTypes.array,
   onOk: PropTypes.func,
 }
 
