@@ -11,8 +11,8 @@ const Group = ({ location, dispatch, group, loading }) => {
   const { pageSize } = pagination
 
   const modalProps = {
-    item: currentItem,
-    dataSource: list,
+    item: { ...currentItem, catalog: currentItem.catalog.id },
+    dataSource: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],

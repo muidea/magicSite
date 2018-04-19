@@ -8,14 +8,13 @@ export default class AutoCompleteItem extends Component {
   constructor (props) {
     super(props)
 
-    if ('dataSource' in props) {
-      const { dataSource } = props
+    const { dataSource, value } = props
+    if (dataSource !== undefined) {
       this.state = { dataSource }
-    }
-    if ('value' in props) {
-      const { value } = props
-      const { id } = value
-      this.state = { ...this.state, value: String(id) }
+
+      if (value !== undefined && dataSource.length > 0) {
+        this.state = { ...this.state, value: String(value) }
+      }
     }
   }
 
@@ -28,12 +27,13 @@ export default class AutoCompleteItem extends Component {
     }
     if ('value' in nextProps) {
       const { value } = nextProps
-      this.setState({ value: String(value.id) })
+      this.setState({ value: String(value) })
     }
   }
 
   onSelect = (value) => {
     console.log('onSelect....')
+    console.log(value)
     const { onChange, isNumber } = this.props
     if (onChange) {
       if (isNumber) {
