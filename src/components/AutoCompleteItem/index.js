@@ -49,6 +49,19 @@ export default class AutoCompleteItem extends Component {
     if (onSearch) {
       onSearch(value)
     }
+
+    let filteredItem = []
+
+    for (let idx = 0; idx < this.props.dataSource.length;) {
+      const item = this.props.dataSource[idx]
+      const { name } = item
+      if (name.indexOf(value) > -1) {
+        filteredItem.push(item)
+      }
+
+      idx += 1
+    }
+    this.setState({ dataSource: filteredItem })
   }
 
   renderOption = (item) => {
