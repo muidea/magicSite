@@ -94,7 +94,7 @@ export default class AutoCompleteTagGroup extends Component {
             ref={this.saveInputRef}
             type="text"
             size="small"
-            style={{ width: 78 }}
+            style={{ width: 100 }}
             dataSource={dataSource}
             value={inputValue}
             onChange={this.handleInputChange}

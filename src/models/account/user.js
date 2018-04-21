@@ -1,6 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllUser, queryUser, createUser, deleteUser, multiDeleteUser } from 'services/account/user'
+import { queryAllGroup } from 'services/account/group'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -9,7 +10,7 @@ export default modelExtend(pageModel, {
 
   state: {
     currentItem: { id: -1, account: '', email: '', name: '', group: [] },
-    groupList: [{ id: 1, name: 'aa' }, { id: 2, name: 'bb' }],
+    groupList: [],
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -32,12 +33,21 @@ export default modelExtend(pageModel, {
 
     * queryAllUser ({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllUser, { authToken })
-      if (data) {
-        const { user } = data
+      const result = yield call(queryAllUser, { authToken })
+      if (result.success) {
+        const { user } = result
         let totalCount = 0
         if (user) {
           totalCount = user.length
+        }
+
+        const groupResult = yield call(queryAllGroup, { authToken })
+        if (groupResult.success) {
+          const { group } = groupResult
+          yield put({
+            type: 'updateGroups',
+            payload: { groupList: group },
+          })
         }
 
         yield put({
@@ -51,6 +61,8 @@ export default modelExtend(pageModel, {
             },
           },
         })
+      } else {
+        throw result
       }
     },
 
@@ -113,6 +125,10 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
+    updateGroups (state, { payload }) {
+      return { ...state, ...payload }
+    },
+
     showModal (state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
