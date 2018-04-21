@@ -39,6 +39,11 @@ export default class AutoCompleteTagGroup extends Component {
     const { inputValue } = this.state
     const { id } = inputValue
     if (id === undefined) {
+      this.setState({
+        inputVisible: false,
+        inputValue: {},
+      })
+
       return
     }
 
