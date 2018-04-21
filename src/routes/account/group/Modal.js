@@ -13,7 +13,7 @@ const formItemLayout = {
 
 const modal = ({
   item,
-  dataSource,
+  groupList,
   onOk,
   form: {
     getFieldDecorator,
@@ -58,8 +58,8 @@ const modal = ({
               { required: true },
             ],
           })(<AutoCompleteItem
-            dataSource={dataSource}
-            isNumber
+            dataSource={groupList}
+            numberValue
             placeholder="input here"
           />)}
         </FormItem>
@@ -72,7 +72,7 @@ modal.propTypes = {
   form: PropTypes.object.isRequired,
   type: PropTypes.string,
   item: PropTypes.object,
-  dataSource: PropTypes.array,
+  groupList: PropTypes.array,
   onOk: PropTypes.func,
 }
 

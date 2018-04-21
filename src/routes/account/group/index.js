@@ -12,7 +12,7 @@ const Group = ({ location, dispatch, group, loading }) => {
 
   const modalProps = {
     item: { ...currentItem, catalog: currentItem.catalog.id },
-    dataSource: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
+    groupList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['group/update'],

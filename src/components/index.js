@@ -7,6 +7,7 @@ import { RichEditor, RichView } from './RichEditor'
 import EditableTagGroup from './EditableTagGroup'
 import RadioItemGroup from './RadioItemGroup'
 import AutoCompleteItem from './AutoCompleteItem'
+import AutoCompleteTagGroup from './AutoCompleteTagGroup'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
 import * as Layout from './Layout/index.js'
@@ -30,4 +31,5 @@ export {
   EditableTagGroup,
   RadioItemGroup,
   AutoCompleteItem,
+  AutoCompleteTagGroup,
 }

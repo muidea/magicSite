@@ -9,6 +9,7 @@ export default modelExtend(pageModel, {
 
   state: {
     currentItem: { id: -1, account: '', email: '', name: '', group: [] },
+    groupList: [{ id: 1, name: 'aa' }, { id: 2, name: 'bb' }],
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',

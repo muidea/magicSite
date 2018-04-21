@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
+import { AutoCompleteTagGroup } from '../../../components'
 
 const FormItem = Form.Item
 
@@ -11,6 +12,7 @@ const formItemLayout = {
 
 const modal = ({
   item,
+  groupList,
   onOk,
   form: {
     getFieldDecorator,
@@ -49,10 +51,22 @@ const modal = ({
           })(<Input />)}
         </FormItem>
         <FormItem label="EMail" {...formItemLayout}>
-          {getFieldDecorator('email', { initialValue: item.email })(<Input />)}
+          {getFieldDecorator('email', {
+            initialValue: item.email,
+            rules: [
+              { required: true },
+            ],
+          })(<Input />)}
         </FormItem>
         <FormItem label="分组" {...formItemLayout}>
-          {getFieldDecorator('group', { initialValue: item.group })(<Input />)}
+          {getFieldDecorator('group', {
+            initialValue: item.group,
+            rules: [
+              { required: true },
+            ],
+          })(<AutoCompleteTagGroup
+            dataSource={groupList}
+          />)}
         </FormItem>
       </Form>
     </Modal>
@@ -63,6 +77,7 @@ modal.propTypes = {
   form: PropTypes.object.isRequired,
   type: PropTypes.string,
   item: PropTypes.object,
+  groupList: PropTypes.array,
   onOk: PropTypes.func,
 }
 

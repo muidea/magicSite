@@ -13,7 +13,10 @@ export default class AutoCompleteItem extends Component {
       this.state = { dataSource }
 
       if (value !== undefined && dataSource.length > 0) {
-        this.state = { ...this.state, value: String(value) }
+        const { id } = value
+        if (id !== undefined) {
+          this.state = { ...this.state, value: String(id) }
+        }
       }
     }
   }
@@ -32,16 +35,25 @@ export default class AutoCompleteItem extends Component {
   }
 
   onSelect = (value) => {
-    console.log('onSelect....')
-    console.log(value)
-    const { onChange, isNumber } = this.props
-    if (onChange) {
-      if (isNumber) {
-        onChange(Number(value))
-      } else {
-        onChange(value)
+    const { onChange } = this.props
+    const { dataSource } = this.state
+    for (let idx = 0; idx < dataSource.length;) {
+      const item = dataSource[idx]
+      const { id } = item
+      if (String(id) === value) {
+        onChange(item)
+        break
       }
+      idx += 1
     }
+  }
+
+  focus () {
+    this.input.focus()
+  }
+
+  blur () {
+    this.input.blur()
   }
 
   handleSearch = (value) => {
@@ -64,6 +76,17 @@ export default class AutoCompleteItem extends Component {
     this.setState({ dataSource: filteredItem })
   }
 
+  saveInputRef = (input) => {
+    this.input = input
+  }
+
+  handleOnBlur = () => {
+    const { onBlur } = this.props
+    if (onBlur) {
+      onBlur()
+    }
+  }
+
   renderOption = (item) => {
     return (
       <Option key={item.id} text={item.name} >
@@ -78,10 +101,12 @@ export default class AutoCompleteItem extends Component {
 
     return (
       <AutoComplete
+        ref={this.saveInputRef}
         dataSource={dataSource.map(this.renderOption)}
         style={style}
         onSelect={this.onSelect}
         onSearch={this.handleSearch}
+        onBlur={this.handleOnBlur}
         defaultValue={value}
         placeholder={placeholder}
       />
@@ -93,8 +118,8 @@ AutoCompleteItem.propTypes = {
   dataSource: PropTypes.array,
   style: PropTypes.object,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   onSearch: PropTypes.func,
-  isNumber: PropTypes.bool,
   value: PropTypes.any,
   placeholder: PropTypes.string,
 }

@@ -7,11 +7,12 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const User = ({ location, dispatch, user, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, modalVisible } = user
+  const { list, selectedRowKeys, pagination, currentItem, groupList, modalVisible } = user
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
+    groupList,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['user/update'],
