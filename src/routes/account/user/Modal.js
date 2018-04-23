@@ -26,10 +26,7 @@ const modal = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-        key: item.key,
-      }
+      const data = { ...getFieldsValue() }
       onOk(data)
     })
   }
@@ -49,6 +46,14 @@ const modal = ({
               { required: true },
             ],
           })(<Input />)}
+        </FormItem>
+        <FormItem label="密码" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('password', {
+            initialValue: item.password,
+            rules: [
+              { required: true },
+            ],
+          })(<Input type="password" />)}
         </FormItem>
         <FormItem label="EMail" {...formItemLayout}>
           {getFieldDecorator('email', {
