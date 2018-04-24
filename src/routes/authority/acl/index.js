@@ -7,7 +7,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Acl = ({ location, dispatch, acl, loading }) => {
-  const { list, pagination, selectedRowKeys, currentItem, modalVisible, modalType } = acl
+  const { list, pagination, selectedRowKeys, currentItem, modalVisible } = acl
   const { pageSize } = pagination
 
   const modalProps = {
@@ -15,12 +15,12 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['acl/update'],
-    title: `${modalType === 'create' ? '新建ACL' : '修改ACL'}`,
+    title: '更新ACL',
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
         type: 'acl/saveAcl',
-        payload: { action: modalType, data: { id: currentItem.id, ...data } },
+        payload: { data: { id: currentItem.id, ...data } },
       })
     },
     onCancel () {

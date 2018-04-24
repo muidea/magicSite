@@ -15,7 +15,6 @@ const TwoColProps = {
 }
 
 const Filter = ({
-  onAdd,
   onFilterChange,
   onDeleteItems,
   selectedRowKeys,
@@ -75,7 +74,6 @@ const Filter = ({
                 <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
               </Popconfirm>
             }
-            <Button size="large" type="ghost" onClick={onAdd}>新建</Button>
           </div>
         </div>
       </Col>

@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllAcl, queryAcl, createAcl, updateAcl, deleteAcl, multiDeleteAcl } from 'services/authority/acl'
+import { queryAllAcl, queryAcl, updateAcl, deleteAcl, multiDeleteAcl } from 'services/authority/acl'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -11,7 +11,6 @@ export default modelExtend(pageModel, {
     currentItem: { id: -1, url: '', method: '', module: {}, authGroup: {}, state: 0 },
     selectedRowKeys: [],
     modalVisible: false,
-    modalType: 'create',
   },
 
   subscriptions: {
@@ -78,8 +77,8 @@ export default modelExtend(pageModel, {
 
     * saveAcl ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const { action, data } = payload
-      const result = yield call(action === 'create' ? createAcl : updateAcl, { authToken, ...data })
+      const { data } = payload
+      const result = yield call(updateAcl, { authToken, ...data })
       if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/acl'))

@@ -59,13 +59,13 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="URL" hasFeedback {...formItemLayout}>
+        <FormItem label="URL" {...formItemLayout}>
           {getFieldDecorator('url', {
             initialValue: item.url,
             rules: [
               { required: true },
             ],
-          })(<Input />)}
+          })(<Input disabled />)}
         </FormItem>
         <FormItem label="方法" {...formItemLayout}>
           {getFieldDecorator('method', {
@@ -73,7 +73,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup items={methodItems} />)}
+          })(<RadioItemGroup disabled items={methodItems} />)}
         </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {getFieldDecorator('authGroup', {
@@ -89,7 +89,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup items={[{ id: item.module.id, name: item.module.name }]} />)}
+          })(<RadioItemGroup disabled items={[{ id: item.module.id, name: item.module.name }]} />)}
         </FormItem>
         <FormItem label="状态" {...formItemLayout}>
           {getFieldDecorator('status', {
