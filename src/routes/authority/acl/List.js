@@ -7,7 +7,7 @@ import styles from './List.less'
 import { DropOption } from '../../../components'
 
 const statusMap = ['processing', 'warning']
-const status = ['运行中', '未激活']
+const status = ['启用', '停用']
 
 const { confirm } = Modal
 

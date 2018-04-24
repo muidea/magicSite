@@ -7,7 +7,7 @@ import { DescriptionList, EditableTagGroup } from '../../../../components'
 const { Description } = DescriptionList
 
 const statusMap = ['processing', 'warning']
-const statusInfo = ['运行中', '未激活']
+const statusInfo = ['启用', '停用']
 
 const Detail = ({ aclDetail }) => {
   const { url, method, module, status, authGroup } = aclDetail
