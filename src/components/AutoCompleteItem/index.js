@@ -96,11 +96,12 @@ export default class AutoCompleteItem extends Component {
   }
 
   render () {
-    const { style, placeholder } = this.props
+    const { style, placeholder, disabled } = this.props
     const { dataSource, value } = this.state
 
     return (
       <AutoComplete
+        disabled={disabled}
         ref={this.saveInputRef}
         dataSource={dataSource.map(this.renderOption)}
         style={style}
@@ -116,6 +117,7 @@ export default class AutoCompleteItem extends Component {
 
 AutoCompleteItem.propTypes = {
   dataSource: PropTypes.array,
+  disabled: PropTypes.bool,
   style: PropTypes.object,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,

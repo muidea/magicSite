@@ -51,10 +51,7 @@ const Module = ({ location, dispatch, module, loading }) => {
       })
     },
     onAddItemAuthGroup (id) {
-      dispatch({
-        type: 'module/updateModule',
-        payload: id,
-      })
+      dispatch(routerRedux.push({ pathname: `/authority/module/edit/${id}` }))
     },
     rowSelection: {
       selectedRowKeys,

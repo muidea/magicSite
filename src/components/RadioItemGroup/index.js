@@ -17,6 +17,8 @@ export default class RadioItemGroup extends Component {
     if ('disabled' in props) {
       const { disabled } = props
       this.state = { ...this.state, disabled }
+    } else {
+      this.state = { ...this.state, disabled: false }
     }
   }
 
@@ -35,10 +37,10 @@ export default class RadioItemGroup extends Component {
   }
 
   render () {
-    const { items } = this.props
+    const { dataSource } = this.props
     return (
-      <RadioGroup disabled={this.state.disabled} onChange={this.handleInputChange} value={this.state.value}>
-        { items && items.map((tag) => {
+      <RadioGroup style={this.props.style} disabled={this.state.disabled} onChange={this.handleInputChange} value={this.state.value}>
+        { dataSource && dataSource.map((tag) => {
           const chkItem = (
             <RadioButton key={tag.id} value={tag.id} >
               {tag.name}
@@ -52,7 +54,8 @@ export default class RadioItemGroup extends Component {
 }
 
 RadioItemGroup.propTypes = {
-  items: PropTypes.array,
+  dataSource: PropTypes.array,
+  style: PropTypes.object,
   value: PropTypes.any,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,

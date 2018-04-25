@@ -176,6 +176,14 @@ let database = [
     route: '/authority/module/view/:id',
   },
   {
+    id: '422',
+    mpid: '-1',
+    bpid: '42',
+    name: '模块编辑',
+    icon: 'book',
+    route: '/authority/module/edit/:id',
+  },
+  {
     id: '43',
     bpid: '4',
     mpid: '4',

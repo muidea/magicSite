@@ -73,7 +73,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup disabled items={methodItems} />)}
+          })(<RadioItemGroup disabled dataSource={methodItems} />)}
         </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {getFieldDecorator('authGroup', {
@@ -81,7 +81,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup items={authGroupItems} />)}
+          })(<RadioItemGroup dataSource={authGroupItems} />)}
         </FormItem>
         <FormItem label="所属模块" {...formItemLayout}>
           {getFieldDecorator('module', {
@@ -89,7 +89,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup disabled items={[{ id: item.module.id, name: item.module.name }]} />)}
+          })(<RadioItemGroup disabled dataSource={[{ id: item.module.id, name: item.module.name }]} />)}
         </FormItem>
         <FormItem label="状态" {...formItemLayout}>
           {getFieldDecorator('status', {
@@ -97,7 +97,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<RadioItemGroup items={statusItems} />)}
+          })(<RadioItemGroup dataSource={statusItems} />)}
         </FormItem>
       </Form>
     </Modal>

@@ -89,6 +89,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/authority/module/detail')],
       component: () => import('./routes/authority/module/detail/'),
     }, {
+      path: '/authority/module/edit/:id',
+      models: () => [import('./models/authority/module/edit')],
+      component: () => import('./routes/authority/module/edit/'),
+    }, {
       path: '/authority/user',
       models: () => [import('./models/authority/user')],
       component: () => import('./routes/authority/user/'),
