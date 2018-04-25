@@ -41,16 +41,11 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="名称" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: item.name,
-            rules: [
-              { required: true },
-            ],
-          })(<Input />)}
+        <FormItem label="名称" {...formItemLayout}>
+          {getFieldDecorator('name', { initialValue: item.name })(<Input readOnly />)}
         </FormItem>
         <FormItem label="用户" {...formItemLayout}>
-          {getFieldDecorator('user', { })(<EditableTagGroup />)}
+          {getFieldDecorator('user', { initialValue: item.userAuthGroup })(<EditableTagGroup disableInput />)}
         </FormItem>
       </Form>
     </Modal>

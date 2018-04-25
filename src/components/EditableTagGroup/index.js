@@ -3,6 +3,14 @@ import PropTypes from 'prop-types'
 import { Tag, Input, Tooltip, Icon } from 'antd'
 
 export default class EditableTagGroup extends Component {
+  constructor (props) {
+    super(props)
+    if ('value' in props) {
+      const { value } = props
+      this.state = { ...this.state, value }
+    }
+  }
+
   state = {
     value: [],
     inputVisible: false,
@@ -89,7 +97,7 @@ export default class EditableTagGroup extends Component {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && !this.props.readOnly && (
+        {!inputVisible && !this.props.disableInput && !this.props.readOnly && (
           <Tag
             onClick={this.showInput}
             style={{ background: '#fff', borderStyle: 'dashed' }}
@@ -104,6 +112,7 @@ export default class EditableTagGroup extends Component {
 
 EditableTagGroup.propTypes = {
   value: PropTypes.array,
+  disableInput: PropTypes.bool,
   readOnly: PropTypes.bool,
   onChange: PropTypes.func,
 }

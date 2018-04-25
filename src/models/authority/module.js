@@ -28,7 +28,6 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllModule ({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllModule, { authToken })
@@ -65,7 +64,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateModule ({ payload }, { call, put, select }) {
+    * updateModuleAuthGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryModule, { id: payload, authToken })
       if (result.success) {
@@ -82,7 +81,7 @@ export default modelExtend(pageModel, {
       const result = yield call(action === 'create' ? createModule : updateModule, { authToken, ...data })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/module'))
+        yield put(routerRedux.push('/authority/module'))
       } else {
         throw data
       }

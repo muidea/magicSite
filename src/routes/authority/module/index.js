@@ -15,7 +15,7 @@ const Module = ({ location, dispatch, module, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['module/update'],
-    title: '更新模块用户信息',
+    title: '更新用户信息',
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -44,7 +44,13 @@ const Module = ({ location, dispatch, module, loading }) => {
         },
       }))
     },
-    onEditItem (id) {
+    onEditItemAuthGroup (id) {
+      dispatch({
+        type: 'module/updateModuleAuthGroup',
+        payload: id,
+      })
+    },
+    onAddItemAuthGroup (id) {
       dispatch({
         type: 'module/updateModule',
         payload: id,
