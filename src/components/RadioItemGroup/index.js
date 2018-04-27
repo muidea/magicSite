@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Radio } from 'antd'
+import styles from './index.less'
 
 const RadioGroup = Radio.Group
 const RadioButton = Radio.Button
@@ -20,6 +21,13 @@ export default class RadioItemGroup extends Component {
     } else {
       this.state = { ...this.state, disabled: false }
     }
+
+    if ('style' in props) {
+      const { style } = props
+      this.state = { ...this.state, style }
+    }
+
+    this.state = { ...this.state, borderStyle: styles.normalBorder }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -31,15 +39,24 @@ export default class RadioItemGroup extends Component {
 
   handleInputChange = (e) => {
     let { value } = e.target
-    this.setState({ value })
+    this.setState({ value, borderStyle: styles.normalBorder })
     const { onChange } = this.props
     if (onChange) { onChange(value) }
   }
 
+  focus () {
+    this.setState({ borderStyle: styles.focusBorder })
+  }
+
+  blur () {
+    this.setState({ borderStyle: styles.normalBorder })
+  }
+
   render () {
     const { dataSource } = this.props
+    const { borderStyle } = this.state
     return (
-      <RadioGroup style={this.props.style} disabled={this.state.disabled} onChange={this.handleInputChange} value={this.state.value}>
+      <RadioGroup className={borderStyle} disabled={this.state.disabled} onChange={this.handleInputChange} value={this.state.value}>
         { dataSource && dataSource.map((tag) => {
           const chkItem = (
             <RadioButton key={tag.id} value={tag.id} >

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Tag, Tooltip, Icon } from 'antd'
-import AutoCompleteItem from '../AutoCompleteItem'
+import AutoCompleteSelect from '../AutoCompleteSelect'
 
 export default class AutoCompleteTagGroup extends Component {
   state = {
@@ -90,7 +90,7 @@ export default class AutoCompleteTagGroup extends Component {
           return isLongTag ? <Tooltip title={tag.name} key={tag.name}>{tagElem}</Tooltip> : tagElem
         })}
         {inputVisible && (
-          <AutoCompleteItem
+          <AutoCompleteSelect
             ref={this.saveInputRef}
             type="text"
             size="small"

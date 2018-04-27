@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Row, Col, Steps, Button, Divider } from 'antd'
-import { DescriptionList, AutoCompleteItem, RadioItemGroup } from '../../../../components'
+import { DescriptionList, AutoCompleteSelect, RadioItemGroup } from '../../../../components'
 import styles from './index.less'
 
 const { Step } = Steps
 const { Description } = DescriptionList
 
 const Edit = ({ dispatch, moduleEdit }) => {
+  let currentInput = null
+
   const { currentStep, currentTempUserAuthGroup, userList, id, name, description, type, status, userAuthGroup } = moduleEdit
   const { user, authGroup } = currentTempUserAuthGroup
 
@@ -23,6 +25,26 @@ const Edit = ({ dispatch, moduleEdit }) => {
       type: 'moduleEdit/updateTempUserAuthGroupInfo',
       payload: { currentTempUserAuthGroup: { ...currentTempUserAuthGroup, user: value } },
     })
+  }
+
+  const saveUserInputRef = (input) => {
+    if (input !== null && input !== undefined) {
+      if (user === null || user === undefined) {
+        input.focus()
+      }
+
+      currentInput = input
+    }
+  }
+
+  const saveAuthGroupInputRef = (input) => {
+    if (input !== null && input !== undefined) {
+      if (authGroup === null || authGroup === undefined) {
+        input.focus()
+      }
+
+      currentInput = input
+    }
   }
 
   const onAuthGroupValueChange = (value) => {
@@ -54,7 +76,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
     content:
   <div>
     <DescriptionList size="large" title="用户信息" style={{ marginBottom: 32 }}>
-      <Description term="选择用户"><AutoCompleteItem style={{ width: 200 }} dataSource={userList} onChange={onUserValueChange} value={user} /></Description>
+      <Description term="用户"><AutoCompleteSelect style={{ width: 200 }} dataSource={userList} ref={saveUserInputRef} onChange={onUserValueChange} value={user} /></Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
     <div>
@@ -68,7 +90,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
     content:
   <div>
     <DescriptionList size="large" title="授权组信息" style={{ marginBottom: 32 }}>
-      <Description term="选择授权组"><RadioItemGroup style={{ width: 400 }} dataSource={authGroupItems} onChange={onAuthGroupValueChange} value={authGroup} /></Description>
+      <Description term="授权组"><RadioItemGroup dataSource={authGroupItems} ref={saveAuthGroupInputRef} onChange={onAuthGroupValueChange} value={authGroup} /></Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
     <div>
@@ -78,11 +100,14 @@ const Edit = ({ dispatch, moduleEdit }) => {
     </div>
   </div>,
   }, {
-    title: '信息确认',
+    title: '确认信息',
     content:
   <div>
     <DescriptionList size="large" title="待提交信息" style={{ marginBottom: 32 }}>
-      <Description term="用户"><AutoCompleteItem disabled style={{ width: 200 }} dataSource={userList} onChange={onUserValueChange} value={user} /></Description>
+      <Description term="模块名">{name}</Description>
+      <Description term="类型">{type.toString()}</Description>
+      <Description term="状态">{status.toString()}</Description>
+      <Description term="用户"><AutoCompleteSelect disabled style={{ width: 200 }} dataSource={userList} onChange={onUserValueChange} value={user} /></Description>
       <Description term="授权组"><RadioItemGroup disabled style={{ width: 400 }} dataSource={authGroupItems} onChange={onAuthGroupValueChange} value={authGroup} /></Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
@@ -98,6 +123,11 @@ const Edit = ({ dispatch, moduleEdit }) => {
   }]
 
   const nextStep = () => {
+    console.log('nextStep...')
+    if (currentInput !== null && currentInput !== undefined) {
+      currentInput.blur()
+    }
+
     const current = currentStep + 1
     dispatch({
       type: 'moduleEdit/moveToStep',

@@ -6,7 +6,7 @@ import Search from './Search'
 import { RichEditor, RichView } from './RichEditor'
 import EditableTagGroup from './EditableTagGroup'
 import RadioItemGroup from './RadioItemGroup'
-import AutoCompleteItem from './AutoCompleteItem'
+import AutoCompleteSelect from './AutoCompleteSelect'
 import AutoCompleteTagGroup from './AutoCompleteTagGroup'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
@@ -30,6 +30,6 @@ export {
   RichView,
   EditableTagGroup,
   RadioItemGroup,
-  AutoCompleteItem,
+  AutoCompleteSelect,
   AutoCompleteTagGroup,
 }

@@ -21,9 +21,7 @@ const Description = ({
   )
 }
 
-Description.defaultProps = {
-  term: '',
-}
+Description.defaultProps = { term: '' }
 
 Description.propTypes = {
   term: PropTypes.node,
