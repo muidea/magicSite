@@ -49,8 +49,6 @@ export default class AutoCompleteSelect extends Component {
         const item = dataSource[idx]
         const { id } = item
         if (id === value) {
-          this.blur()
-
           onChange(item)
           break
         }

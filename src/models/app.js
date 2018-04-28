@@ -58,9 +58,7 @@ export default {
   },
 
   effects: {
-    * query ({
-      payload,
-    }, { call, put, select }) {
+    * query ({ payload }, { call, put, select }) {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
       if (data.errorCode === 0) {
@@ -78,24 +76,18 @@ export default {
             },
           })
           if (location.pathname === '/login') {
-            yield put(routerRedux.push({
-              pathname: '/dashboard',
-            }))
+            yield put(routerRedux.push({ pathname: '/dashboard' }))
           }
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({
           pathname: '/login',
-          search: queryString.stringify({
-            from: locationPathname,
-          }),
+          search: queryString.stringify({ from: locationPathname }),
         }))
       }
     },
 
-    * logout ({
-      payload,
-    }, { call, put, select }) {
+    * logout ({ payload }, { call, put, select }) {
       const { sessionID, authToken } = yield select(_ => _.app)
       const data = yield call(logout, { sessionID, authToken, ...payload })
       if (data.success) {
@@ -117,7 +109,6 @@ export default {
   },
 
   reducers: {
-
     updateState (state, { payload }) {
       const { sessionID, authToken } = payload
 
@@ -141,9 +132,7 @@ export default {
         sessionID: '',
         authToken: '',
         onlineUser: {},
-        permissions: {
-          visit: [],
-        },
+        permissions: { visit: [] },
       }
     },
 
