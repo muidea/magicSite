@@ -11,7 +11,7 @@ const Group = ({ location, dispatch, group, loading }) => {
   const { pageSize } = pagination
 
   const modalProps = {
-    item: { ...currentItem, catalog: currentItem.catalog.id },
+    item: currentItem,
     groupList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
@@ -51,13 +51,10 @@ const Group = ({ location, dispatch, group, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (id) {
       dispatch({
-        type: 'group/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
-        },
+        type: 'group/updateGroup',
+        payload: id,
       })
     },
     rowSelection: {

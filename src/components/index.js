@@ -8,6 +8,7 @@ import EditableTagGroup from './EditableTagGroup'
 import RadioItemGroup from './RadioItemGroup'
 import AutoCompleteSelect from './AutoCompleteSelect'
 import AutoCompleteTagGroup from './AutoCompleteTagGroup'
+import Status from './Status'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
 import * as Layout from './Layout/index.js'
@@ -32,4 +33,5 @@ export {
   RadioItemGroup,
   AutoCompleteSelect,
   AutoCompleteTagGroup,
+  Status,
 }

@@ -25,10 +25,7 @@ const modal = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-        key: item.key,
-      }
+      const data = { ...getFieldsValue() }
       onOk(data)
     })
   }
@@ -45,7 +42,7 @@ const modal = ({
           {getFieldDecorator('name', { initialValue: item.name })(<Input readOnly />)}
         </FormItem>
         <FormItem label="用户" {...formItemLayout}>
-          {getFieldDecorator('user', { initialValue: item.userAuthGroup })(<EditableTagGroup disableInput />)}
+          {getFieldDecorator('userAuthGroup', { initialValue: item.userAuthGroup })(<EditableTagGroup disableInput />)}
         </FormItem>
       </Form>
     </Modal>

@@ -79,7 +79,9 @@ export default modelExtend(pageModel, {
     * saveGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { action, data } = payload
-      const result = yield call(action === 'create' ? createGroup : updateGroup, { authToken, ...data })
+      const { catalog } = data
+      const { id } = catalog
+      const result = yield call(action === 'create' ? createGroup : updateGroup, { authToken, ...data, catalog: id })
       if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/account/group'))

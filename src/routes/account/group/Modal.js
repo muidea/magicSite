@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
-import { AutoCompleteItem } from '../../../components'
+import { AutoCompleteSelect } from '../../../components'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -57,7 +57,7 @@ const modal = ({
             rules: [
               { required: true },
             ],
-          })(<AutoCompleteItem
+          })(<AutoCompleteSelect
             dataSource={groupList}
             numberValue
             placeholder="input here"

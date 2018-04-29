@@ -69,7 +69,7 @@ const modal = ({
         </FormItem>
         <FormItem label="方法" {...formItemLayout}>
           {getFieldDecorator('method', {
-            initialValue: item.method,
+            initialValue: { id: item.method },
             rules: [
               { required: true },
             ],
@@ -77,7 +77,7 @@ const modal = ({
         </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {getFieldDecorator('authGroup', {
-            initialValue: item.authGroup.id,
+            initialValue: item.authGroup,
             rules: [
               { required: true },
             ],
@@ -85,7 +85,7 @@ const modal = ({
         </FormItem>
         <FormItem label="所属模块" {...formItemLayout}>
           {getFieldDecorator('module', {
-            initialValue: item.module.id,
+            initialValue: item.module,
             rules: [
               { required: true },
             ],

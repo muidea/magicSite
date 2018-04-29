@@ -2,12 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Link } from 'dva/router'
-import { Table, Modal, Badge } from 'antd'
+import { Table, Modal } from 'antd'
 import styles from './List.less'
-import { DropOption } from '../../../components'
-
-const statusMap = ['processing', 'warning']
-const status = ['启用', '停用']
+import { DropOption, Status } from '../../../components'
 
 const { confirm } = Modal
 
@@ -41,8 +38,8 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
     }, {
       title: '状态',
       dataIndex: 'status',
-      render (val) {
-        return <Badge status={statusMap[val]} text={status[val]} />
+      render (record) {
+        return <Status value={record} />
       },
     }, {
       title: '操作',

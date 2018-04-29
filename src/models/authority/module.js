@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllModule, queryModule, createModule, updateModule, deleteModule, multiDeleteModule } from 'services/authority/module'
+import { queryAllModule, queryModule, updateModule, deleteModule, multiDeleteModule } from 'services/authority/module'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -77,8 +77,18 @@ export default modelExtend(pageModel, {
 
     * saveModule ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const { action, data } = payload
-      const result = yield call(action === 'create' ? createModule : updateModule, { authToken, ...data })
+      const { data } = payload
+      const { userAuthGroup } = data
+      let usrAuthGroupList = []
+      if (userAuthGroup !== null && userAuthGroup !== undefined) {
+        for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
+          let item = userAuthGroup[idx]
+          let { id, authGroup } = item
+          usrAuthGroupList.push({ user: id, authGroup: authGroup.id })
+        }
+      }
+
+      const result = yield call(updateModule, { authToken, id: data.id, userAuthGroup: usrAuthGroupList })
       if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/authority/module'))

@@ -49,15 +49,23 @@ export default {
       }
     },
 
-    * submitAllUserAuthGroup ({ payload }, { call, put, select }) {
+    * submitUserAuthGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const result = yield call(updateModule, { authToken, ...payload })
-      const { success, message, status, ...other } = result
-      if (success) {
-        console.log(other)
-      } else {
-        throw result
+      const { id, userAuthGroup } = payload
+      let usrAuthGroupList = []
+      if (userAuthGroup !== null && userAuthGroup !== undefined) {
+        for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
+          const item = userAuthGroup[idx]
+          const { authGroup } = item
+          usrAuthGroupList.push({ user: item.id, authGroup: authGroup.id })
+        }
       }
+
+      const result = yield call(updateModule, { authToken, id, userAuthGroup: usrAuthGroupList })
+      yield put({
+        type: 'submitUserAuthGroupResult',
+        payload: { result },
+      })
     },
   },
 
@@ -78,16 +86,18 @@ export default {
       }
     },
 
-    submitUserAuthGroup (state, { payload }) {
+    completeUserAuthGroup (state, { payload }) {
       const { userAuthGroup } = state
       const { currentTempUserAuthGroup, currentStep } = payload
       const { user, authGroup } = currentTempUserAuthGroup
-      userAuthGroup.push({ user: user.id, authGroup })
+
+      userAuthGroup.push({ ...user, authGroup })
 
       return {
         ...state,
         userAuthGroup,
         currentStep,
+        currentTempUserAuthGroup: {},
       }
     },
 
@@ -96,21 +106,24 @@ export default {
       const { module } = data
       const { userAuthGroup } = module
 
-      let uAuthGroup = []
-      for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
-        const item = userAuthGroup[idx]
-        const { authGroup } = item
-        uAuthGroup.push({ user: item.id, authGroup: authGroup.id })
-      }
-
-      console.log(uAuthGroup)
       return {
         ...state,
         ...module,
-        userAuthGroup: uAuthGroup,
+        userAuthGroup: userAuthGroup !== null ? userAuthGroup : [],
         userList: user,
         currentStep,
       }
+    },
+
+    submitUserAuthGroupResult (state, { payload }) {
+      const { result } = payload
+      let { currentStep } = state
+
+      currentStep += 1
+
+      console.log(result)
+
+      return { ...state, currentStep }
     },
   },
 }

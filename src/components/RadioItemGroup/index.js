@@ -12,7 +12,11 @@ export default class RadioItemGroup extends Component {
 
     if ('value' in props) {
       const { value } = props
-      this.state = { value }
+      if (value != null) {
+        if ('id' in value) {
+          this.state = { value: value.id }
+        }
+      }
     }
 
     if ('disabled' in props) {
@@ -31,17 +35,28 @@ export default class RadioItemGroup extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if ('value' in nextProps) {
-      const { value } = nextProps
-      this.setState({ value })
+    const { value } = nextProps
+    if (value != null) {
+      if ('id' in value) {
+        this.setState({ value: value.id })
+      }
     }
   }
 
   handleInputChange = (e) => {
     let { value } = e.target
-    this.setState({ value, borderStyle: styles.normalBorder })
-    const { onChange } = this.props
-    if (onChange) { onChange(value) }
+    const { onChange, dataSource } = this.props
+    if (onChange !== null && onChange !== undefined) {
+      for (let idx = 0; idx < dataSource.length;) {
+        const item = dataSource[idx]
+        const { id } = item
+        if (id === value) {
+          onChange(item)
+          break
+        }
+        idx += 1
+      }
+    }
   }
 
   focus () {

@@ -27,6 +27,13 @@ const Edit = ({ dispatch, moduleEdit }) => {
     })
   }
 
+  const onAuthGroupValueChange = (value) => {
+    dispatch({
+      type: 'moduleEdit/updateTempUserAuthGroupInfo',
+      payload: { currentTempUserAuthGroup: { ...currentTempUserAuthGroup, authGroup: value } },
+    })
+  }
+
   const saveUserInputRef = (input) => {
     if (input !== null && input !== undefined) {
       if (user === null || user === undefined) {
@@ -45,13 +52,6 @@ const Edit = ({ dispatch, moduleEdit }) => {
 
       currentInput = input
     }
-  }
-
-  const onAuthGroupValueChange = (value) => {
-    dispatch({
-      type: 'moduleEdit/updateTempUserAuthGroupInfo',
-      payload: { currentTempUserAuthGroup: { ...currentTempUserAuthGroup, authGroup: value } },
-    })
   }
 
   const steps = [{
@@ -85,6 +85,12 @@ const Edit = ({ dispatch, moduleEdit }) => {
       <p>计划给模块分配授权组的用户，只能是系统中已经存在的，如果选择已经存在的用户，则会覆盖已经当前授权组。</p>
     </div>
   </div>,
+    validator: () => {
+      if (user === null || user === undefined) {
+        return false
+      }
+      return true
+    },
   }, {
     title: '选择授权组',
     content:
@@ -99,6 +105,12 @@ const Edit = ({ dispatch, moduleEdit }) => {
       <p>用户所在授权组，访客组只允许查看信息，用户组可以新增和更新信息，维护组可以新增，更新和删除信息。如果是核心系统模块，也要求用户必须属于维护组。</p>
     </div>
   </div>,
+    validator: () => {
+      if (authGroup === null || authGroup === undefined) {
+        return false
+      }
+      return true
+    },
   }, {
     title: '确认信息',
     content:
@@ -123,7 +135,19 @@ const Edit = ({ dispatch, moduleEdit }) => {
   }]
 
   const nextStep = () => {
-    console.log('nextStep...')
+    let valueOk = true
+    const { validator } = steps[currentStep]
+    if (validator !== null && validator !== undefined) {
+      valueOk = validator()
+    }
+
+    if (!valueOk) {
+      if (currentInput !== null && currentInput !== undefined) {
+        currentInput.focus()
+      }
+      return
+    }
+
     if (currentInput !== null && currentInput !== undefined) {
       currentInput.blur()
     }
@@ -143,24 +167,27 @@ const Edit = ({ dispatch, moduleEdit }) => {
     })
   }
 
-  const submitStep = () => {
+  const completeStep = () => {
     const current = 0
     dispatch({
-      type: 'moduleEdit/submitUserAuthGroup',
+      type: 'moduleEdit/completeUserAuthGroup',
       payload: { currentTempUserAuthGroup, currentStep: current },
     })
   }
 
-  const completeStep = () => {
+  const submitStep = () => {
     dispatch({
-      type: 'moduleEdit/submitUserAuthGroup',
+      type: 'moduleEdit/completeUserAuthGroup',
       payload: { currentTempUserAuthGroup, currentStep },
     })
 
     dispatch({
-      type: 'moduleEdit/submitAllUserAuthGroup',
+      type: 'moduleEdit/submitUserAuthGroup',
       payload: { userAuthGroup, id },
     })
+  }
+
+  const finishStep = () => {
   }
 
   return (
@@ -181,19 +208,24 @@ const Edit = ({ dispatch, moduleEdit }) => {
                   </Button>
               }
               {
-                currentStep < steps.length - 1
+                currentStep < steps.length - 2
                 &&
                 <Button type="primary" style={{ marginLeft: 8 }} onClick={nextStep}>下一步</Button>
               }
               {
-                currentStep === steps.length - 1
+                currentStep === steps.length - 2
                 &&
-                <Button style={{ marginLeft: 8 }} onClick={submitStep}>继续添加</Button>
+                <Button style={{ marginLeft: 8 }} onClick={completeStep}>继续添加</Button>
+              }
+              {
+                currentStep === steps.length - 2
+                &&
+                <Button type="primary" style={{ marginLeft: 8 }} onClick={submitStep}>确认提交</Button>
               }
               {
                 currentStep === steps.length - 1
                 &&
-                <Button type="primary" style={{ marginLeft: 8 }} onClick={completeStep}>完成</Button>
+                <Button type="primary" style={{ marginLeft: 8 }} onClick={finishStep}>完成</Button>
               }
             </div>
           </div>
