@@ -6,10 +6,13 @@ import { Table } from 'antd'
 import styles from './List.less'
 import { DropOption, EditableTagGroup } from '../../../components'
 
-const List = ({ onEditItem, location, ...tableProps }) => {
+const List = ({ onEditItemAuthGroup, onAddItemAuthGroup, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
-      onEditItem(record.id)
+      onEditItemAuthGroup(record.id)
+    }
+    if (e.key === '2') {
+      onAddItemAuthGroup(record.id)
     }
   }
 
@@ -33,7 +36,7 @@ const List = ({ onEditItem, location, ...tableProps }) => {
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '新增' }]} />
       },
     },
   ]
@@ -54,7 +57,8 @@ const List = ({ onEditItem, location, ...tableProps }) => {
 }
 
 List.propTypes = {
-  onEditItem: PropTypes.func,
+  onEditItemAuthGroup: PropTypes.func,
+  onAddItemAuthGroup: PropTypes.func,
   location: PropTypes.object,
 }
 

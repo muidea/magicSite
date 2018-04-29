@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Button, Row, Col, Input, Popconfirm } from 'antd'
+import { Form, Button, Row, Col, Input } from 'antd'
 
 const { Search } = Input
 const ColProps = {
@@ -16,8 +16,6 @@ const TwoColProps = {
 
 const Filter = ({
   onFilterChange,
-  onDeleteItems,
-  selectedRowKeys,
   filter,
   form: {
     getFieldDecorator,
@@ -50,10 +48,6 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleDeleteItems = () => {
-    onDeleteItems()
-  }
-
   const { name } = filter
 
   return (
@@ -67,14 +61,6 @@ const Filter = ({
             <Button type="primary" size="large" className="margin-right" onClick={handleSubmit}>查找</Button>
             <Button size="large" onClick={handleReset}>重置</Button>
           </div>
-          <div>
-            {
-              selectedRowKeys.length > 0 &&
-              <Popconfirm title="确认删除选中项?" placement="left" onConfirm={handleDeleteItems}>
-                <Button type="primary" style={{ marginRight: 16 }} size="large">删除</Button>
-              </Popconfirm>
-            }
-          </div>
         </div>
       </Col>
     </Row>
@@ -82,9 +68,6 @@ const Filter = ({
 }
 
 Filter.propTypes = {
-  selectedRowKeys: PropTypes.array,
-  onDeleteItems: PropTypes.func,
-  onAdd: PropTypes.func,
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,

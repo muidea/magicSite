@@ -4,6 +4,7 @@ const CasApi = '/api/v2/cas'
 const ContentApi = '/api/v2/content'
 const AccountApi = '/api/v2/account'
 const AuthorityApi = '/api/v2/authority'
+const ModuleApi = '/api/v2/module'
 const SystemInfoApi = '/api/v2/system'
 
 module.exports = {
@@ -35,16 +36,14 @@ module.exports = {
     group: `${AccountApi}/group/:id`,
     acls: `${AuthorityApi}/acl/`,
     acl: `${AuthorityApi}/acl/:id`,
-    modules: `${AuthorityApi}/module/`,
-    module: `${AuthorityApi}/module/:id`,
+    authModules: `${AuthorityApi}/module/`,
+    authModule: `${AuthorityApi}/module/:id`,
     authUsers: `${AuthorityApi}/user/`,
     authUser: `${AuthorityApi}/user/:id`,
+    modules: `${ModuleApi}/`,
+    module: `${ModuleApi}/:id`,
     systemInfo: `${SystemInfoApi}/config/`,
-    posts: `${APIV1}/posts`,
     dashboard: `${APIV1}/dashboard`,
     menus: `${APIV1}/menus`,
-    weather: `${APIV1}/weather`,
-    v1test: `${APIV1}/test`,
-    v2test: `${APIV2}/test`,
   },
 }

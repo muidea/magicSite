@@ -1,18 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Radio, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { EditableTagGroup } from 'components'
 
 const FormItem = Form.Item
-const RadioGroup = Radio.Group
-const { TextArea } = Input
 
 const formItemLayout = {
-  labelCol: {
-    span: 6,
-  },
-  wrapperCol: {
-    span: 14,
-  },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
 }
 
 const modal = ({
@@ -30,10 +25,7 @@ const modal = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-        key: item.key,
-      }
+      const data = { ...getFieldsValue() }
       onOk(data)
     })
   }
@@ -46,31 +38,11 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="名称" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('name', {
-            initialValue: item.name,
-            rules: [
-              {
-                required: true,
-              },
-            ],
-          })(<Input />)}
+        <FormItem label="账号" {...formItemLayout}>
+          {getFieldDecorator('account', { initialValue: item.account })(<Input readOnly />)}
         </FormItem>
-        <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: item.description,
-          })(<TextArea rows={3} cols={3} />)}
-        </FormItem>
-        <FormItem label="类型" {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: item.catalog,
-          })(
-            <RadioGroup>
-              <Radio value={0}>访客</Radio>
-              <Radio value={1}>用户</Radio>
-              <Radio value={2}>管理</Radio>
-            </RadioGroup>
-          )}
+        <FormItem label="模块" {...formItemLayout}>
+          {getFieldDecorator('moduleAuthGroup', { initialValue: item.moduleAuthGroup })(<EditableTagGroup disableInput />)}
         </FormItem>
       </Form>
     </Modal>

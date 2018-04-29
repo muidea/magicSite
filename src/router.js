@@ -101,6 +101,18 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/authority/user/detail')],
       component: () => import('./routes/authority/user/detail/'),
     }, {
+      path: '/authority/user/edit/:id',
+      models: () => [import('./models/authority/user/edit')],
+      component: () => import('./routes/authority/user/edit/'),
+    }, {
+      path: '/module/registry',
+      models: () => [import('./models/module/registry')],
+      component: () => import('./routes/module/registry/'),
+    }, {
+      path: '/module/registry/view/:id',
+      models: () => [import('./models/module/registry/detail')],
+      component: () => import('./routes/module/registry/detail/'),
+    }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],
       component: () => import('./routes/system/config/'),

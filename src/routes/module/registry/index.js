@@ -4,33 +4,14 @@ import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import List from './List'
 import Filter from './Filter'
-import Modal from './Modal'
 
-const User = ({ location, dispatch, user, loading }) => {
-  const { list, pagination, currentItem, selectedRowKeys, modalVisible } = user
+const ModuleRegistry = ({ location, dispatch, moduleRegistry, loading }) => {
+  const { list, pagination, selectedRowKeys } = moduleRegistry
   const { pageSize } = pagination
-
-  const modalProps = {
-    item: currentItem,
-    visible: modalVisible,
-    maskClosable: false,
-    confirmLoading: loading.effects['user/update'],
-    title: '更新用户信息',
-    wrapClassName: 'vertical-center-modal',
-    onOk (data) {
-      dispatch({
-        type: 'user/saveUser',
-        payload: { data: { id: currentItem.id, ...data } },
-      })
-    },
-    onCancel () {
-      dispatch({ type: 'user/hideModal' })
-    },
-  }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['user/query'],
+    loading: loading.effects['moduleRegistry/query'],
     pagination,
     location,
     onChange (page) {
@@ -44,20 +25,11 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onEditItemAuthGroup (id) {
-      dispatch({
-        type: 'user/updateUserAuthGroup',
-        payload: id,
-      })
-    },
-    onAddItemAuthGroup (id) {
-      dispatch(routerRedux.push({ pathname: `/authority/user/edit/${id}` }))
-    },
     rowSelection: {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'user/updateModelState',
+          type: 'moduleRegistry/updateModelState',
           payload: { selectedRowKeys: keys },
         })
       },
@@ -79,12 +51,12 @@ const User = ({ location, dispatch, user, loading }) => {
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/user',
+        pathname: '/moduleRegistry',
         query: {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
-      })) : dispatch(routerRedux.push({ pathname: '/user' }))
+      })) : dispatch(routerRedux.push({ pathname: '/moduleRegistry' }))
     },
   }
 
@@ -92,16 +64,15 @@ const User = ({ location, dispatch, user, loading }) => {
     <div className="content-inner">
       <Filter {...filterProps} />
       <List {...listProps} />
-      {modalVisible && <Modal {...modalProps} />}
     </div>
   )
 }
 
-User.propTypes = {
-  user: PropTypes.object,
+ModuleRegistry.propTypes = {
+  moduleRegistry: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ user, loading }) => ({ user, loading }))(User)
+export default connect(({ moduleRegistry, loading }) => ({ moduleRegistry, loading }))(ModuleRegistry)

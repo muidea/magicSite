@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllUser, queryUser, createUser, updateUser, deleteUser, multiDeleteUser } from 'services/authority/user'
+import { queryAllUser, queryUser, updateUser, deleteUser, multiDeleteUser } from 'services/authority/user'
 import queryString from 'query-string'
 import { pageModel } from '../common'
 
@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   namespace: 'user',
 
   state: {
-    currentItem: { id: -1, account: '', email: '', name: '', registerTime: '', group: [], moduleAuthGroup: [], state: 0 },
+    currentItem: {},
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -28,7 +28,6 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllUser ({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllUser, { authToken })
@@ -55,7 +54,7 @@ export default modelExtend(pageModel, {
 
     * queryUser ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryUser, { authToken, id: payload })
+      const result = yield call(queryUser, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.user)
       if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -65,7 +64,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateUser ({ payload }, { call, put, select }) {
+    * updateUserAuthGroup ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryUser, { id: payload, authToken })
       if (result.success) {
@@ -78,11 +77,21 @@ export default modelExtend(pageModel, {
 
     * saveUser ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const { action, data } = payload
-      const result = yield call(action === 'create' ? createUser : updateUser, { authToken, ...data })
+      const { data } = payload
+      const { moduleAuthGroup } = data
+      let modAuthGroupList = []
+      if (moduleAuthGroup !== null && moduleAuthGroup !== undefined) {
+        for (let idx = 0; idx < moduleAuthGroup.length; idx += 1) {
+          let item = moduleAuthGroup[idx]
+          let { id, authGroup } = item
+          modAuthGroupList.push({ user: id, authGroup: authGroup.id })
+        }
+      }
+
+      const result = yield call(updateUser, { authToken, id: data.id, moduleAuthGroup: modAuthGroupList })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/user'))
+        yield put(routerRedux.push('/authority/user'))
       } else {
         throw data
       }
@@ -117,7 +126,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, currentItem: { id: -1, account: '', email: '', name: '', registerTime: '', group: [], moduleAuthGroup: [], state: 0 }, modalVisible: false }
+      return { ...state, currentItem: {}, modalVisible: false }
     },
   },
 })

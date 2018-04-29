@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import { Row, Col, Steps, Button, Divider } from 'antd'
-import { DescriptionList, AutoCompleteSelect, RadioItemGroup } from '../../../../components'
+import { DescriptionList, AutoCompleteSelect, EditableTagGroup, RadioItemGroup, Status } from 'components'
 import styles from './index.less'
 
 const { Step } = Steps
 const { Description } = DescriptionList
 
-const Edit = ({ dispatch, moduleEdit }) => {
+const Edit = ({ dispatch, userEdit }) => {
   let currentInput = null
 
-  const { currentStep, currentTempUserAuthGroup, userList, id, name, description, type, status, userAuthGroup } = moduleEdit
-  const { user, authGroup } = currentTempUserAuthGroup
+  const { currentStep, currentTempModuleAuthGroup, moduleList, id, account, email, name, group, registerTime, status, moduleAuthGroup } = userEdit
+  const { module, authGroup } = currentTempModuleAuthGroup
 
   const authGroupItems = [
     { id: 0, name: '访客组' },
@@ -21,23 +21,23 @@ const Edit = ({ dispatch, moduleEdit }) => {
     { id: 2, name: '维护组' },
   ]
 
-  const onUserValueChange = (value) => {
+  const onModuleValueChange = (value) => {
     dispatch({
-      type: 'moduleEdit/updateTempUserAuthGroupInfo',
-      payload: { currentTempUserAuthGroup: { ...currentTempUserAuthGroup, user: value } },
+      type: 'userEdit/updateTempModuleAuthGroupInfo',
+      payload: { currentTempModuleAuthGroup: { ...currentTempModuleAuthGroup, module: value } },
     })
   }
 
   const onAuthGroupValueChange = (value) => {
     dispatch({
-      type: 'moduleEdit/updateTempUserAuthGroupInfo',
-      payload: { currentTempUserAuthGroup: { ...currentTempUserAuthGroup, authGroup: value } },
+      type: 'userEdit/updateTempModuleAuthGroupInfo',
+      payload: { currentTempModuleAuthGroup: { ...currentTempModuleAuthGroup, authGroup: value } },
     })
   }
 
   const saveUserInputRef = (input) => {
     if (input !== null && input !== undefined) {
-      if (user === null || user === undefined) {
+      if (module === null || module === undefined) {
         input.focus()
       }
 
@@ -59,11 +59,13 @@ const Edit = ({ dispatch, moduleEdit }) => {
     title: '基本信息',
     content:
   <div>
-    <DescriptionList size="large" title="模块信息" style={{ marginBottom: 32 }}>
-      <Description term="模块名">{name}</Description>
-      <Description term="类型">{type.toString()}</Description>
-      <Description term="状态">{status.toString()}</Description>
-      <Description term="描述">{description}</Description>
+    <DescriptionList size="large" title="用户信息" style={{ marginBottom: 32 }}>
+      <Description term="账号">{account}</Description>
+      <Description term="邮箱">{email}</Description>
+      <Description term="用户名">{name}</Description>
+      <Description term="分组"><EditableTagGroup readOnly value={group} /></Description>
+      <Description term="状态"><Status value={status} /></Description>
+      <Description term="注册时间">{registerTime}</Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
     <div>
@@ -73,11 +75,11 @@ const Edit = ({ dispatch, moduleEdit }) => {
     </div>
   </div>,
   }, {
-    title: '选择用户',
+    title: '选择模块',
     content:
   <div>
-    <DescriptionList size="large" title="用户信息" style={{ marginBottom: 32 }}>
-      <Description term="用户"><AutoCompleteSelect style={{ width: 200 }} dataSource={userList} ref={saveUserInputRef} onChange={onUserValueChange} value={user} /></Description>
+    <DescriptionList size="large" title="模块信息" style={{ marginBottom: 32 }}>
+      <Description term="模块"><AutoCompleteSelect style={{ width: 200 }} dataSource={moduleList} ref={saveUserInputRef} onChange={onModuleValueChange} value={module} /></Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
     <div>
@@ -87,7 +89,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
     </div>
   </div>,
     validator: () => {
-      if (user === null || user === undefined) {
+      if (module === null || module === undefined) {
         return false
       }
       return true
@@ -117,10 +119,13 @@ const Edit = ({ dispatch, moduleEdit }) => {
     content:
   <div>
     <DescriptionList size="large" title="待提交信息" style={{ marginBottom: 32 }}>
-      <Description term="模块名">{name}</Description>
-      <Description term="类型">{type.toString()}</Description>
-      <Description term="状态">{status.toString()}</Description>
-      <Description term="用户"><AutoCompleteSelect disabled style={{ width: 200 }} dataSource={userList} onChange={onUserValueChange} value={user} /></Description>
+      <Description term="账号">{account}</Description>
+      <Description term="邮箱">{email}</Description>
+      <Description term="用户名">{name}</Description>
+      <Description term="分组"><EditableTagGroup readOnly value={group} /></Description>
+      <Description term="状态"><Status value={status} /></Description>
+      <Description term="注册时间">{registerTime}</Description>
+      <Description term="用户"><AutoCompleteSelect disabled style={{ width: 200 }} dataSource={moduleList} onChange={onModuleValueChange} value={module} /></Description>
       <Description term="授权组"><RadioItemGroup disabled style={{ width: 400 }} dataSource={authGroupItems} onChange={onAuthGroupValueChange} value={authGroup} /></Description>
     </DescriptionList>
     <Divider style={{ marginBottom: 32 }} />
@@ -155,7 +160,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
 
     const current = currentStep + 1
     dispatch({
-      type: 'moduleEdit/moveToStep',
+      type: 'userEdit/moveToStep',
       payload: { currentStep: current },
     })
   }
@@ -163,7 +168,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
   const prevStep = () => {
     const current = currentStep - 1
     dispatch({
-      type: 'moduleEdit/moveToStep',
+      type: 'userEdit/moveToStep',
       payload: { currentStep: current },
     })
   }
@@ -171,25 +176,25 @@ const Edit = ({ dispatch, moduleEdit }) => {
   const completeStep = () => {
     const current = 0
     dispatch({
-      type: 'moduleEdit/completeUserAuthGroup',
-      payload: { currentTempUserAuthGroup, currentStep: current },
+      type: 'userEdit/completeModuleAuthGroup',
+      payload: { currentTempModuleAuthGroup, currentStep: current },
     })
   }
 
   const submitStep = () => {
     dispatch({
-      type: 'moduleEdit/completeUserAuthGroup',
-      payload: { currentTempUserAuthGroup, currentStep },
+      type: 'userEdit/completeModuleAuthGroup',
+      payload: { currentTempModuleAuthGroup, currentStep },
     })
 
     dispatch({
-      type: 'moduleEdit/submitUserAuthGroup',
-      payload: { userAuthGroup, id },
+      type: 'userEdit/submitModuleAuthGroup',
+      payload: { moduleAuthGroup, id },
     })
   }
 
   const finishStep = () => {
-    dispatch(routerRedux.push({ pathname: '/authority/module' }))
+    dispatch(routerRedux.push({ pathname: '/authority/user' }))
   }
 
   return (
@@ -238,7 +243,7 @@ const Edit = ({ dispatch, moduleEdit }) => {
 
 Edit.propTypes = {
   dispatch: PropTypes.func,
-  moduleEdit: PropTypes.object,
+  userEdit: PropTypes.object,
 }
 
-export default connect(({ moduleEdit, loading }) => ({ moduleEdit, loading: loading.models.moduleEdit }))(Edit)
+export default connect(({ userEdit, loading }) => ({ userEdit, loading: loading.models.userEdit }))(Edit)
