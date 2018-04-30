@@ -93,7 +93,18 @@ export default {
       const { currentTempModuleAuthGroup, currentStep } = payload
       const { module, authGroup } = currentTempModuleAuthGroup
 
-      moduleAuthGroup.push({ ...module, authGroup })
+      let exist = false
+      for (let idx = 0; idx < moduleAuthGroup.length; idx += 1) {
+        const current = moduleAuthGroup[idx]
+        const { id } = current
+        if (id === module.id) {
+          exist = true
+        }
+      }
+
+      if (!exist) {
+        moduleAuthGroup.push({ ...module, authGroup })
+      }
 
       return {
         ...state,

@@ -91,7 +91,19 @@ export default {
       const { currentTempUserAuthGroup, currentStep } = payload
       const { user, authGroup } = currentTempUserAuthGroup
 
-      userAuthGroup.push({ ...user, authGroup })
+      let exist = false
+      for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
+        const current = userAuthGroup[idx]
+        const { id } = current
+        if (user.id === id) {
+          exist = true
+          break
+        }
+      }
+
+      if (!exist) {
+        userAuthGroup.push({ ...user, authGroup })
+      }
 
       return {
         ...state,
