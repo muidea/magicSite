@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import styles from './Header.less'
 import Menus from './Menu'
 
-const SubMenu = Menu.SubMenu
+const { SubMenu } = Menu
 
 const Header = ({ onlineUser, logout, switchSider, siderFold, isNavbar, menuPopoverVisible, location, switchMenuPopover, navOpenKeys, changeOpenKeys, menu }) => {
   let handleClickMenu = e => e.key === 'logout' && logout()
@@ -22,30 +22,28 @@ const Header = ({ onlineUser, logout, switchSider, siderFold, isNavbar, menuPopo
   return (
     <div className={styles.header}>
       {isNavbar
-        ? <Popover placement="bottomLeft" onVisibleChange={switchMenuPopover} visible={menuPopoverVisible} overlayClassName={styles.popovermenu} trigger="click" content={<Menus {...menusProps} />}>
-          <div className={styles.button}>
-            <Icon type="bars" />
-          </div>
-        </Popover>
-        : <div
-          className={styles.button}
-          onClick={switchSider}
-        >
-          <Icon type={classnames({ 'menu-unfold': siderFold, 'menu-fold': !siderFold })} />
-        </div>}
+        ?
+          <Popover placement="bottomLeft" onVisibleChange={switchMenuPopover} visible={menuPopoverVisible} overlayClassName={styles.popovermenu} trigger="click" content={<Menus {...menusProps} />}>
+            <div className={styles.button}>
+              <Icon type="bars" />
+            </div>
+          </Popover>
+        :
+          <div className={styles.button} onClick={switchSider} >
+            <Icon type={classnames({ 'menu-unfold': siderFold, 'menu-fold': !siderFold })} />
+          </div>}
       <div className={styles.rightWarpper}>
         <div className={styles.button}>
           <Icon type="mail" />
         </div>
         <Menu mode="horizontal" onClick={handleClickMenu}>
           <SubMenu
-            style={{
-              float: 'right',
-            }}
-            title={<span>
-              <Icon type="user" />
-              {onlineUser.name}
-            </span>}
+            style={{ float: 'right' }}
+            title={
+              <span>
+                <Icon type="user" />
+                {onlineUser.name}
+              </span>}
           >
             <Menu.Item key="logout">
               注销

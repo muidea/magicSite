@@ -22,7 +22,7 @@ const App = ({ children, dispatch, app, loading, location }) => {
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`
   const { iconFontJS, iconFontCSS, logo } = config
   const hasPermission = true
-  const href = window.location.href
+  const { href } = window.location
 
   if (lastHref !== href) {
     NProgress.start()
@@ -74,10 +74,7 @@ const App = ({ children, dispatch, app, loading, location }) => {
     location,
   }
   if (openPages && openPages.includes(pathname)) {
-    return (<div>
-      <Loader fullScreen spinning={loading.effects['app/query']} />
-      {children}
-    </div>)
+    return (<div> <Loader fullScreen spinning={loading.effects['app/query']} /> {children} </div>)
   }
   return (
     <div>
@@ -90,9 +87,10 @@ const App = ({ children, dispatch, app, loading, location }) => {
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
       </Helmet>
       <div className={classnames(styles.layout, { [styles.fold]: isNavbar ? false : siderFold }, { [styles.withnavbar]: isNavbar })}>
-        {!isNavbar ? <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
-          {siderProps.menu.length === 0 ? null : <Sider {...siderProps} />}
-        </aside> : ''}
+        {!isNavbar ?
+          <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
+            {siderProps.menu.length === 0 ? null : <Sider {...siderProps} />}
+          </aside> : ''}
         <div className={styles.main}>
           <Header {...headerProps} />
           <Bread {...breadProps} />
