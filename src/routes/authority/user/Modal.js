@@ -39,7 +39,7 @@ const modal = ({
     <Modal {...modalOpts}>
       <Form layout="horizontal">
         <FormItem label="账号" {...formItemLayout}>
-          {getFieldDecorator('account', { initialValue: item.account })(<Input readOnly />)}
+          {getFieldDecorator('name', { initialValue: item.name })(<Input readOnly />)}
         </FormItem>
         <FormItem label="模块" {...formItemLayout}>
           {getFieldDecorator('moduleAuthGroup', { initialValue: item.moduleAuthGroup })(<EditableTagGroup disableInput />)}
