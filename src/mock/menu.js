@@ -147,7 +147,7 @@ let database = [
     id: '41',
     bpid: '4',
     mpid: '4',
-    name: '模块信息',
+    name: '模块仓库',
     icon: 'bars',
     route: '/module/registry',
   },

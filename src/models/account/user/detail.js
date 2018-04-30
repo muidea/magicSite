@@ -12,7 +12,7 @@ export default {
     email: '',
     group: [],
     registerTime: '',
-    status: 0,
+    status: {},
   },
 
   subscriptions: {

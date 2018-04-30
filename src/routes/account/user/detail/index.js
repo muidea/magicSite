@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
+import { EditableTagGroup, Status } from 'components'
 import styles from './index.less'
-import { EditableTagGroup } from '../../../../components'
 
 const Detail = ({ userDetail }) => {
   const { account, name, email, group, registerTime, status } = userDetail
@@ -32,7 +32,7 @@ const Detail = ({ userDetail }) => {
         </div>
         <div className={styles.item}>
           <div>状态</div>
-          <div>{status}</div>
+          <div><Status value={status} /></div>
         </div>
       </div>
     </div>)
