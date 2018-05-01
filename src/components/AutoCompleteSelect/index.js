@@ -70,7 +70,7 @@ export default class AutoCompleteSelect extends Component {
   }
 
   render () {
-    const { style, placeholder, disabled } = this.props
+    const { style, placeholder, disabled, onBlur } = this.props
     const { dataSource, value } = this.state
 
     return (
@@ -82,6 +82,7 @@ export default class AutoCompleteSelect extends Component {
         placeholder={placeholder}
         optionFilterProp="children"
         onChange={this.handleChange}
+        onBlur={onBlur}
         value={value}
         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
@@ -99,6 +100,7 @@ AutoCompleteSelect.propTypes = {
   disabled: PropTypes.bool,
   style: PropTypes.object,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   value: PropTypes.any,
   placeholder: PropTypes.string,
 }

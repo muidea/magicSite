@@ -59,7 +59,6 @@ const modal = ({
             ],
           })(<AutoCompleteSelect
             dataSource={groupList}
-            numberValue
             placeholder="input here"
           />)}
         </FormItem>

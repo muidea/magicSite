@@ -12,6 +12,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
 
   const modalProps = {
     item: currentItem,
+    catalogList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['catalog/update'],
