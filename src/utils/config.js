@@ -30,6 +30,7 @@ module.exports = {
     link: `${ContentApi}/link/:id`,
     medias: `${ContentApi}/medias/`,
     media: `${ContentApi}/media/:id`,
+    summary: `${ContentApi}/summary/:id`,
     users: `${AccountApi}/user/`,
     user: `${AccountApi}/user/:id`,
     groups: `${AccountApi}/group/`,

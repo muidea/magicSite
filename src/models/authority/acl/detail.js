@@ -9,7 +9,7 @@ export default {
     url: '',
     method: '',
     module: {},
-    status: '',
+    status: {},
     authGroup: { id: 0, name: '' },
   },
 

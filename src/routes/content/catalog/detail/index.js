@@ -1,35 +1,53 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import styles from './index.less'
-import { EditableTagGroup } from '../../../../components'
+import { Table, Divider } from 'antd'
+import { DescriptionList, EditableTagGroup } from '../../../../components'
+
+const { Description } = DescriptionList
 
 const Detail = ({ catalogDetail }) => {
-  const { name, description, catalog, creater, createDate } = catalogDetail
+  const { name, description, catalog, creater, createDate, summary } = catalogDetail
+
+  const columns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+    },
+    {
+      title: '创建人',
+      dataIndex: 'creater',
+      render: (text, record) => <span>{record.creater.name}</span>,
+    },
+    {
+      title: '更新日期',
+      dataIndex: 'createDate',
+    },
+  ]
 
   return (
     <div className="content-inner">
-      <div className={styles.content}>
-        <div className={styles.item}>
-          <div>名称</div>
-          <div>{name}</div>
-        </div>
-        <div className={styles.item}>
-          <div>父分类</div>
-          <div><EditableTagGroup readOnly value={catalog} /></div>
-        </div>
-        <div className={styles.item}>
-          <div>描述</div>
-          <div>{description}</div>
-        </div>
-        <div className={styles.item}>
-          <div>创建时间</div>
-          <div>{createDate}</div>
-        </div>
-        <div className={styles.item}>
-          <div>创建人</div>
-          <div>{creater.name}</div>
-        </div>
+      <DescriptionList size="large" title="分组信息" style={{ marginBottom: 32 }}>
+        <Description term="名称">{name}</Description>
+        <Description term="父分类"><EditableTagGroup readOnly value={catalog} /></Description>
+        <Description term="描述">{description}</Description>
+        <Description term="创建时间">{createDate}</Description>
+        <Description term="创建人">{creater.name}</Description>
+      </DescriptionList>
+      <Divider style={{ marginBottom: 32 }} />
+      <div>
+        <h3>分组内容</h3>
+        <Table
+          style={{ marginBottom: 24 }}
+          pagination={false}
+          dataSource={summary}
+          columns={columns}
+          rowKey={record => record.id + record.type}
+        />
       </div>
     </div>)
 }

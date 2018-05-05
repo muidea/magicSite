@@ -10,15 +10,13 @@ const Detail = ({ aclDetail }) => {
 
   return (
     <div className="content-inner">
-      <div>
-        <DescriptionList size="large" title="ACL信息" style={{ marginBottom: 32 }}>
-          <Description term="URL">{url}</Description>
-          <Description term="Method">{method}</Description>
-          <Description term="状态"><Status value={status} /></Description>
-          <Description term="所属模块">{module.name}</Description>
-          <Description term="权限组"><EditableTagGroup readOnly value={[authGroup]} /></Description>
-        </DescriptionList>
-      </div>
+      <DescriptionList size="large" title="ACL信息" style={{ marginBottom: 32 }}>
+        <Description term="URL">{url}</Description>
+        <Description term="Method">{method}</Description>
+        <Description term="状态"><Status value={status} /></Description>
+        <Description term="所属模块">{module.name}</Description>
+        <Description term="权限组"><EditableTagGroup readOnly value={[authGroup]} /></Description>
+      </DescriptionList>
     </div>)
 }
 
