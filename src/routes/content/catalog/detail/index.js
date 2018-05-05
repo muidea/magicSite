@@ -31,7 +31,7 @@ const Detail = ({ catalogDetail }) => {
 
   return (
     <div className="content-inner">
-      <DescriptionList size="large" title="分组信息" style={{ marginBottom: 32 }}>
+      <DescriptionList size="large" title="分类信息" style={{ marginBottom: 32 }}>
         <Description term="名称">{name}</Description>
         <Description term="父分类"><EditableTagGroup readOnly value={catalog} /></Description>
         <Description term="描述">{description}</Description>
@@ -40,7 +40,7 @@ const Detail = ({ catalogDetail }) => {
       </DescriptionList>
       <Divider style={{ marginBottom: 32 }} />
       <div>
-        <h3>分组内容</h3>
+        <h3>分类内容</h3>
         <Table
           style={{ marginBottom: 24 }}
           pagination={false}
