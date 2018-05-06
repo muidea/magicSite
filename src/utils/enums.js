@@ -4,6 +4,4 @@ const EnumRoleType = {
   DEVELOPER: 'developer',
 }
 
-module.exports = {
-  EnumRoleType,
-}
+module.exports = { EnumRoleType }

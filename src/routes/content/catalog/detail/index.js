@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
+import { Link } from 'dva/router'
 import { Table, Divider } from 'antd'
-import { DescriptionList, EditableTagGroup } from '../../../../components'
+import { DescriptionList, EditableTagGroup } from 'components'
 
 const { Description } = DescriptionList
 
@@ -13,6 +14,19 @@ const Detail = ({ catalogDetail }) => {
     {
       title: '名称',
       dataIndex: 'name',
+      render: (text, record) => {
+        if (record.type === 'article') {
+          return <Link to={`/content/article/view/${record.id}`}>{text}</Link>
+        } else if (record.type === 'catalog') {
+          return <Link to={`/content/catalog/view/${record.id}`}>{text}</Link>
+        } else if (record.type === 'link') {
+          return <Link to={`/content/link/view/${record.id}`}>{text}</Link>
+        } else if (record.type === 'media') {
+          return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
+        }
+
+        return <span>{text}</span>
+      },
     },
     {
       title: '类型',

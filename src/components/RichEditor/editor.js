@@ -1,24 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import autobind from 'class-autobind'
-import RichTextEditor, { EditorValue } from 'react-rte'
+import RichTextEditor from 'react-rte'
 import { Tabs, Input } from 'antd'
 import defaultFormat from './common'
 
-const TabPane = Tabs.TabPane
+const { TabPane } = Tabs
 const { TextArea } = Input
-
-type Props = {
-  value: string,
-  placeholder: string,
-  editorStyle: any,
-  onChange: (value: string) => any
-}
-type State = {
-  value: EditorValue,
-  format: string,
-  placeholder: string,
-  editorStyle: string
-}
 
 export default class RichEditor extends Component {
   constructor (props) {
@@ -27,7 +15,7 @@ export default class RichEditor extends Component {
     autobind(this)
 
     this.state = {
-      value: RichTextEditor.createEmptyValue(),
+      richValue: RichTextEditor.createEmptyValue(),
       format: defaultFormat,
       placeholder: props.placeholder,
       editorStyle: props.editorStyle,
@@ -37,25 +25,18 @@ export default class RichEditor extends Component {
     this._onChangeSource = this._onChangeSource.bind(this)
   }
 
-  state: State
-
   componentWillReceiveProps (nextProps) {
-    if (('value' in nextProps) && (this.props.value !== nextProps.value)) {
-      this.setState({
-        value: this.state.value.setContentFromString(nextProps.value, this.state.format),
-      })
+    if (('value' in nextProps) && (this.props.value !== nextProps.value) && this.props.value.length === 0) {
+      this.setState({ richValue: this.state.richValue.setContentFromString(nextProps.value, this.state.format) })
     }
 
     if (('placeholder' in nextProps) && (this.props.placeholder !== nextProps.placeholder)) {
-      this.setState({
-        placeholder: nextProps.placeholder,
-      })
+      this.setState({ placeholder: nextProps.placeholder })
     }
   }
-  props: Props
 
   _onChange (value) {
-    this.setState({ value })
+    this.setState({ richValue: value })
 
     this.props.onChange(value.toString(this.state.format))
   }
@@ -64,15 +45,13 @@ export default class RichEditor extends Component {
     let source = event.target.value
     let oldValue = this.state.value
 
-    this.setState({
-      value: oldValue.setContentFromString(source, this.state.format),
-    })
+    this.setState({ richValue: oldValue.setContentFromString(source, this.state.format) })
 
     this.props.onChange(source)
   }
 
   render () {
-    let { value, format, placeholder, editorStyle } = this.state
+    let { richValue, format, placeholder, editorStyle } = this.state
 
     return (
       <Tabs type="card">
@@ -81,7 +60,7 @@ export default class RichEditor extends Component {
             <RichTextEditor
               toolbarClassName="demo-toolbar"
               editorClassName="demo-editor"
-              value={value}
+              value={richValue}
               onChange={this._onChange}
               placeholder={placeholder}
               editorStyle={editorStyle}
@@ -90,15 +69,22 @@ export default class RichEditor extends Component {
         </TabPane>
         <TabPane tab="Markdown模式" key="markdown">
           <div className="row">
-            <TextArea rows={27} cols={30} value={value.toString(format)} onChange={this._onChangeSource} />
+            <TextArea rows={27} cols={30} value={richValue.toString(format)} onChange={this._onChangeSource} />
           </div>
         </TabPane>
         <TabPane tab="预览" key="preView">
           <div className="row">
-            <RichTextEditor value={value} editorStyle={editorStyle} readOnly />
+            <RichTextEditor value={richValue} editorStyle={editorStyle} readOnly />
           </div>
         </TabPane>
       </Tabs>
     )
   }
+}
+
+RichEditor.propTypes = {
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  editorStyle: PropTypes.object,
+  onChange: PropTypes.func,
 }
