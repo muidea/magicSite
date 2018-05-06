@@ -43,7 +43,7 @@ export default class RichEditor extends Component {
 
   _onChangeSource (event) {
     let source = event.target.value
-    let oldValue = this.state.value
+    let oldValue = this.state.richValue
 
     this.setState({ richValue: oldValue.setContentFromString(source, this.state.format) })
 
