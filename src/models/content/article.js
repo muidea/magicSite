@@ -25,7 +25,6 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllArticle ({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllArticle, { authToken })
@@ -73,6 +72,5 @@ export default modelExtend(pageModel, {
     },
   },
 
-  reducers: {
-  },
+  reducers: { },
 })
