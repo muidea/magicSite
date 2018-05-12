@@ -5,9 +5,7 @@ import createHistory from 'history/createBrowserHistory'
 
 // 1. Initialize
 const app = dva({
-  ...createLoading({
-    effects: true,
-  }),
+  ...createLoading({ effects: true }),
   history: createHistory(),
   onError (error) {
     message.error(error.message)

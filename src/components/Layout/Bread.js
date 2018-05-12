@@ -43,14 +43,13 @@ const Bread = ({ menu, location }) => {
     const content = (
       <span>{item.icon
         ? <Icon type={item.icon} style={{ marginRight: 4 }} />
-        : ''}{item.name}</span>
+        : ''}{item.name}
+      </span>
     )
     return (
       <Breadcrumb.Item key={key}>
         {((pathArray.length - 1) !== key)
-          ? <Link to={item.route || '#'}>
-            {content}
-          </Link>
+          ? <Link to={item.route || '#'}>{content}</Link>
           : content}
       </Breadcrumb.Item>
     )
