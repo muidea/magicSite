@@ -247,14 +247,6 @@ let database = [
     route: '/authority/endpoint/view/:id',
   },
   {
-    id: '542',
-    mpid: '-1',
-    bpid: '54',
-    name: '终端编辑',
-    icon: 'tool',
-    route: '/authority/endpoint/edit/:id',
-  },
-  {
     id: '6',
     bpid: '1',
     name: '系统设置',

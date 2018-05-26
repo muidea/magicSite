@@ -37,7 +37,7 @@ const List = ({ location, ...tableProps }) => {
         {...tableProps}
         className={classnames({ [styles.table]: true })}
         bordered
-        scroll={{ x: 1200 }}
+        scroll={{ x: '100%' }}
         columns={columns}
         simple
         rowKey={record => record.id}

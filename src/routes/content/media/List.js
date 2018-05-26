@@ -6,7 +6,7 @@ import { Table, Modal } from 'antd'
 import styles from './List.less'
 import { DropOption, EditableTagGroup } from '../../../components'
 
-const confirm = Modal.confirm
+const { confirm } = Modal
 
 const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
@@ -56,7 +56,7 @@ const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
         {...tableProps}
         className={classnames({ [styles.table]: true })}
         bordered
-        scroll={{ x: 1200 }}
+        scroll={{ x: '100%' }}
         columns={columns}
         simple
         rowKey={record => record.id}

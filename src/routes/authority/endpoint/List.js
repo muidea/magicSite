@@ -25,23 +25,25 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
 
   const columns = [
     {
-      title: '模块名称',
+      title: '终端名称',
       dataIndex: 'name',
       key: 'name',
+      width: 20,
       render: (text, record) => {
         return <Link to={`/authority/endpoint/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '用户',
+      title: '用户列表',
       dataIndex: 'user',
       key: 'user',
+      width: 70,
       render: (text, record) => {
         return <EditableTagGroup readOnly value={record.user} />
       },
     }, {
       title: '操作',
       key: 'operation',
-      width: 80,
+      width: 10,
       render: (text, record) => {
         return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '修改' }, { key: '2', name: '删除' }]} />
       },
@@ -54,7 +56,7 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
         {...tableProps}
         className={classnames({ [styles.table]: true })}
         bordered
-        scroll={{ x: 1200 }}
+        scroll={{ x: '100%' }}
         columns={columns}
         simple
         rowKey={record => record.id}
