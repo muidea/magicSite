@@ -51,6 +51,9 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
     onEditItem (item) {
       dispatch({ type: 'endpoint/showModal', payload: { currentItem: item, modalType: 'update' } })
     },
+    onDeleteItem (id) {
+      dispatch({ type: 'endpoint/deleteEndpoint', payload: { id } })
+    },
     rowSelection: {
       selectedRowKeys,
       onChange: (keys) => {

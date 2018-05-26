@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllEndpoint, createEndpoint, updateEndpoint, deleteEndpoint } from 'services/authority/endpoint'
+import { queryAllEndpoint, queryEndpoint, createEndpoint, updateEndpoint, deleteEndpoint } from 'services/authority/endpoint'
 import { queryAllUser } from 'services/account/user'
 import queryString from 'query-string'
 import { stripArray } from 'utils'
@@ -62,6 +62,18 @@ export default modelExtend(pageModel, {
       }
     },
 
+    * queryEndpoint ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const data = yield call(queryEndpoint, { ...payload, authToken })
+      const { selectedRowKeys } = yield select(_ => _.endpoint)
+      if (data.success) {
+        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+        yield put({ type: 'queryAllEndpoint' })
+      } else {
+        throw data
+      }
+    },
+
     * createEndpoint ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
@@ -92,7 +104,7 @@ export default modelExtend(pageModel, {
 
     * deleteEndpoint ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteEndpoint, { id: payload, authToken })
+      const data = yield call(deleteEndpoint, { ...payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.endpoint)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })

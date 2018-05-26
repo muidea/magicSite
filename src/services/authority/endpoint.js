@@ -11,6 +11,14 @@ export async function queryAllEndpoint (params) {
   })
 }
 
+export async function queryEndpoint (params) {
+  return request({
+    url: authEndpoint,
+    method: 'get',
+    data: params,
+  })
+}
+
 export async function createEndpoint (params) {
   return request({
     url: authEndpoint.replace(':id', ''),

@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Link } from 'dva/router'
-import { Table } from 'antd'
+import { Table, Modal } from 'antd'
 import styles from './List.less'
 import { DropOption, EditableTagGroup } from '../../../components'
+
+const { confirm } = Modal
 
 const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
@@ -12,7 +14,12 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
       onEditItem(record)
     }
     if (e.key === '2') {
-      onDeleteItem(record.id)
+      confirm({
+        title: '确认删除?',
+        onOk () {
+          onDeleteItem(record.id)
+        },
+      })
     }
   }
 
@@ -22,7 +29,7 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
-        return <Link to={`/authority/module/view/${record.id}`}>{text}</Link>
+        return <Link to={`/authority/endpoint/view/${record.id}`}>{text}</Link>
       },
     }, {
       title: '用户',

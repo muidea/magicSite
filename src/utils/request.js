@@ -59,7 +59,7 @@ export default function request (options) {
     if (options.data) {
       const { id, authToken } = options.data
       let { url, method } = options
-      if (id !== undefined && method === 'put') {
+      if (id !== undefined && (method !== 'post')) {
         delete options.data.id
         url = url.replace(':id', id)
       }

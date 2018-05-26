@@ -6,11 +6,12 @@ export default {
   namespace: 'endpointDetail',
 
   state: {
+    id: '',
     name: '',
     description: '',
-    type: 0,
+    user: [],
     status: 0,
-    userAuthGroup: [],
+    accessToken: '',
   },
 
   subscriptions: {
