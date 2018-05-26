@@ -105,6 +105,18 @@ const Routers = function ({ history, app }) {
       models: () => [import('./models/authority/user/edit')],
       component: () => import('./routes/authority/user/edit/'),
     }, {
+      path: '/authority/endpoint',
+      models: () => [import('./models/authority/endpoint')],
+      component: () => import('./routes/authority/endpoint/'),
+    }, {
+      path: '/authority/endpoint/view/:id',
+      models: () => [import('./models/authority/endpoint/detail')],
+      component: () => import('./routes/authority/endpoint/detail/'),
+    }, {
+      path: '/authority/endpoint/edit/:id',
+      models: () => [import('./models/authority/endpoint/edit')],
+      component: () => import('./routes/authority/endpoint/edit/'),
+    }, {
       path: '/module/registry',
       models: () => [import('./models/module/registry')],
       component: () => import('./routes/module/registry/'),

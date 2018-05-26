@@ -1,0 +1,142 @@
+import pathToRegexp from 'path-to-regexp'
+import { queryEndpoint, updateEndpoint } from 'services/authority/endpoint'
+import { queryAllUser } from 'services/account/user'
+
+export default {
+
+  namespace: 'endpointEdit',
+
+  state: {
+    currentStep: 0,
+    id: '',
+    name: '',
+    description: '',
+    type: 0,
+    status: 0,
+    userAuthGroup: [],
+    userList: [],
+    currentTempUserAuthGroup: {},
+  },
+
+  subscriptions: {
+    setup ({ dispatch, history }) {
+      history.listen((location) => {
+        const match = pathToRegexp('/authority/endpoint/edit/:id').exec(location.pathname)
+        if (match) {
+          dispatch({
+            type: 'queryEndpoint',
+            payload: { id: match[1] },
+          })
+        }
+      })
+    },
+  },
+
+  effects: {
+    * queryEndpoint ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const result = yield call(queryEndpoint, { authToken, ...payload })
+      const { success, message, status, ...other } = result
+      if (success) {
+        const userResult = yield call(queryAllUser, { authToken })
+        const { user } = userResult
+        yield put({
+          type: 'queryEndpointSuccess',
+          payload: { data: other, user, currentStep: 0 },
+        })
+      } else {
+        throw result
+      }
+    },
+
+    * submitUserAuthGroup ({ payload }, { call, put, select }) {
+      const { authToken } = yield select(_ => _.app)
+      const { id, userAuthGroup } = payload
+      let usrAuthGroupList = []
+      if (userAuthGroup !== null && userAuthGroup !== undefined) {
+        for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
+          const item = userAuthGroup[idx]
+          const { authGroup } = item
+          usrAuthGroupList.push({ user: item.id, authGroup: authGroup.id })
+        }
+      }
+
+      const result = yield call(updateEndpoint, { authToken, id, userAuthGroup: usrAuthGroupList })
+      yield put({
+        type: 'submitUserAuthGroupResult',
+        payload: { result },
+      })
+    },
+  },
+
+  reducers: {
+    moveToStep (state, { payload }) {
+      const { currentStep } = payload
+      return {
+        ...state,
+        currentStep,
+      }
+    },
+
+    updateTempUserAuthGroupInfo (state, { payload }) {
+      const { currentTempUserAuthGroup } = payload
+      return {
+        ...state,
+        currentTempUserAuthGroup,
+      }
+    },
+
+    completeUserAuthGroup (state, { payload }) {
+      const { userAuthGroup } = state
+      const { currentTempUserAuthGroup, currentStep } = payload
+      const { user, authGroup } = currentTempUserAuthGroup
+
+      let exist = false
+      for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
+        const current = userAuthGroup[idx]
+        const { id } = current
+        if (user.id === id) {
+          exist = true
+          break
+        }
+      }
+
+      if (!exist) {
+        userAuthGroup.push({ ...user, authGroup })
+      }
+
+      return {
+        ...state,
+        userAuthGroup,
+        currentStep,
+        currentTempUserAuthGroup: {},
+      }
+    },
+
+    queryEndpointSuccess (state, { payload }) {
+      const { data, user, currentStep } = payload
+      const { endpoint } = data
+      const { userAuthGroup } = endpoint
+
+      return {
+        ...state,
+        ...endpoint,
+        userAuthGroup: userAuthGroup !== null ? userAuthGroup : [],
+        userList: user,
+        currentStep,
+        currentTempUserAuthGroup: {},
+      }
+    },
+
+    submitUserAuthGroupResult (state, { payload }) {
+      const { result } = payload
+      let { currentStep } = state
+
+      currentStep += 1
+
+      console.log(result)
+
+      return { ...state, currentStep }
+    },
+  },
+}

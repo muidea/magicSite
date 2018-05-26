@@ -41,6 +41,8 @@ module.exports = {
     authModule: `${AuthorityApi}/module/:id`,
     authUsers: `${AuthorityApi}/user/`,
     authUser: `${AuthorityApi}/user/:id`,
+    authEndpoints: `${AuthorityApi}/endpoint/`,
+    authEndpoint: `${AuthorityApi}/endpoint/:id`,
     modules: `${ModuleApi}/`,
     module: `${ModuleApi}/:id`,
     systemInfo: `${SystemInfoApi}/config/`,

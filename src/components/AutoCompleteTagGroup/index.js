@@ -4,8 +4,22 @@ import { Tag, Tooltip, Icon } from 'antd'
 import AutoCompleteSelect from '../AutoCompleteSelect'
 
 export default class AutoCompleteTagGroup extends Component {
+  constructor (props) {
+    super(props)
+
+    if ('dataSource' in props) {
+      const { dataSource } = props
+
+      if ('value' in props && dataSource.length > 0) {
+        const { value } = props
+        if (value !== null && value !== undefined) {
+          this.state = { ...this.state, value }
+        }
+      }
+    }
+  }
+
   state = {
-    value: [],
     inputVisible: false,
     inputValue: {},
   }

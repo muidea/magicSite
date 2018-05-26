@@ -40,6 +40,18 @@ Date.prototype.format = function (format) {
   return format
 }
 
+const stripArray = (array, keyAlias = 'id') => {
+  if (!(array instanceof Array)) {
+    return null
+  }
+
+  let retVal = []
+  for (let idx = 0; idx < array.length; idx += 1) {
+    retVal.push(array[idx][keyAlias])
+  }
+
+  return retVal
+}
 
 /**
  * @param   {String}
@@ -106,5 +118,6 @@ module.exports = {
   classnames,
   queryURL,
   queryArray,
+  stripArray,
   arrayToTree,
 }
