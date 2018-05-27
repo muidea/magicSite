@@ -11,7 +11,7 @@ export default {
     description: '',
     user: [],
     status: 0,
-    accessToken: '',
+    authToken: '',
   },
 
   subscriptions: {

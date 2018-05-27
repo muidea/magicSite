@@ -6,7 +6,7 @@ import { DescriptionList, EditableTagGroup, RadioItemGroup } from '../../../../c
 const { Description } = DescriptionList
 
 const Detail = ({ endpointDetail }) => {
-  const { id, name, description, user, status, accessToken } = endpointDetail
+  const { id, name, description, user, status, authToken } = endpointDetail
 
   const statusItems = [
     { id: 0, name: '启用' },
@@ -22,7 +22,7 @@ const Detail = ({ endpointDetail }) => {
           <Description term="描述">{description}</Description>
           <Description term="用户"><EditableTagGroup readOnly value={user} /></Description>
           <Description term="状态"><RadioItemGroup dataSource={statusItems} value={{ id: status }} disabled /></Description>
-          <Description term="授权码">{accessToken}</Description>
+          <Description term="授权码">{authToken}</Description>
         </DescriptionList>
       </div>
     </div>)
