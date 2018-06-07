@@ -14,15 +14,21 @@ export default class RichEditor extends Component {
 
     autobind(this)
 
+    const curFormat = defaultFormat
+    let curValue = RichTextEditor.createEmptyValue()
+    if (('value' in props) && props.value.length !== 0) {
+      curValue = curValue.setContentFromString(props.value, curFormat)
+    }
+
     this.state = {
-      richValue: RichTextEditor.createEmptyValue(),
-      format: defaultFormat,
+      richValue: curValue,
+      format: curFormat,
       placeholder: props.placeholder,
       editorStyle: props.editorStyle,
     }
 
-    this._onChange = this._onChange.bind(this)
-    this._onChangeSource = this._onChangeSource.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.onChangeSource = this.onChangeSource.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -35,15 +41,15 @@ export default class RichEditor extends Component {
     }
   }
 
-  _onChange (value) {
+  onChange (value) {
     this.setState({ richValue: value })
 
     this.props.onChange(value.toString(this.state.format))
   }
 
-  _onChangeSource (event) {
-    let source = event.target.value
-    let oldValue = this.state.richValue
+  onChangeSource (event) {
+    const source = event.target.value
+    const oldValue = this.state.richValue
 
     this.setState({ richValue: oldValue.setContentFromString(source, this.state.format) })
 
@@ -51,7 +57,7 @@ export default class RichEditor extends Component {
   }
 
   render () {
-    let { richValue, format, placeholder, editorStyle } = this.state
+    const { richValue, format, placeholder, editorStyle } = this.state
 
     return (
       <Tabs type="card">
@@ -61,7 +67,7 @@ export default class RichEditor extends Component {
               toolbarClassName="demo-toolbar"
               editorClassName="demo-editor"
               value={richValue}
-              onChange={this._onChange}
+              onChange={this.onChange}
               placeholder={placeholder}
               editorStyle={editorStyle}
             />
@@ -69,7 +75,7 @@ export default class RichEditor extends Component {
         </TabPane>
         <TabPane tab="Markdown模式" key="markdown">
           <div className="row">
-            <TextArea rows={27} cols={30} value={richValue.toString(format)} onChange={this._onChangeSource} />
+            <TextArea rows={27} cols={30} value={richValue.toString(format)} onChange={this.onChangeSource} />
           </div>
         </TabPane>
         <TabPane tab="预览" key="preView">
