@@ -18,13 +18,13 @@ const Group = ({ location, dispatch, group, loading }) => {
     confirmLoading: loading.effects['group/update'],
     title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'group/saveGroup',
         payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'group/hideModal' })
     },
   }
@@ -34,7 +34,7 @@ const Group = ({ location, dispatch, group, loading }) => {
     loading: loading.effects['group/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -45,13 +45,13 @@ const Group = ({ location, dispatch, group, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'group/deleteGroup',
         payload: id,
       })
     },
-    onEditItem (id) {
+    onEditItem(id) {
       dispatch({
         type: 'group/updateGroup',
         payload: id,
@@ -71,7 +71,7 @@ const Group = ({ location, dispatch, group, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -81,22 +81,26 @@ const Group = ({ location, dispatch, group, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/group',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/group' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length > 0) {
+        dispatch(routerRedux.push({
+          pathname: '/group',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/group' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({
         type: 'group/showModal',
         payload: { modalType: 'create' },
       })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'group/multiDeleteGroup',
         payload: { ids: selectedRowKeys },
