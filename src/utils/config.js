@@ -10,7 +10,7 @@ const SystemInfoApi = '/api/v2/system'
 module.exports = {
   name: 'MagicCenter',
   prefix: 'magicCenter',
-  footerText: 'MagicCenter © 2017 muidea.com',
+  footerText: 'magicCenter © 2017 muidea.com',
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',

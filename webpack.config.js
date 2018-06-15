@@ -17,12 +17,10 @@ module.exports = (webpackConfig, env) => {
         return item
       })
     }
-    webpackConfig.plugins.push(
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false,
-      })
-    )
+    webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }))
   }
 
   webpackConfig.plugins = webpackConfig.plugins.concat([
@@ -35,25 +33,20 @@ module.exports = (webpackConfig, env) => {
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.ejs`,
       filename: production ? '../index.html' : 'index.html',
-      minify: production ? {
-        collapseWhitespace: true,
-      } : null,
+      minify: production ? { collapseWhitespace: true } : null,
       hash: true,
       headScripts: production ? null : ['/roadhog.dll.js'],
     }),
   ])
-
   // Alias
   webpackConfig.resolve.alias = {
     components: `${__dirname}/src/components`,
     utils: `${__dirname}/src/utils`,
     config: `${__dirname}/src/utils/config`,
-    enums: `${__dirname}/src/utils/enums`,
     services: `${__dirname}/src/services`,
     models: `${__dirname}/src/models`,
     routes: `${__dirname}/src/routes`,
     themes: `${__dirname}/src/themes`,
   }
-
   return webpackConfig
 }
