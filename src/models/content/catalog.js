@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog, multiDeleteCatalog } from 'services/content/catalog'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -20,7 +19,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/content/catalog') {
           dispatch({
             type: 'queryAllCatalog',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

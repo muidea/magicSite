@@ -1,6 +1,5 @@
 import modelExtend from 'dva-model-extend'
 import { queryAllArticle, deleteArticle, multiDeleteArticle } from 'services/content/article'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -17,7 +16,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/content/article') {
           dispatch({
             type: 'queryAllArticle',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

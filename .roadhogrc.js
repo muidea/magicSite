@@ -30,28 +30,18 @@ export default {
       extraBabelPlugins: [
         "dva-hmr",
         "transform-runtime",
-        [
-          "import", {
-            "libraryName": "antd",
-            "style": true
-          }
-        ]
+        ["import", { "libraryName": "antd", "style": true }]
       ]
     },
     production: {
       extraBabelPlugins: [
         "transform-runtime",
-        [
-          "import", {
-            "libraryName": "antd",
-            "style": true
-          }
-        ]
+        ["import", { "libraryName": "antd", "style": true }]
       ]
     }
   },
   dllPlugin: {
     exclude: ["babel-runtime", "roadhog", "cross-env"],
-    include: ["dva/router", "dva/saga", "dva/fetch"]
+    include: ["dva/router", "dva/saga"]
   }
 }

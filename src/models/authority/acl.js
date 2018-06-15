@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllAcl, queryAcl, updateAcl, deleteAcl, multiDeleteAcl } from 'services/authority/acl'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -19,7 +18,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/authority/acl') {
           dispatch({
             type: 'queryAllAcl',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

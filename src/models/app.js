@@ -5,7 +5,6 @@ import { routerRedux } from 'dva/router'
 import config from 'config'
 import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
-import queryString from 'query-string'
 
 const { prefix } = config
 
@@ -36,10 +35,7 @@ export default {
       history.listen((location) => {
         dispatch({
           type: 'updateState',
-          payload: {
-            locationPathname: location.pathname,
-            locationQuery: queryString.parse(location.search),
-          },
+          payload: { locationPathname: location.pathname },
         })
       })
     },

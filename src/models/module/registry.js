@@ -1,6 +1,5 @@
 import modelExtend from 'dva-model-extend'
 import { queryAllModule, queryModule } from 'services/module/registry'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -14,7 +13,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/module/registry') {
           dispatch({
             type: 'queryAllModule',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

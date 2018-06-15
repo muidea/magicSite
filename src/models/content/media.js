@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllMedia, queryMedia, createMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -19,7 +18,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/content/media') {
           dispatch({
             type: 'queryAllMedia',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

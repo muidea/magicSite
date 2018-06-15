@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllModule, queryModule, updateModule, deleteModule, multiDeleteModule } from 'services/authority/module'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -20,7 +19,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/authority/module') {
           dispatch({
             type: 'queryAllModule',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

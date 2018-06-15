@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllGroup, queryGroup, createGroup, updateGroup, deleteGroup, multiDeleteGroup } from 'services/account/group'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -20,7 +19,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/account/group') {
           dispatch({
             type: 'queryAllGroup',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })
