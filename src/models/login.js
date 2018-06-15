@@ -7,7 +7,7 @@ export default {
   state: {},
 
   effects: {
-    * login ({ payload }, { put, call }) {
+    * login({ payload }, { put, call }) {
       const data = yield call(login, payload)
       const { errorCode } = data
       if (errorCode === 0) {

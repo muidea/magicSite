@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Card, Row, Col, Button } from 'antd'
 import { Page } from 'components'
-import queryString from 'query-string'
+import qs from 'qs'
 import Modal from './Modal'
 
 
@@ -16,7 +16,7 @@ const ColProps = {
 }
 
 const Config = ({ location, dispatch, config }) => {
-  location.query = queryString.parse(location.search)
+  location.query = qs.parse(location.search)
   const { modalVisible, modalType, systemProperty } = config
   const { name, domain, description, mailServer, mailAccount, mailPassword } = systemProperty
 

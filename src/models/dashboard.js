@@ -11,7 +11,7 @@ export default modelExtend(model, {
     recentAccount: [],
   },
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
         if (pathname === '/dashboard' || pathname === '/') {
           dispatch({ type: 'query' })
@@ -20,7 +20,7 @@ export default modelExtend(model, {
     },
   },
   effects: {
-    * query ({
+    * query({
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)

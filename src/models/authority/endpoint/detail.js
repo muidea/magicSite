@@ -15,7 +15,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/authority/endpoint/view/:id').exec(location.pathname)
         if (match) {
@@ -29,7 +29,7 @@ export default {
   },
 
   effects: {
-    * queryEndpoint ({ payload }, { call, put, select }) {
+    * queryEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryEndpoint, { authToken, ...payload })
       const { success, message, status, ...other } = data

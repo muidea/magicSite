@@ -14,7 +14,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/authority/acl/view/:id').exec(location.pathname)
         if (match) {
@@ -25,10 +25,10 @@ export default {
   },
 
   effects: {
-    * queryAcl ({ payload }, { call, put, select }) {
+    * queryAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAcl, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryAclSuccess',
@@ -41,7 +41,7 @@ export default {
   },
 
   reducers: {
-    queryAclSuccess (state, { payload }) {
+    queryAclSuccess(state, { payload }) {
       const { data } = payload
       const { acl } = data
 

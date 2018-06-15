@@ -2,6 +2,7 @@
 /* global document */
 /* global location */
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import config from 'config'
 import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
@@ -31,7 +32,7 @@ export default {
     locationQuery: {},
   },
   subscriptions: {
-    setupHistory ({ dispatch, history }) {
+    setupHistory({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
           type: 'updateState',
@@ -40,7 +41,7 @@ export default {
       })
     },
 
-    setup ({ dispatch }) {
+    setup({ dispatch }) {
       dispatch({ type: 'query' })
       let tid
       window.onresize = () => {
@@ -54,7 +55,7 @@ export default {
   },
 
   effects: {
-    * query ({ payload }, { call, put, select }) {
+    * query({ payload }, { call, put, select }) {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
       if (data.errorCode === 0) {
@@ -78,12 +79,12 @@ export default {
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({
           pathname: '/login',
-          search: queryString.stringify({ from: locationPathname }),
+          search: qs.stringify({ from: locationPathname }),
         }))
       }
     },
 
-    * logout ({ payload }, { call, put, select }) {
+    * logout({ payload }, { call, put, select }) {
       const { sessionID, authToken } = yield select(_ => _.app)
       const data = yield call(logout, { sessionID, authToken, ...payload })
       if (data.success) {
@@ -94,7 +95,7 @@ export default {
       }
     },
 
-    * changeNavbar (action, { put, select }) {
+    * changeNavbar(action, { put, select }) {
       const { app } = yield (select(_ => _))
       const isNavbar = document.body.clientWidth < 769
       if (isNavbar !== app.isNavbar) {
@@ -105,7 +106,7 @@ export default {
   },
 
   reducers: {
-    updateState (state, { payload }) {
+    updateState(state, { payload }) {
       const { sessionID, authToken } = payload
 
       if (sessionID && authToken) {
@@ -119,7 +120,7 @@ export default {
       }
     },
 
-    clearStatus (state) {
+    clearStatus(state) {
       window.localStorage.removeItem(`${prefix}SessionID`)
       window.localStorage.removeItem(`${prefix}AuthToken`)
 
@@ -132,7 +133,7 @@ export default {
       }
     },
 
-    switchSider (state) {
+    switchSider(state) {
       window.localStorage.setItem(`${prefix}siderFold`, !state.siderFold)
       return {
         ...state,
@@ -140,7 +141,7 @@ export default {
       }
     },
 
-    switchTheme (state) {
+    switchTheme(state) {
       window.localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
       return {
         ...state,
@@ -148,21 +149,21 @@ export default {
       }
     },
 
-    switchMenuPopver (state) {
+    switchMenuPopver(state) {
       return {
         ...state,
         menuPopoverVisible: !state.menuPopoverVisible,
       }
     },
 
-    handleNavbar (state, { payload }) {
+    handleNavbar(state, { payload }) {
       return {
         ...state,
         isNavbar: payload,
       }
     },
 
-    handleNavOpenKeys (state, { payload: navOpenKeys }) {
+    handleNavOpenKeys(state, { payload: navOpenKeys }) {
       return {
         ...state,
         ...navOpenKeys,

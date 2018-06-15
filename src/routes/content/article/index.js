@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import { Page } from 'components'
-import queryString from 'query-string'
+import qs from 'qs'
 import List from './List'
 import Filter from './Filter'
 
 const Article = ({ location, dispatch, article, loading }) => {
-  location.query = queryString.parse(location.search)
+  location.query = qs.parse(location.search)
   const { list, pagination, selectedRowKeys } = article
   const { pageSize } = pagination
 
@@ -21,7 +21,7 @@ const Article = ({ location, dispatch, article, loading }) => {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        search: queryString.stringify({
+        search: qs.stringify({
           ...query,
           page: page.current,
           pageSize: page.pageSize,

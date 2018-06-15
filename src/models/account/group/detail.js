@@ -12,7 +12,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/account/group/view/:id').exec(location.pathname)
         if (match) {
@@ -23,10 +23,10 @@ export default {
   },
 
   effects: {
-    * queryGroup ({ payload }, { call, put, select }) {
+    * queryGroup({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryGroup, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryGroupSuccess',
@@ -39,7 +39,7 @@ export default {
   },
 
   reducers: {
-    queryGroupSuccess (state, { payload }) {
+    queryGroupSuccess(state, { payload }) {
       const { data } = payload
       const { group } = data
 
