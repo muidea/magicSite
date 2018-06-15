@@ -1,4 +1,3 @@
-import queryString from 'query-string'
 import { querySystemInfo, updateSystemInfo } from 'services/system/config'
 
 export default {
@@ -6,8 +5,7 @@ export default {
   state: {
     modalVisible: false,
     modalType: 'updateSite',
-    systemProperty: {
-    },
+    systemProperty: { },
   },
 
   subscriptions: {
@@ -16,7 +14,7 @@ export default {
         if (location.pathname === '/system/info') {
           dispatch({
             type: 'querySystemInfo',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })
@@ -25,9 +23,7 @@ export default {
   },
 
   effects: {
-    * querySystemInfo ({
-      payload,
-    }, { call, put, select }) {
+    * querySystemInfo ({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(querySystemInfo, { authToken, ...payload })
       const { success, message, status, ...other } = data
@@ -52,9 +48,7 @@ export default {
           type: 'refreshSystemInfo',
           payload: other,
         })
-        yield put({
-          type: 'hideModal',
-        })
+        yield put({ type: 'hideModal' })
       } else {
         throw data
       }

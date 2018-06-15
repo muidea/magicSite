@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllLink, queryLink, createLink, updateLink, deleteLink, multiDeleteLink } from 'services/content/link'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -20,7 +19,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/content/link') {
           dispatch({
             type: 'queryAllLink',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

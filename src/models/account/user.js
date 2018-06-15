@@ -2,7 +2,6 @@ import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllUser, queryUser, createUser, deleteUser, multiDeleteUser } from 'services/account/user'
 import { queryAllGroup } from 'services/account/group'
-import queryString from 'query-string'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -22,7 +21,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/account/user') {
           dispatch({
             type: 'queryAllUser',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })

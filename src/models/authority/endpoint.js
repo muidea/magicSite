@@ -2,7 +2,6 @@ import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { queryAllEndpoint, queryEndpoint, createEndpoint, updateEndpoint, deleteEndpoint } from 'services/authority/endpoint'
 import { queryAllUser } from 'services/account/user'
-import queryString from 'query-string'
 import { stripArray } from 'utils'
 import { pageModel } from '../common'
 
@@ -23,7 +22,7 @@ export default modelExtend(pageModel, {
         if (location.pathname === '/authority/endpoint') {
           dispatch({
             type: 'queryAllEndpoint',
-            payload: queryString.parse(location.search),
+            payload: {},
           })
         }
       })
