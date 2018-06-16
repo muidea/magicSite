@@ -14,7 +14,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/content/article/view/:id').exec(location.pathname)
         if (match) {
@@ -25,12 +25,12 @@ export default {
   },
 
   effects: {
-    * queryArticle ({
+    * queryArticle({
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryArticle, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryArticleSuccess',
@@ -45,7 +45,7 @@ export default {
   },
 
   reducers: {
-    queryArticleSuccess (state, { payload }) {
+    queryArticleSuccess(state, { payload }) {
       const { article } = payload
       const { name, content, catalog, creater, createDate } = article
 

@@ -16,7 +16,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/content/catalog/view/:id').exec(location.pathname)
         if (match) {
@@ -27,10 +27,10 @@ export default {
   },
 
   effects: {
-    * queryCatalog ({ payload }, { call, put, select }) {
+    * queryCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const catalogResult = yield call(queryCatalog, { authToken, ...payload })
-      const { success, message, status, ...other } = catalogResult
+      const { success, ...other } = catalogResult
       if (success) {
         const { catalog } = other
         const { id } = catalog
@@ -50,7 +50,7 @@ export default {
   },
 
   reducers: {
-    queryCatalogSuccess (state, { payload }) {
+    queryCatalogSuccess(state, { payload }) {
       const { data, summary } = payload
       const { catalog } = data
 

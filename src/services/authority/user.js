@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { authUser, authUsers } = api
 
-export async function queryAllUser (params) {
+export async function queryAllUser(params) {
   return request({
     url: authUsers,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllUser (params) {
   })
 }
 
-export async function queryUser (params) {
+export async function queryUser(params) {
   return request({
     url: authUser,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryUser (params) {
   })
 }
 
-export async function createUser (params) {
+export async function createUser(params) {
   return request({
     url: authUser.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createUser (params) {
   })
 }
 
-export async function deleteUser (params) {
+export async function deleteUser(params) {
   return request({
     url: authUser,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteUser (params) {
   })
 }
 
-export async function multiDeleteUser (params) {
+export async function multiDeleteUser(params) {
   return request({
     url: authUsers,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteUser (params) {
   })
 }
 
-export async function updateUser (params) {
+export async function updateUser(params) {
   return request({
     url: authUser,
     method: 'put',

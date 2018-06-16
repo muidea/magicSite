@@ -43,7 +43,7 @@ const Menus = ({ siderFold, darkTheme, handleClickNavMenu, navOpenKeys, changeOp
 
   // 保持选中
   const getAncestorKeys = (key) => {
-    let map = {}
+    const map = {}
     const getParent = (index) => {
       const result = [String(levelMap[index])]
       if (levelMap[result[0]]) {
@@ -51,7 +51,7 @@ const Menus = ({ siderFold, darkTheme, handleClickNavMenu, navOpenKeys, changeOp
       }
       return result
     }
-    for (let index in levelMap) {
+    for (const index in levelMap) {
       if ({}.hasOwnProperty.call(levelMap, index)) {
         map[index] = getParent(index)
       }
@@ -72,7 +72,7 @@ const Menus = ({ siderFold, darkTheme, handleClickNavMenu, navOpenKeys, changeOp
     changeOpenKeys(nextOpenKeys)
   }
 
-  let menuProps = !siderFold ? {
+  const menuProps = !siderFold ? {
     onOpenChange,
     openKeys: navOpenKeys,
   } : {}
@@ -81,14 +81,14 @@ const Menus = ({ siderFold, darkTheme, handleClickNavMenu, navOpenKeys, changeOp
   // 寻找选中路由
   let currentMenu
   let defaultSelectedKeys
-  for (let item of menu) {
+  for (const item of menu) {
     if (item.route && pathToRegexp(item.route).exec(location.pathname)) {
       currentMenu = item
       break
     }
   }
   const getPathArray = (array, current, pid, id) => {
-    let result = [String(current[id])]
+    const result = [String(current[id])]
     const getPath = (item) => {
       if (item && item[pid]) {
         result.unshift(String(item[pid]))

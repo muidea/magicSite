@@ -21,7 +21,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/authority/user/edit/:id').exec(location.pathname)
         if (match) {
@@ -35,10 +35,10 @@ export default {
   },
 
   effects: {
-    * queryUser ({ payload }, { call, put, select }) {
+    * queryUser({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryUser, { authToken, ...payload })
-      const { success, message, status, ...other } = result
+      const { success, ...other } = result
       if (success) {
         const moduleResult = yield call(queryAllModule, { authToken })
         const { module } = moduleResult
@@ -51,10 +51,10 @@ export default {
       }
     },
 
-    * submitModuleAuthGroup ({ payload }, { call, put, select }) {
+    * submitModuleAuthGroup({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { id, moduleAuthGroup } = payload
-      let modAuthGroupList = []
+      const modAuthGroupList = []
       if (moduleAuthGroup !== null && moduleAuthGroup !== undefined) {
         for (let idx = 0; idx < moduleAuthGroup.length; idx += 1) {
           const item = moduleAuthGroup[idx]
@@ -72,7 +72,7 @@ export default {
   },
 
   reducers: {
-    moveToStep (state, { payload }) {
+    moveToStep(state, { payload }) {
       const { currentStep } = payload
       return {
         ...state,
@@ -80,7 +80,7 @@ export default {
       }
     },
 
-    updateTempModuleAuthGroupInfo (state, { payload }) {
+    updateTempModuleAuthGroupInfo(state, { payload }) {
       const { currentTempModuleAuthGroup } = payload
       return {
         ...state,
@@ -88,7 +88,7 @@ export default {
       }
     },
 
-    completeModuleAuthGroup (state, { payload }) {
+    completeModuleAuthGroup(state, { payload }) {
       const { moduleAuthGroup } = state
       const { currentTempModuleAuthGroup, currentStep } = payload
       const { module, authGroup } = currentTempModuleAuthGroup
@@ -114,7 +114,7 @@ export default {
       }
     },
 
-    queryUserSuccess (state, { payload }) {
+    queryUserSuccess(state, { payload }) {
       const { data, module, currentStep } = payload
       const { user } = data
       const { moduleAuthGroup } = user
@@ -129,7 +129,7 @@ export default {
       }
     },
 
-    submitModuleAuthGroupResult (state, { payload }) {
+    submitModuleAuthGroupResult(state, { payload }) {
       const { result } = payload
       let { currentStep } = state
 

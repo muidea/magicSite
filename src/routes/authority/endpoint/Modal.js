@@ -49,7 +49,7 @@ const modal = ({
           {getFieldDecorator('id', {
             initialValue: item.id,
             rules: [{ required: true }],
-         })(<Input />)}
+          })(<Input />)}
         </FormItem>
         <FormItem label="名称" {...formItemLayout}>
           {getFieldDecorator('name', {

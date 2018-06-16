@@ -17,13 +17,13 @@ const Media = ({ location, dispatch, media, loading }) => {
     confirmLoading: loading.effects['media/update'],
     title: '新增文件',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'media/saveMedia',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'media/hideModal' })
     },
   }
@@ -33,7 +33,7 @@ const Media = ({ location, dispatch, media, loading }) => {
     loading: loading.effects['media/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -44,7 +44,7 @@ const Media = ({ location, dispatch, media, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'media/deleteMedia',
         payload: id,
@@ -64,7 +64,7 @@ const Media = ({ location, dispatch, media, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -74,19 +74,23 @@ const Media = ({ location, dispatch, media, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/media',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/media' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/media',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/media' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({ type: 'media/showModal' })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'media/multiDeleteMedia',
         payload: { ids: selectedRowKeys },

@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { link, links } = api
 
-export async function queryAllLink (params) {
+export async function queryAllLink(params) {
   return request({
     url: links,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllLink (params) {
   })
 }
 
-export async function queryLink (params) {
+export async function queryLink(params) {
   return request({
     url: link,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryLink (params) {
   })
 }
 
-export async function createLink (params) {
+export async function createLink(params) {
   return request({
     url: link.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createLink (params) {
   })
 }
 
-export async function deleteLink (params) {
+export async function deleteLink(params) {
   return request({
     url: link,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteLink (params) {
   })
 }
 
-export async function multiDeleteLink (params) {
+export async function multiDeleteLink(params) {
   return request({
     url: links,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteLink (params) {
   })
 }
 
-export async function updateLink (params) {
+export async function updateLink(params) {
   return request({
     url: link,
     method: 'put',

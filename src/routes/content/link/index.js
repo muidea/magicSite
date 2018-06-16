@@ -17,13 +17,13 @@ const Link = ({ location, dispatch, link, loading }) => {
     confirmLoading: loading.effects['link/update'],
     title: `${modalType === 'create' ? '新建链接' : '修改链接'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'link/saveLink',
         payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'link/hideModal' })
     },
   }
@@ -33,7 +33,7 @@ const Link = ({ location, dispatch, link, loading }) => {
     loading: loading.effects['link/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -44,13 +44,13 @@ const Link = ({ location, dispatch, link, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'link/deleteLink',
         payload: id,
       })
     },
-    onEditItem (id) {
+    onEditItem(id) {
       dispatch({
         type: 'link/updateLink',
         payload: id,
@@ -70,7 +70,7 @@ const Link = ({ location, dispatch, link, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -80,22 +80,26 @@ const Link = ({ location, dispatch, link, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/link',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/link' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/link',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/link' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({
         type: 'link/showModal',
         payload: { modalType: 'create' },
       })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'link/multiDeleteLink',
         payload: { ids: selectedRowKeys },

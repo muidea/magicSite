@@ -31,58 +31,58 @@ const internalUserList = [
 ]
 
 Mock.Random.extend({
-  moduleInfo () {
+  moduleInfo() {
     return this.pick(internalModuleList)
   },
-  methodInfo () {
+  methodInfo() {
     return this.pick(internalMethodList)
   },
-  authGroupInfo () {
+  authGroupInfo() {
     return this.pick(internalAuthGroupList)
   },
-  userInfo () {
+  userInfo() {
     return this.shuffle(internalUserList)
   },
-  userModuleInfo () {
+  userModuleInfo() {
     return this.shuffle(internalModuleList)
   },
 })
 
-let authorityAclsListData = Mock.mock({
+const authorityAclsListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
       url: '@url',
-      method () { return Mock.Random.methodInfo() },
-      module () { return Mock.Random.moduleInfo() },
-      authgroup () { return Mock.Random.authGroupInfo() },
+      method() { return Mock.Random.methodInfo() },
+      module() { return Mock.Random.moduleInfo() },
+      authgroup() { return Mock.Random.authGroupInfo() },
     },
   ],
 })
 
-let authorityModulesListData = Mock.mock({
+const authorityModulesListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
       name: '@cname',
-      user () { return Mock.Random.userInfo() },
+      user() { return Mock.Random.userInfo() },
     },
   ],
 })
 
-let authorityUsersListData = Mock.mock({
+const authorityUsersListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
       account: '@name',
-      module () { return Mock.Random.userModuleInfo() },
+      module() { return Mock.Random.userModuleInfo() },
     },
   ],
 })
 
 let authorityAclDataBase = authorityAclsListData.data
 let authorityModuleDataBase = authorityModulesListData.data
-let authorityUserDataBase = authorityUsersListData.data
+const authorityUserDataBase = authorityUsersListData.data
 
 // 查询指定的对象
 const queryArray = (array, key, keyAlias = 'key') => {
@@ -91,7 +91,7 @@ const queryArray = (array, key, keyAlias = 'key') => {
   }
   let data
 
-  for (let item of array) {
+  for (const item of array) {
     if (item[keyAlias] === key) {
       data = item
       break
@@ -110,14 +110,14 @@ const NOTFOUND = {
 }
 
 module.exports = {
-  [`GET ${apiPrefix}/authority/acls`] (req, res) {
+  [`GET ${apiPrefix}/authority/acls`](req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
     page = page || 1
 
     let newData = authorityAclDataBase
-    for (let key in other) {
+    for (const key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
           if ({}.hasOwnProperty.call(item, key)) {
@@ -134,7 +134,7 @@ module.exports = {
     })
   },
 
-  [`POST ${apiPrefix}/authority/acl`] (req, res) {
+  [`POST ${apiPrefix}/authority/acl`](req, res) {
     const newData = req.body
 
     const authgroup = queryArray(internalAuthGroupList, newData.authgroup, 'id')

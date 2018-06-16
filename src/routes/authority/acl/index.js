@@ -17,13 +17,13 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     confirmLoading: loading.effects['acl/update'],
     title: '更新ACL',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'acl/saveAcl',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'acl/hideModal' })
     },
   }
@@ -33,7 +33,7 @@ const Acl = ({ location, dispatch, acl, loading }) => {
     loading: loading.effects['acl/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -44,13 +44,13 @@ const Acl = ({ location, dispatch, acl, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'acl/deleteAcl',
         payload: id,
       })
     },
-    onEditItem (id) {
+    onEditItem(id) {
       dispatch({
         type: 'acl/updateAcl',
         payload: id,
@@ -70,7 +70,7 @@ const Acl = ({ location, dispatch, acl, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -80,22 +80,26 @@ const Acl = ({ location, dispatch, acl, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/acl',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/acl' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/acl',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/acl' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({
         type: 'acl/showModal',
         payload: { modalType: 'create' },
       })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'acl/multiDeleteACL',
         payload: { ids: selectedRowKeys },

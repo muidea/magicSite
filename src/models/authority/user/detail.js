@@ -14,7 +14,7 @@ export default {
     moduleAuthGroup: [],
   },
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/authority/user/view/:id').exec(location.pathname)
         if (match) {
@@ -25,10 +25,10 @@ export default {
   },
 
   effects: {
-    * queryUser ({ payload }, { call, put, select }) {
+    * queryUser({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryUser, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
 
       if (success) {
         yield put({
@@ -42,7 +42,7 @@ export default {
   },
 
   reducers: {
-    queryUserSuccess (state, { payload }) {
+    queryUserSuccess(state, { payload }) {
       const { data } = payload
       const { user } = data
 

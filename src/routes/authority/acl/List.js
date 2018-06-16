@@ -8,7 +8,7 @@ import { DropOption, Status } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
+const List = ({ onEditItem, onDeleteItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record.id)
@@ -16,7 +16,7 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
     if (e.key === '2') {
       confirm({
         title: '确认删除分组?',
-        onOk () {
+        onOk() {
           onDeleteItem(record.id)
         },
       })
@@ -38,7 +38,7 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
     }, {
       title: '状态',
       dataIndex: 'status',
-      render (record) {
+      render(record) {
         return <Status value={record} />
       },
     }, {

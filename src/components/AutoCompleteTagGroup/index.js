@@ -4,7 +4,7 @@ import { Tag, Tooltip, Icon } from 'antd'
 import AutoCompleteSelect from '../AutoCompleteSelect'
 
 export default class AutoCompleteTagGroup extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if ('dataSource' in props) {
@@ -24,7 +24,7 @@ export default class AutoCompleteTagGroup extends Component {
     inputValue: {},
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       const { value } = nextProps
       this.setState({ value })
@@ -63,7 +63,7 @@ export default class AutoCompleteTagGroup extends Component {
 
     let { value } = this.state
     let exitFlag = false
-    for (let item of value) {
+    for (const item of value) {
       if (item.id === inputValue.id) {
         exitFlag = true
         break
@@ -89,7 +89,7 @@ export default class AutoCompleteTagGroup extends Component {
     this.input = input
   }
 
-  render () {
+  render() {
     const { value, inputVisible, inputValue } = this.state
     const { dataSource } = this.props
     return (

@@ -8,14 +8,14 @@ import { DropOption } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onDeleteItem, onEditItem, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record.id)
     } else if (e.key === '2') {
       confirm({
         title: '确认删除分组?',
-        onOk () {
+        onOk() {
           onDeleteItem(record.id)
         },
       })

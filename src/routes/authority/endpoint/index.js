@@ -18,16 +18,20 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
     confirmLoading: loading.effects['endpoint/update'],
     title: modalType === 'create' ? '新建Endpoint' : '更新Endpoint',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
-      modalType === 'create' ? dispatch({
-        type: 'endpoint/createEndpoint',
-        payload: { data: { ...data } },
-      }) : dispatch({
-        type: 'endpoint/updateEndpoint',
-        payload: { data: { id: currentItem.id, ...data } },
-      })
+    onOk(data) {
+      if (modalType === 'create') {
+        dispatch({
+          type: 'endpoint/createEndpoint',
+          payload: { data: { ...data } },
+        })
+      } else {
+        dispatch({
+          type: 'endpoint/updateEndpoint',
+          payload: { data: { id: currentItem.id, ...data } },
+        })
+      }
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'endpoint/hideModal' })
     },
   }
@@ -37,7 +41,7 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
     loading: loading.effects['endpoint/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -48,10 +52,10 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
         },
       }))
     },
-    onEditItem (item) {
+    onEditItem(item) {
       dispatch({ type: 'endpoint/showModal', payload: { currentItem: item, modalType: 'update' } })
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({ type: 'endpoint/deleteEndpoint', payload: { id } })
     },
     rowSelection: {
@@ -68,7 +72,7 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -78,16 +82,20 @@ const Endpoint = ({ location, dispatch, endpoint, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/endpoint',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/endpoint' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/endpoint',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/endpoint' }))
+      }
     },
-    onAddItem () {
+    onAddItem() {
       dispatch({ type: 'endpoint/showModal', payload: { currentItem, modalType: 'create' } })
     },
   }

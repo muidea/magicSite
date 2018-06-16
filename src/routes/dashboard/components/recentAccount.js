@@ -23,7 +23,7 @@ const status = {
   },
 }
 
-function RecentAccount ({ data }) {
+function RecentAccount({ data }) {
   const columns = [
     {
       title: 'NAME',

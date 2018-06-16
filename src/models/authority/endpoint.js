@@ -17,7 +17,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/authority/endpoint') {
           dispatch({
@@ -30,7 +30,7 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllEndpoint ({ payload = {} }, { call, put, select }) {
+    * queryAllEndpoint({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryAllEndpoint, { authToken })
       if (result.success) {
@@ -61,7 +61,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryEndpoint ({ payload }, { call, put, select }) {
+    * queryEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryEndpoint, { ...payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.endpoint)
@@ -73,7 +73,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * createEndpoint ({ payload }, { call, put, select }) {
+    * createEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
       const { user, status } = data
@@ -87,7 +87,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateEndpoint ({ payload }, { call, put, select }) {
+    * updateEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
       const { user, status } = data
@@ -101,7 +101,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteEndpoint ({ payload }, { call, put, select }) {
+    * deleteEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteEndpoint, { ...payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.endpoint)
@@ -115,15 +115,15 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
-    updateUserList (state, { payload }) {
+    updateUserList(state, { payload }) {
       return { ...state, ...payload }
     },
 
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: '', name: '', description: '', user: [], state: 0 }, modalVisible: false }
     },
   },

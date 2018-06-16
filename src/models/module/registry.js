@@ -8,7 +8,7 @@ export default modelExtend(pageModel, {
   state: { selectedRowKeys: [] },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/module/registry') {
           dispatch({
@@ -22,7 +22,7 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllModule ({ payload = {} }, { call, put, select }) {
+    * queryAllModule({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryAllModule, { authToken })
       if (result.success) {
@@ -48,7 +48,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryModule ({ payload }, { call, put, select }) {
+    * queryModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryModule, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.user)

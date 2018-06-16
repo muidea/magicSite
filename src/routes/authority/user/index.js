@@ -17,13 +17,13 @@ const User = ({ location, dispatch, user, loading }) => {
     confirmLoading: loading.effects['user/update'],
     title: '更新用户信息',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'user/saveUser',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'user/hideModal' })
     },
   }
@@ -33,7 +33,7 @@ const User = ({ location, dispatch, user, loading }) => {
     loading: loading.effects['user/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -44,13 +44,13 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onEditItemAuthGroup (id) {
+    onEditItemAuthGroup(id) {
       dispatch({
         type: 'user/updateUserAuthGroup',
         payload: id,
       })
     },
-    onAddItemAuthGroup (id) {
+    onAddItemAuthGroup(id) {
       dispatch(routerRedux.push({ pathname: `/authority/user/edit/${id}` }))
     },
     rowSelection: {
@@ -67,7 +67,7 @@ const User = ({ location, dispatch, user, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -77,14 +77,18 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/user',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/user' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/user',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/user' }))
+      }
     },
   }
 

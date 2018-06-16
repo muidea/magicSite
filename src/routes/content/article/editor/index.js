@@ -102,7 +102,6 @@ ArticleEditor.propTypes = {
   dispatch: PropTypes.func,
   articleEditor: PropTypes.object,
   form: PropTypes.object,
-  loading: PropTypes.bool,
 }
 
-export default connect(({ articleEditor, loading }) => ({ articleEditor, loading: loading.models.articleEditor }))(Form.create()(ArticleEditor))
+export default connect(({ articleEditor }) => ({ articleEditor }))(Form.create()(ArticleEditor))

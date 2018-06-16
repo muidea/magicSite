@@ -14,7 +14,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/link') {
           dispatch({
@@ -28,7 +28,7 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllLink ({ payload = {} }, { call, put, select }) {
+    * queryAllLink({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllLink, { authToken })
       if (data) {
@@ -52,7 +52,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryLink ({ payload }, { call, put, select }) {
+    * queryLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryLink, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.link)
@@ -64,7 +64,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateLink ({ payload }, { call, put, select }) {
+    * updateLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryLink, { id: payload, authToken })
       if (result.success) {
@@ -75,7 +75,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * saveLink ({ payload }, { call, put, select }) {
+    * saveLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { action, data } = payload
       const result = yield call(action === 'create' ? createLink : updateLink, { authToken, ...data })
@@ -87,7 +87,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteLink ({ payload }, { call, put, select }) {
+    * deleteLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteLink, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.link)
@@ -99,7 +99,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteLink ({ payload }, { call, put }) {
+    * multiDeleteLink({ payload }, { call, put }) {
       const data = yield call(multiDeleteLink, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
@@ -111,11 +111,11 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: -1, name: '', description: '', url: '', logo: '', catalog: [] }, modalVisible: false }
     },
   },

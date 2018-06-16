@@ -11,12 +11,12 @@ const internalGroupList = [
 ]
 
 Mock.Random.extend({
-  groupInfo () {
+  groupInfo() {
     return this.pick(internalGroupList)
   },
 })
 
-let accountUsersListData = Mock.mock({
+const accountUsersListData = Mock.mock({
   'data|10-30': [
     {
       id: '@id',
@@ -24,12 +24,12 @@ let accountUsersListData = Mock.mock({
       password: '@word',
       nickName: '@name',
       email: '@email',
-      group () { return Mock.Random.groupInfo() },
+      group() { return Mock.Random.groupInfo() },
     },
   ],
 })
 
-let accountGroupListData = Mock.mock({
+const accountGroupListData = Mock.mock({
   'data|3-5': [
     {
       id: '@id',
@@ -41,7 +41,7 @@ let accountGroupListData = Mock.mock({
 })
 
 const constructGroupDataBase = (database) => {
-  for (let item of internalGroupList) {
+  for (const item of internalGroupList) {
     database.push(item)
   }
 
@@ -60,7 +60,7 @@ const queryArray = (array, key, keyAlias = 'key') => {
   }
   let data
 
-  for (let item of array) {
+  for (const item of array) {
     if (item[keyAlias] === key) {
       data = item
       break
@@ -79,14 +79,14 @@ const NOTFOUND = {
 }
 
 module.exports = {
-  [`GET ${apiPrefix}/account/users`] (req, res) {
+  [`GET ${apiPrefix}/account/users`](req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10
     page = page || 1
 
     let newData = accountUserDataBase
-    for (let key in other) {
+    for (const key in other) {
       if ({}.hasOwnProperty.call(other, key)) {
         newData = newData.filter((item) => {
           if ({}.hasOwnProperty.call(item, key)) {
@@ -103,14 +103,14 @@ module.exports = {
     })
   },
 
-  [`DELETE ${apiPrefix}/account/users`] (req, res) {
+  [`DELETE ${apiPrefix}/account/users`](req, res) {
     const { ids } = req.body
     accountUserDataBase = accountUserDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/account/user`] (req, res) {
+  [`POST ${apiPrefix}/account/user`](req, res) {
     const newData = req.body
 
     const newUser = { id: Mock.mock('@id'), account: newData.account, password: newData.password, email: newData.email, group: newData.group }
@@ -121,7 +121,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/account/user/:id`] (req, res) {
+  [`GET ${apiPrefix}/account/user/:id`](req, res) {
     const { id } = req.params
     const data = queryArray(accountUserDataBase, id, 'id')
     if (data) {
@@ -132,7 +132,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/account/user/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/account/user/:id`](req, res) {
     const { id } = req.params
     const data = queryArray(accountUserDataBase, id, 'id')
     if (data) {
@@ -143,7 +143,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/account/user/:id`] (req, res) {
+  [`PUT ${apiPrefix}/account/user/:id`](req, res) {
     const { id } = req.params
     let isExist = false
 
@@ -167,27 +167,27 @@ module.exports = {
     }
   },
 
-  [`GET ${apiPrefix}/account/groups`] (req, res) {
+  [`GET ${apiPrefix}/account/groups`](req, res) {
     const { query } = req
     let { pageSize, page } = query
     pageSize = pageSize || 10
     page = page || 1
 
-    let newData = accountGroupDataBase
+    const newData = accountGroupDataBase
     res.status(200).json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
     })
   },
 
-  [`DELETE ${apiPrefix}/account/groups`] (req, res) {
+  [`DELETE ${apiPrefix}/account/groups`](req, res) {
     const { ids } = req.body
     accountGroupDataBase = accountGroupDataBase.filter(item => !ids.some(_ => _ === item.id))
     res.status(204).end()
   },
 
 
-  [`POST ${apiPrefix}/account/group`] (req, res) {
+  [`POST ${apiPrefix}/account/group`](req, res) {
     const newData = req.body
     const newCatalog = { id: Mock.mock('@id'), name: newData.name, description: newData.description, catalog: newData.catalog }
     newCatalog.avatar = newCatalog.avatar || Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', newCatalog.name.substr(0, 1))
@@ -197,7 +197,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/account/group/:id`] (req, res) {
+  [`GET ${apiPrefix}/account/group/:id`](req, res) {
     const { id } = req.params
     const data = queryArray(accountGroupDataBase, id, 'id')
     if (data) {
@@ -208,7 +208,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/account/group/:id`] (req, res) {
+  [`DELETE ${apiPrefix}/account/group/:id`](req, res) {
     const { id } = req.params
     const data = queryArray(accountGroupDataBase, id, 'id')
     if (data) {
@@ -219,7 +219,7 @@ module.exports = {
     }
   },
 
-  [`PUT ${apiPrefix}/account/group/:id`] (req, res) {
+  [`PUT ${apiPrefix}/account/group/:id`](req, res) {
     const { id } = req.params
     let isExist = false
 

@@ -5,11 +5,8 @@ import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
 
 const fetch = (options) => {
-  let {
-    method = 'get',
-    data,
-    url,
-  } = options
+  const { method = 'get', data } = options
+  let { url } = options
 
   const cloneData = lodash.cloneDeep(data)
 
@@ -21,7 +18,7 @@ const fetch = (options) => {
     }
     const match = pathToRegexp.parse(url)
     url = pathToRegexp.compile(url)(data)
-    for (let item of match) {
+    for (const item of match) {
       if (item instanceof Object && item.name in cloneData) {
         delete cloneData[item.name]
       }
@@ -47,7 +44,7 @@ const fetch = (options) => {
   }
 }
 
-export default function request (options) {
+const request = (options) => {
   if (options.url && options.url.indexOf('//') > -1) {
     const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`
     if (window.location.origin !== origin) {
@@ -58,7 +55,8 @@ export default function request (options) {
   if (options.url) {
     if (options.data) {
       const { id, authToken } = options.data
-      let { url, method } = options
+      const { method } = options
+      let { url } = options
       if (id !== undefined && (method !== 'post')) {
         delete options.data.id
         url = url.replace(':id', id)
@@ -106,7 +104,9 @@ export default function request (options) {
       msg = error.message || 'Network Error'
     }
 
-    let val = { success: false, statusCode, message: msg }
+    const val = { success: false, statusCode, message: msg }
     return Promise.reject(val)
   })
 }
+
+export default request

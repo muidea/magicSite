@@ -13,7 +13,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/authority/acl') {
           dispatch({
@@ -27,7 +27,7 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllAcl ({ payload = {} }, { call, put, select }) {
+    * queryAllAcl({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllAcl, { authToken })
       if (data) {
@@ -51,7 +51,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryAcl ({ payload }, { call, put, select }) {
+    * queryAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryAcl, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.acl)
@@ -63,7 +63,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateAcl ({ payload }, { call, put, select }) {
+    * updateAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryAcl, { id: payload, authToken })
       if (result.success) {
@@ -74,7 +74,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * saveAcl ({ payload }, { call, put, select }) {
+    * saveAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
       const result = yield call(updateAcl, { authToken, ...data })
@@ -86,7 +86,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteAcl ({ payload }, { call, put, select }) {
+    * deleteAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteAcl, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.acl)
@@ -98,7 +98,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteAcl ({ payload }, { call, put }) {
+    * multiDeleteAcl({ payload }, { call, put }) {
       const data = yield call(multiDeleteAcl, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
@@ -110,11 +110,11 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: -1, url: '', method: '', module: {}, authGroup: {}, state: 0 }, modalVisible: false }
     },
   },

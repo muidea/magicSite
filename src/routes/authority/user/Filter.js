@@ -37,7 +37,7 @@ const Filter = ({
 
   const handleReset = () => {
     const fields = getFieldsValue()
-    for (let item in fields) {
+    for (const item in fields) {
       if ({}.hasOwnProperty.call(fields, item)) {
         if (fields[item] instanceof Array) {
           fields[item] = []
@@ -84,7 +84,6 @@ const Filter = ({
 Filter.propTypes = {
   selectedRowKeys: PropTypes.array,
   onDeleteItems: PropTypes.func,
-  onAdd: PropTypes.func,
   form: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,

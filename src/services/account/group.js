@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { group, groups } = api
 
-export async function queryAllGroup (params) {
+export async function queryAllGroup(params) {
   return request({
     url: groups,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllGroup (params) {
   })
 }
 
-export async function queryGroup (params) {
+export async function queryGroup(params) {
   return request({
     url: group,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryGroup (params) {
   })
 }
 
-export async function createGroup (params) {
+export async function createGroup(params) {
   return request({
     url: group.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createGroup (params) {
   })
 }
 
-export async function deleteGroup (params) {
+export async function deleteGroup(params) {
   return request({
     url: group,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteGroup (params) {
   })
 }
 
-export async function multiDeleteGroup (params) {
+export async function multiDeleteGroup(params) {
   return request({
     url: groups,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteGroup (params) {
   })
 }
 
-export async function updateGroup (params) {
+export async function updateGroup(params) {
   return request({
     url: group,
     method: 'put',

@@ -54,7 +54,7 @@ layer.open = (config) => {
   const { prefixCls } = layer
   layer.index += 1
   const index = layer.index
-  let div = document.createElement('div')
+  const div = document.createElement('div')
   div.id = `${prefixCls}-reference-${index}`
   div.className = `${prefixCls}-reference`
   document.body.appendChild(div)

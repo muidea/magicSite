@@ -8,8 +8,6 @@ const Detail = ({ groupDetail }) => {
   const { name, description, catalog } = groupDetail
   const catalogs = [catalog]
 
-  console.log(catalogs)
-
   return (
     <div className="content-inner">
       <div className={styles.content}>

@@ -17,7 +17,7 @@ const Article = ({ location, dispatch, article, loading }) => {
     loading: loading.effects['article/queryAllArticle'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -28,13 +28,13 @@ const Article = ({ location, dispatch, article, loading }) => {
         }),
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'article/deleteArticle',
         payload: id,
       })
     },
-    onEditItem (id) {
+    onEditItem(id) {
       dispatch(routerRedux.push({ pathname: `/content/article/edit/${id}` }))
     },
     rowSelection: {
@@ -51,20 +51,20 @@ const Article = ({ location, dispatch, article, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: queryString.stringify({
+        search: qs.stringify({
           ...value,
           page: 1,
           pageSize,
         }),
       }))
     },
-    onAdd () {
+    onAdd() {
       dispatch(routerRedux.push({ pathname: '/content/article/add' }))
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'article/multiDeleteArticle',
         payload: { ids: selectedRowKeys },

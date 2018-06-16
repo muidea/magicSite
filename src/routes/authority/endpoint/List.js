@@ -8,7 +8,7 @@ import { DropOption, EditableTagGroup } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
+const List = ({ onEditItem, onDeleteItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
@@ -16,7 +16,7 @@ const List = ({ onEditItem, onDeleteItem, location, ...tableProps }) => {
     if (e.key === '2') {
       confirm({
         title: '确认删除?',
-        onOk () {
+        onOk() {
           onDeleteItem(record.id)
         },
       })

@@ -12,7 +12,7 @@ const bodyStyle = {
   },
 }
 
-function Dashboard ({ dashboard, loading }) {
+function Dashboard({ dashboard, loading }) {
   const { numbers, visitTrend, recentContent, recentAccount } = dashboard
   const numberCards = numbers.map((item, key) => (<Col key={key} lg={6} md={12}>
     <NumberCard {...item} />
@@ -23,7 +23,8 @@ function Dashboard ({ dashboard, loading }) {
       <Row gutter={24}>
         {numberCards}
         <Col lg={24} md={24}>
-          <Card bordered={false}
+          <Card
+            bordered={false}
             bodyStyle={{
               padding: '24px 36px 24px 0',
             }}

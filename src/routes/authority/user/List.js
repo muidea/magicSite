@@ -6,7 +6,7 @@ import { Table } from 'antd'
 import styles from './List.less'
 import { DropOption, EditableTagGroup } from '../../../components'
 
-const List = ({ onEditItemAuthGroup, onAddItemAuthGroup, location, ...tableProps }) => {
+const List = ({ onEditItemAuthGroup, onAddItemAuthGroup, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItemAuthGroup(record.id)

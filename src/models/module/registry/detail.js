@@ -14,7 +14,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/module/registry/view/:id').exec(location.pathname)
         if (match) {
@@ -25,10 +25,10 @@ export default {
   },
 
   effects: {
-    * queryModule ({ payload }, { call, put, select }) {
+    * queryModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryModule, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryModuleSuccess',
@@ -41,7 +41,7 @@ export default {
   },
 
   reducers: {
-    queryModuleSuccess (state, { payload }) {
+    queryModuleSuccess(state, { payload }) {
       const { data } = payload
       const { module } = data
 

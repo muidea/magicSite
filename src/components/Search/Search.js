@@ -37,7 +37,7 @@ class Search extends React.Component {
     })
     this.handleSearch()
   }
-  render () {
+  render() {
     const { size, select, selectOptions, selectProps, style, keyword } = this.props
     const { clearVisible } = this.state
     return (

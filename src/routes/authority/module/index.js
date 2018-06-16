@@ -17,13 +17,13 @@ const Module = ({ location, dispatch, module, loading }) => {
     confirmLoading: loading.effects['module/update'],
     title: '更新用户信息',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'module/saveModule',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'module/hideModal' })
     },
   }
@@ -33,7 +33,7 @@ const Module = ({ location, dispatch, module, loading }) => {
     loading: loading.effects['module/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -44,13 +44,13 @@ const Module = ({ location, dispatch, module, loading }) => {
         },
       }))
     },
-    onEditItemAuthGroup (id) {
+    onEditItemAuthGroup(id) {
       dispatch({
         type: 'module/updateModuleAuthGroup',
         payload: id,
       })
     },
-    onAddItemAuthGroup (id) {
+    onAddItemAuthGroup(id) {
       dispatch(routerRedux.push({ pathname: `/authority/module/edit/${id}` }))
     },
     rowSelection: {
@@ -67,7 +67,7 @@ const Module = ({ location, dispatch, module, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -77,14 +77,18 @@ const Module = ({ location, dispatch, module, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/module',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/module' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/module',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/module' }))
+      }
     },
   }
 

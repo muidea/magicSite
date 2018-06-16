@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { acl, acls } = api
 
-export async function queryAllAcl (params) {
+export async function queryAllAcl(params) {
   return request({
     url: acls,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllAcl (params) {
   })
 }
 
-export async function queryAcl (params) {
+export async function queryAcl(params) {
   return request({
     url: acl,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryAcl (params) {
   })
 }
 
-export async function createAcl (params) {
+export async function createAcl(params) {
   return request({
     url: acl.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createAcl (params) {
   })
 }
 
-export async function deleteAcl (params) {
+export async function deleteAcl(params) {
   return request({
     url: acl,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteAcl (params) {
   })
 }
 
-export async function multiDeleteAcl (params) {
+export async function multiDeleteAcl(params) {
   return request({
     url: acls,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteAcl (params) {
   })
 }
 
-export async function updateAcl (params) {
+export async function updateAcl(params) {
   return request({
     url: acl,
     method: 'put',

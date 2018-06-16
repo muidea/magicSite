@@ -7,7 +7,7 @@ const RadioGroup = Radio.Group
 const RadioButton = Radio.Button
 
 export default class RadioItemGroup extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if ('value' in props) {
@@ -34,7 +34,7 @@ export default class RadioItemGroup extends Component {
     this.state = { ...this.state, borderStyle: styles.normalBorder }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { value } = nextProps
     if (value != null) {
       if ('id' in value) {
@@ -44,7 +44,7 @@ export default class RadioItemGroup extends Component {
   }
 
   handleInputChange = (e) => {
-    let { value } = e.target
+    const { value } = e.target
     const { onChange, dataSource } = this.props
     if (onChange !== null && onChange !== undefined) {
       for (let idx = 0; idx < dataSource.length;) {
@@ -59,15 +59,15 @@ export default class RadioItemGroup extends Component {
     }
   }
 
-  focus () {
+  focus() {
     this.setState({ borderStyle: styles.focusBorder })
   }
 
-  blur () {
+  blur() {
     this.setState({ borderStyle: styles.normalBorder })
   }
 
-  render () {
+  render() {
     const { dataSource } = this.props
     const { borderStyle } = this.state
     return (

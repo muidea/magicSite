@@ -8,9 +8,9 @@ import styles from './Bread.less'
 
 const Bread = ({ menu, location }) => {
   // 匹配当前路由
-  let pathArray = []
+  const pathArray = []
   let current
-  for (let index in menu) {
+  for (const index in menu) {
     if (menu[index].route && pathToRegexp(menu[index].route).exec(location.pathname)) {
       current = menu[index]
       break

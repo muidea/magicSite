@@ -9,7 +9,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/system/info') {
           dispatch({
@@ -23,10 +23,10 @@ export default {
   },
 
   effects: {
-    * querySystemInfo ({ payload }, { call, put, select }) {
+    * querySystemInfo({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(querySystemInfo, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
 
       if (success) {
         yield put({
@@ -38,10 +38,10 @@ export default {
       }
     },
 
-    * updateSystemInfo ({ payload }, { call, put, select }) {
+    * updateSystemInfo({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(updateSystemInfo, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
 
       if (success) {
         yield put({
@@ -57,7 +57,7 @@ export default {
   },
 
   reducers: {
-    refreshSystemInfo (state, { payload }) {
+    refreshSystemInfo(state, { payload }) {
       const { systemProperty } = payload
 
       return {
@@ -66,11 +66,11 @@ export default {
       }
     },
 
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, modalVisible: false }
     },
 

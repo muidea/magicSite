@@ -13,7 +13,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/media') {
           dispatch({
@@ -27,7 +27,7 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllMedia ({ payload = {} }, { call, put, select }) {
+    * queryAllMedia({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllMedia, { authToken })
       if (data) {
@@ -51,7 +51,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryMedia ({ payload }, { call, put, select }) {
+    * queryMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryMedia, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.media)
@@ -64,7 +64,7 @@ export default modelExtend(pageModel, {
     },
 
 
-    * saveMedia ({ payload }, { call, put, select }) {
+    * saveMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
       const result = yield call(createMedia, { authToken, ...data })
@@ -76,7 +76,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteMedia ({ payload }, { call, put, select }) {
+    * deleteMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteMedia, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.media)
@@ -88,7 +88,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteMedia ({ payload }, { call, put, select }) {
+    * multiDeleteMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(multiDeleteMedia, { authToken, ...payload })
       if (data.success) {
@@ -100,11 +100,11 @@ export default modelExtend(pageModel, {
     },
   },
   reducers: {
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: -1, name: '', url: '', descrption: '', expiration: -1, catalog: [] }, modalVisible: false }
     },
   },

@@ -32,7 +32,7 @@ Date.prototype.format = function (format) {
   if (/(y+)/.test(format)) {
     format = format.replace(RegExp.$1, `${this.getFullYear()}`.substr(4 - RegExp.$1.length))
   }
-  for (let k in o) {
+  for (const k in o) {
     if (new RegExp(`(${k})`).test(format)) {
       format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : (`00${o[k]}`).substr(`${o[k]}`.length))
     }
@@ -45,7 +45,7 @@ const stripArray = (array, keyAlias = 'id') => {
     return null
   }
 
-  let retVal = []
+  const retVal = []
   for (let idx = 0; idx < array.length; idx += 1) {
     retVal.push(array[idx][keyAlias])
   }
@@ -59,8 +59,8 @@ const stripArray = (array, keyAlias = 'id') => {
  */
 
 const queryURL = (name) => {
-  let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i')
-  let r = window.location.search.substr(1).match(reg)
+  const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i')
+  const r = window.location.search.substr(1).match(reg)
   if (r != null) return decodeURI(r[2])
   return null
 }
@@ -92,17 +92,19 @@ const queryArray = (array, key, keyAlias = 'key') => {
  * @return  {Array}
  */
 const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
-  let data = lodash.cloneDeep(array)
-  let result = []
-  let hash = {}
+  const data = lodash.cloneDeep(array)
+  const result = []
+  const hash = {}
   data.forEach((item, index) => {
     hash[data[index][id]] = data[index]
   })
 
   data.forEach((item) => {
-    let hashVP = hash[item[pid]]
+    const hashVP = hash[item[pid]]
     if (hashVP) {
-      !hashVP[children] && (hashVP[children] = [])
+      if (!hashVP[children]) {
+        hashVP[children] = []
+      }
       hashVP[children].push(item)
     } else {
       result.push(item)

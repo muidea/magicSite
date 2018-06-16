@@ -15,7 +15,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/content/media/view/:id').exec(location.pathname)
         if (match) {
@@ -26,12 +26,12 @@ export default {
   },
 
   effects: {
-    * queryMedia ({
+    * queryMedia({
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryMedia, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryMediaSuccess',
@@ -46,7 +46,7 @@ export default {
   },
 
   reducers: {
-    queryMediaSuccess (state, { payload }) {
+    queryMediaSuccess(state, { payload }) {
       const { data } = payload
       const { media } = data
 

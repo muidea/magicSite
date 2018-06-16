@@ -68,4 +68,4 @@ const Detail = ({ catalogDetail }) => {
 
 Detail.propTypes = { catalogDetail: PropTypes.object }
 
-export default connect(({ catalogDetail, loading }) => ({ catalogDetail, loading: loading.models.catalogDetail }))(Detail)
+export default connect(({ catalogDetail }) => ({ catalogDetail }))(Detail)

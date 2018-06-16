@@ -12,7 +12,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         const match = pathToRegexp('/content/article/edit/:id').exec(location.pathname)
         if (match) {
@@ -25,7 +25,7 @@ export default {
   },
 
   effects: {
-    * resetModel ({
+    * resetModel({
       payload,
     }, { put }) {
       yield put({
@@ -36,7 +36,7 @@ export default {
       })
     },
 
-    * queryArticle ({
+    * queryArticle({
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
@@ -55,7 +55,7 @@ export default {
       }
     },
 
-    * createArticle ({ payload }, { call, put, select }) {
+    * createArticle({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(createArticle, { authToken, ...payload })
       if (data.success) {
@@ -65,7 +65,7 @@ export default {
       }
     },
 
-    * updateArticle ({ payload }, { call, put, select }) {
+    * updateArticle({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(updateArticle, { authToken, ...payload })
       if (data.success) {
@@ -77,7 +77,7 @@ export default {
   },
 
   reducers: {
-    resetState (state, { payload }) {
+    resetState(state, { payload }) {
       const article = { id: -1, title: '', content: '', catalog: [] }
       return {
         ...state,
@@ -87,7 +87,7 @@ export default {
       }
     },
 
-    updateState (state, { payload }) {
+    updateState(state, { payload }) {
       const { article } = payload
       return {
         ...state,

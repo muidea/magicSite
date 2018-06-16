@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { article, articles } = api
 
-export async function queryAllArticle (params) {
+export async function queryAllArticle(params) {
   return request({
     url: articles,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllArticle (params) {
   })
 }
 
-export async function queryArticle (params) {
+export async function queryArticle(params) {
   return request({
     url: article,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryArticle (params) {
   })
 }
 
-export async function createArticle (params) {
+export async function createArticle(params) {
   return request({
     url: article.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createArticle (params) {
   })
 }
 
-export async function deleteArticle (params) {
+export async function deleteArticle(params) {
   return request({
     url: article,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteArticle (params) {
   })
 }
 
-export async function multiDeleteArticle (params) {
+export async function multiDeleteArticle(params) {
   return request({
     url: articles,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteArticle (params) {
   })
 }
 
-export async function updateArticle (params) {
+export async function updateArticle(params) {
   return request({
     url: article,
     method: 'put',

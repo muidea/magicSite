@@ -23,7 +23,7 @@ const status = {
   },
 }
 
-function RecentContent ({ data }) {
+function RecentContent({ data }) {
   const columns = [
     {
       title: 'NAME',

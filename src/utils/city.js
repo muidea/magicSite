@@ -22,7 +22,7 @@
     JSON.stringify(map)
     ```
 */
-let DICT = {
+const DICT = {
   110000: '北京',
   110100: '北京市',
   110101: '东城区',
@@ -4023,35 +4023,41 @@ let DICT = {
 
 // id pid/parentId name children
 const tree = (list) => {
-  let mapped = {}
+  const mapped = {}
   let item
   for (let i = 0; i < list.length; i += 1) {
     item = list[i]
-    if (!item || !item.id) continue
-    mapped[item.id] = item
+    if (item && item.id) {
+      mapped[item.id] = item
+    }
   }
 
-  let result = []
+  const result = []
   for (let ii = 0; ii < list.length; ii += 1) {
     item = list[ii]
 
-    if (!item) continue
-    /* jshint -W041 */
-    if (item.pid === undefined && item.parentId === undefined) {
-      result.push(item)
-      continue
+    if (item) {
+      /* jshint -W041 */
+      if (item.pid === undefined && item.parentId === undefined) {
+        result.push(item)
+      } else {
+        const parent = mapped[item.pid] || mapped[item.parentId]
+        if (parent) {
+          if (!parent.children) {
+            parent.children = []
+          }
+
+          parent.children.push(item)
+        }
+      }
     }
-    let parent = mapped[item.pid] || mapped[item.parentId]
-    if (!parent) continue
-    if (!parent.children) parent.children = []
-    parent.children.push(item)
   }
   return result
 }
 
-let DICT_FIXED = (function () {
-  let fixed = []
-  for (let id in DICT) {
+const DICT_FIXED = (() => {
+  const fixed = []
+  for (const id in DICT) {
     if ({}.hasOwnProperty.call(DICT, id)) {
       let pid
       if (id.slice(2, 6) !== '0000') {
@@ -4068,6 +4074,6 @@ let DICT_FIXED = (function () {
     }
   }
   return tree(fixed)
-}())
+})
 
 module.exports = DICT_FIXED

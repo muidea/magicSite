@@ -27,13 +27,13 @@ const Config = ({ location, dispatch, config }) => {
     maskClosable: false,
     title: `${modalType === 'updateSite' ? '站点信息' : '系统信息'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'config/updateSystemInfo',
         payload: data,
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({
         type: 'config/hideModal',
       })
@@ -79,7 +79,6 @@ Config.propTypes = {
   config: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
-  loading: PropTypes.object,
 }
 
-export default connect(({ config, loading }) => ({ config, loading }))(Config)
+export default connect(({ config }) => ({ config }))(Config)

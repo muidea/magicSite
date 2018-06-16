@@ -32,7 +32,7 @@ export default {
     * queryEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryEndpoint, { authToken, ...payload })
-      const { success, message, status, ...other } = data
+      const { success, ...other } = data
       if (success) {
         yield put({
           type: 'queryEndpointSuccess',
@@ -45,7 +45,7 @@ export default {
   },
 
   reducers: {
-    queryEndpointSuccess (state, { payload }) {
+    queryEndpointSuccess(state, { payload }) {
       const { data } = payload
       const { endpoint } = data
 

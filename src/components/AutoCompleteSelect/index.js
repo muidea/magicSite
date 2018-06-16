@@ -5,7 +5,7 @@ import { Select } from 'antd'
 const { Option } = Select
 
 export default class AutoCompleteSelect extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if ('dataSource' in props) {
@@ -24,9 +24,7 @@ export default class AutoCompleteSelect extends Component {
     }
   }
 
-  state = { dataSource: [] }
-
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if ('dataSource' in nextProps) {
       const { dataSource } = nextProps
       this.setState({ dataSource })
@@ -57,11 +55,11 @@ export default class AutoCompleteSelect extends Component {
     }
   }
 
-  focus () {
+  focus() {
     this.input.focus()
   }
 
-  blur () {
+  blur() {
     this.input.blur()
   }
 
@@ -69,7 +67,7 @@ export default class AutoCompleteSelect extends Component {
     this.input = input
   }
 
-  render () {
+  render() {
     const { style, placeholder, disabled, onBlur } = this.props
     const { dataSource, value } = this.state
 

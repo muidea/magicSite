@@ -6,7 +6,7 @@ import lodash from 'lodash'
 import './DataTable.less'
 
 class DataTable extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     const { dataSource, pagination = {
       showSizeChanger: true,
@@ -23,16 +23,16 @@ class DataTable extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.fetch) {
       this.fetch()
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const staticNextProps = lodash.cloneDeep(nextProps)
     delete staticNextProps.columns
-    const { columns, ...otherProps } = this.props
+    const { ...otherProps } = this.props
 
     if (!lodash.isEqual(staticNextProps, otherProps)) {
       this.props = nextProps
@@ -81,8 +81,8 @@ class DataTable extends React.Component {
     })
   }
 
-  render () {
-    const { fetch, ...tableProps } = this.props
+  render() {
+    const { ...tableProps } = this.props
     const { loading, dataSource, pagination } = this.state
 
     return (<Table

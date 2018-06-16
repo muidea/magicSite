@@ -18,13 +18,13 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     confirmLoading: loading.effects['catalog/update'],
     title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'catalog/saveCatalog',
         payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'catalog/hideModal' })
     },
   }
@@ -34,7 +34,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     loading: loading.effects['catalog/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -45,13 +45,13 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'catalog/deleteCatalog',
         payload: id,
       })
     },
-    onEditItem (id) {
+    onEditItem(id) {
       dispatch({
         type: 'catalog/updateCatalog',
         payload: id,
@@ -71,7 +71,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -81,22 +81,26 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/catalog',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/catalog' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/catalog',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/catalog' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({
         type: 'catalog/showModal',
         payload: { modalType: 'create' },
       })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'catalog/multiDeleteCatalog',
         payload: { ids: selectedRowKeys },

@@ -9,7 +9,7 @@ const { TabPane } = Tabs
 const { TextArea } = Input
 
 export default class RichEditor extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     autobind(this)
@@ -31,7 +31,7 @@ export default class RichEditor extends Component {
     this.onChangeSource = this.onChangeSource.bind(this)
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (('value' in nextProps) && (this.props.value !== nextProps.value) && this.props.value.length === 0) {
       this.setState({ richValue: this.state.richValue.setContentFromString(nextProps.value, this.state.format) })
     }
@@ -41,13 +41,13 @@ export default class RichEditor extends Component {
     }
   }
 
-  onChange (value) {
+  onChange(value) {
     this.setState({ richValue: value })
 
     this.props.onChange(value.toString(this.state.format))
   }
 
-  onChangeSource (event) {
+  onChangeSource(event) {
     const source = event.target.value
     const oldValue = this.state.richValue
 
@@ -56,7 +56,7 @@ export default class RichEditor extends Component {
     this.props.onChange(source)
   }
 
-  render () {
+  render() {
     const { richValue, format, placeholder, editorStyle } = this.state
 
     return (

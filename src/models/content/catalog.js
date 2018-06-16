@@ -14,7 +14,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/catalog') {
           dispatch({
@@ -28,7 +28,7 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllCatalog ({ payload = {} }, { call, put, select }) {
+    * queryAllCatalog({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllCatalog, { authToken })
       if (data) {
@@ -52,7 +52,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryCatalog ({ payload }, { call, put, select }) {
+    * queryCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryCatalog, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.catalog)
@@ -64,7 +64,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateCatalog ({ payload }, { call, put, select }) {
+    * updateCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryCatalog, { id: payload, authToken })
       if (result.success) {
@@ -75,7 +75,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * saveCatalog ({ payload }, { call, put, select }) {
+    * saveCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { action, data } = payload
       const result = yield call(action === 'create' ? createCatalog : updateCatalog, { authToken, ...data })
@@ -87,7 +87,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteCatalog ({ payload }, { call, put, select }) {
+    * deleteCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteCatalog, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.catalog)
@@ -99,7 +99,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteCatalog ({ payload }, { call, put }) {
+    * multiDeleteCatalog({ payload }, { call, put }) {
       const data = yield call(multiDeleteCatalog, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
@@ -111,11 +111,11 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: -1, name: '', descrption: '', catalog: [] }, modalVisible: false }
     },
   },

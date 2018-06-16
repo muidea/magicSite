@@ -14,7 +14,7 @@ export default modelExtend(pageModel, {
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/authority/module') {
           dispatch({
@@ -27,7 +27,7 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllModule ({ payload = {} }, { call, put, select }) {
+    * queryAllModule({ payload = {} }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryAllModule, { authToken })
       if (data) {
@@ -51,7 +51,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryModule ({ payload }, { call, put, select }) {
+    * queryModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryModule, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.module)
@@ -63,7 +63,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateModuleAuthGroup ({ payload }, { call, put, select }) {
+    * updateModuleAuthGroup({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const result = yield call(queryModule, { id: payload, authToken })
       if (result.success) {
@@ -74,15 +74,15 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * saveModule ({ payload }, { call, put, select }) {
+    * saveModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
       const { userAuthGroup } = data
-      let usrAuthGroupList = []
+      const usrAuthGroupList = []
       if (userAuthGroup !== null && userAuthGroup !== undefined) {
         for (let idx = 0; idx < userAuthGroup.length; idx += 1) {
-          let item = userAuthGroup[idx]
-          let { id, authGroup } = item
+          const item = userAuthGroup[idx]
+          const { id, authGroup } = item
           usrAuthGroupList.push({ user: id, authGroup: authGroup.id })
         }
       }
@@ -96,7 +96,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteModule ({ payload }, { call, put, select }) {
+    * deleteModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteModule, { id: payload, authToken })
       const { selectedRowKeys } = yield select(_ => _.module)
@@ -108,7 +108,7 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteModule ({ payload }, { call, put }) {
+    * multiDeleteModule({ payload }, { call, put }) {
       const data = yield call(multiDeleteModule, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
@@ -120,11 +120,11 @@ export default modelExtend(pageModel, {
   },
 
   reducers: {
-    showModal (state, { payload }) {
+    showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },
 
-    hideModal (state) {
+    hideModal(state) {
       return { ...state, currentItem: { id: '', name: '', description: '', authGroup: [], type: 0, state: 0 }, modalVisible: false }
     },
   },

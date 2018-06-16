@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { media, medias } = api
 
-export async function queryAllMedia (params) {
+export async function queryAllMedia(params) {
   return request({
     url: medias,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllMedia (params) {
   })
 }
 
-export async function queryMedia (params) {
+export async function queryMedia(params) {
   return request({
     url: media,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryMedia (params) {
   })
 }
 
-export async function createMedia (params) {
+export async function createMedia(params) {
   return request({
     url: media.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createMedia (params) {
   })
 }
 
-export async function deleteMedia (params) {
+export async function deleteMedia(params) {
   return request({
     url: media,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteMedia (params) {
   })
 }
 
-export async function multiDeleteMedia (params) {
+export async function multiDeleteMedia(params) {
   return request({
     url: medias,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteMedia (params) {
   })
 }
 
-export async function updateMedia (params) {
+export async function updateMedia(params) {
   return request({
     url: media,
     method: 'put',

@@ -3,7 +3,7 @@ import { request, config } from 'utils'
 const { api } = config
 const { authModule, authModules } = api
 
-export async function queryAllModule (params) {
+export async function queryAllModule(params) {
   return request({
     url: authModules,
     method: 'get',
@@ -11,7 +11,7 @@ export async function queryAllModule (params) {
   })
 }
 
-export async function queryModule (params) {
+export async function queryModule(params) {
   return request({
     url: authModule,
     method: 'get',
@@ -19,7 +19,7 @@ export async function queryModule (params) {
   })
 }
 
-export async function createModule (params) {
+export async function createModule(params) {
   return request({
     url: authModule.replace(':id', ''),
     method: 'post',
@@ -27,7 +27,7 @@ export async function createModule (params) {
   })
 }
 
-export async function deleteModule (params) {
+export async function deleteModule(params) {
   return request({
     url: authModule,
     method: 'delete',
@@ -35,7 +35,7 @@ export async function deleteModule (params) {
   })
 }
 
-export async function multiDeleteModule (params) {
+export async function multiDeleteModule(params) {
   return request({
     url: authModules,
     method: 'delete',
@@ -43,7 +43,7 @@ export async function multiDeleteModule (params) {
   })
 }
 
-export async function updateModule (params) {
+export async function updateModule(params) {
   return request({
     url: authModule,
     method: 'put',

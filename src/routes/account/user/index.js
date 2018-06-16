@@ -18,13 +18,13 @@ const User = ({ location, dispatch, user, loading }) => {
     confirmLoading: loading.effects['user/update'],
     title: '新建用户',
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk(data) {
       dispatch({
         type: 'user/saveUser',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
-    onCancel () {
+    onCancel() {
       dispatch({ type: 'user/hideModal' })
     },
   }
@@ -34,7 +34,7 @@ const User = ({ location, dispatch, user, loading }) => {
     loading: loading.effects['user/query'],
     pagination,
     location,
-    onChange (page) {
+    onChange(page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -45,7 +45,7 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onDeleteItem (id) {
+    onDeleteItem(id) {
       dispatch({
         type: 'user/deleteUser',
         payload: id,
@@ -65,7 +65,7 @@ const User = ({ location, dispatch, user, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
-    onFilterChange (value) {
+    onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -75,19 +75,23 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onSearch (fieldsValue) {
-      fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/user',
-        query: {
-          field: fieldsValue.field,
-          keyword: fieldsValue.keyword,
-        },
-      })) : dispatch(routerRedux.push({ pathname: '/user' }))
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/user',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/user' }))
+      }
     },
-    onAdd () {
+    onAdd() {
       dispatch({ type: 'user/showModal' })
     },
-    onDeleteItems () {
+    onDeleteItems() {
       dispatch({
         type: 'user/multiDeleteUser',
         payload: { ids: selectedRowKeys },
