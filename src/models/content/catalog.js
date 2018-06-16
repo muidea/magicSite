@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog, multiDeleteCatalog } from 'services/content/catalog'
 import { pageModel } from '../common'
 
@@ -17,9 +18,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/catalog') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllCatalog',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -28,9 +30,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllCatalog({ payload = {} }, { call, put, select }) {
+    * queryAllCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllCatalog, { authToken })
+      const data = yield call(queryAllCatalog, { ...payload, authToken })
       if (data) {
         const { catalog } = data
         let totalCount = 0

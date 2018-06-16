@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import { queryAllMedia, queryMedia, createMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
 import { pageModel } from '../common'
 
@@ -16,9 +17,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/media') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllMedia',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -27,9 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllMedia({ payload = {} }, { call, put, select }) {
+    * queryAllMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllMedia, { authToken })
+      const data = yield call(queryAllMedia, { ...payload, authToken })
       if (data) {
         const { media } = data
         let totalCount = 0

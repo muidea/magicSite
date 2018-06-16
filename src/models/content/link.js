@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import { queryAllLink, queryLink, createLink, updateLink, deleteLink, multiDeleteLink } from 'services/content/link'
 import { pageModel } from '../common'
 
@@ -17,9 +18,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/link') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllLink',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -28,9 +30,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllLink({ payload = {} }, { call, put, select }) {
+    * queryAllLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllLink, { authToken })
+      const data = yield call(queryAllLink, { ...payload, authToken })
       if (data) {
         const { link } = data
         let totalCount = 0

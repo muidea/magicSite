@@ -1,4 +1,5 @@
 import modelExtend from 'dva-model-extend'
+import qs from 'qs'
 import { queryAllArticle, deleteArticle, multiDeleteArticle } from 'services/content/article'
 import { pageModel } from '../common'
 
@@ -14,9 +15,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/content/article') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllArticle',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -24,9 +26,9 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllArticle({ payload = {} }, { call, put, select }) {
+    * queryAllArticle({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllArticle, { authToken })
+      const data = yield call(queryAllArticle, { ...payload, authToken })
       if (data) {
         const { article } = data
         let totalCount = 0
