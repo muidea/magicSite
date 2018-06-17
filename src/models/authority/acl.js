@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import { queryAllAcl, queryAcl, updateAcl, deleteAcl, multiDeleteAcl } from 'services/authority/acl'
 import { pageModel } from '../common'
 
@@ -16,9 +17,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/authority/acl') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllAcl',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -27,9 +29,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllAcl({ payload = {} }, { call, put, select }) {
+    * queryAllAcl({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllAcl, { authToken })
+      const data = yield call(queryAllAcl, { ...payload, authToken })
       if (data) {
         const { acl } = data
         let totalCount = 0

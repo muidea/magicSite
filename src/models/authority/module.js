@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
+import qs from 'qs'
 import { queryAllModule, queryModule, updateModule, deleteModule, multiDeleteModule } from 'services/authority/module'
 import { pageModel } from '../common'
 
@@ -17,9 +18,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/authority/module') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllModule',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -27,9 +29,9 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllModule({ payload = {} }, { call, put, select }) {
+    * queryAllModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryAllModule, { authToken })
+      const data = yield call(queryAllModule, { ...payload, authToken })
       if (data) {
         const { module } = data
         let totalCount = 0

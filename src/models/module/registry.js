@@ -1,4 +1,5 @@
 import modelExtend from 'dva-model-extend'
+import qs from 'qs'
 import { queryAllModule, queryModule } from 'services/module/registry'
 import { pageModel } from '../common'
 
@@ -11,9 +12,10 @@ export default modelExtend(pageModel, {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/module/registry') {
+          const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllModule',
-            payload: {},
+            payload: { ...query },
           })
         }
       })
@@ -22,9 +24,9 @@ export default modelExtend(pageModel, {
 
   effects: {
 
-    * queryAllModule({ payload = {} }, { call, put, select }) {
+    * queryAllModule({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryAllModule, { authToken })
+      const result = yield call(queryAllModule, { ...payload, authToken })
       if (result.success) {
         const { module } = result
         let totalCount = 0
