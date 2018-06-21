@@ -23,7 +23,7 @@ function prepareFile()
 {
     echo "prepareFile..."
     src=$(ls $binpath|tail -1)
-    cp -r $binpath/$src $src
+    cp -r $binpath $src
     if [ $? -ne 0 ]; then
         echo "prepare file failed, copy failed exception."
         exit 1

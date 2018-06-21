@@ -4,6 +4,8 @@ LABEL Author="rangh"
 LABEL Application="magicSite"
 
 
+RUN mkdir -p /etc/nginx/logs
+
 COPY bin /tmp/
 RUN cd /tmp \
  && tar -xvf bin -C /usr/share/nginx/html/ \
