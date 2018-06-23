@@ -4,16 +4,16 @@ import { Icon, Card } from 'antd'
 import CountUp from 'react-countup'
 import styles from './numberCard.less'
 
-function NumberCard({ icon, color, title, number, countUp }) {
+function NumberCard({ name, type, count, countUp }) {
   return (
     <Card className={styles.numberCard} bordered={false} bodyStyle={{ padding: 0 }}>
-      <Icon className={styles.iconWarp} style={{ color }} type={icon} />
+      <Icon className={styles.iconWarp} type={type} />
       <div className={styles.content}>
-        <p className={styles.title}>{title || 'No Title'}</p>
+        <p className={styles.title}>{name || 'No Title'}</p>
         <p className={styles.number}>
           <CountUp
             start={0}
-            end={number}
+            end={count}
             duration={2.75}
             useEasing
             useGrouping
@@ -27,10 +27,9 @@ function NumberCard({ icon, color, title, number, countUp }) {
 }
 
 NumberCard.propTypes = {
-  icon: PropTypes.string,
-  color: PropTypes.string,
-  title: PropTypes.string,
-  number: PropTypes.number,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  count: PropTypes.number,
   countUp: PropTypes.object,
 }
 

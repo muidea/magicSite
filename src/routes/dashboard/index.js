@@ -13,13 +13,13 @@ const bodyStyle = {
 }
 
 function Dashboard({ dashboard, loading }) {
-  const { numbers, visitTrend, recentContent, recentAccount } = dashboard
-  const numberCards = numbers.map((item, key) => (<Col key={key} lg={6} md={12}>
+  const { systemSummary, systemTrend, lastContent, lastAccount } = dashboard
+  const numberCards = systemSummary.map((item, key) => (<Col key={key} lg={6} md={12}>
     <NumberCard {...item} />
   </Col>))
 
   return (
-    <Page loading={loading.models.dashboard && visitTrend.length === 0}>
+    <Page loading={loading.models.dashboard && systemTrend.length === 0}>
       <Row gutter={24}>
         {numberCards}
         <Col lg={24} md={24}>
@@ -29,17 +29,17 @@ function Dashboard({ dashboard, loading }) {
               padding: '24px 36px 24px 0',
             }}
           >
-            <VisitTrend data={visitTrend} />
+            <VisitTrend data={systemTrend} />
           </Card>
         </Col>
         <Col lg={12} md={24}>
           <Card bordered={false} {...bodyStyle}>
-            <RecentContent data={recentContent} />
+            <RecentContent data={lastContent} />
           </Card>
         </Col>
         <Col lg={12} md={24}>
           <Card bordered={false} {...bodyStyle}>
-            <RecentAccount data={recentAccount} />
+            <RecentAccount data={lastAccount} />
           </Card>
         </Col>
       </Row>

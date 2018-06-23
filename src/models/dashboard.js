@@ -5,10 +5,10 @@ import { model } from 'models/common'
 export default modelExtend(model, {
   namespace: 'dashboard',
   state: {
-    numbers: [],
-    visitTrend: [],
-    recentContent: [],
-    recentAccount: [],
+    systemSummary: [],
+    systemTrend: [],
+    lastContent: [],
+    lastAccount: [],
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -18,6 +18,7 @@ export default modelExtend(model, {
         }
       })
     },
+
   },
   effects: {
     * query({
@@ -25,10 +26,15 @@ export default modelExtend(model, {
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(query, { authToken, ...payload })
-      yield put({
-        type: 'updateModelState',
-        payload: data,
-      })
+      const { errorCode, reason, ...other } = data
+      if (errorCode === 0) {
+        yield put({
+          type: 'updateModelState',
+          payload: { ...other },
+        })
+      } else {
+        throw (reason)
+      }
     },
   },
 })

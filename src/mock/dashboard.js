@@ -42,7 +42,7 @@ const Dashboard = Mock.mock({
       'id|+1': 1,
       name: '@last',
       'status|1-4': 1,
-      date () {
+      date() {
         return `${Mock.Random.integer(2015, 2016)}-${Mock.Random.date('MM-dd')} ${Mock.Random.time('HH:mm:ss')}`
       },
       'price|10-200.1-2': 1,
@@ -53,7 +53,7 @@ const Dashboard = Mock.mock({
       'id|+1': 1,
       name: '@last',
       'status|1-4': 1,
-      date () {
+      date() {
         return `${Mock.Random.integer(2015, 2016)}-${Mock.Random.date('MM-dd')} ${Mock.Random.time('HH:mm:ss')}`
       },
       'price|10-200.1-2': 1,
@@ -62,7 +62,7 @@ const Dashboard = Mock.mock({
 })
 
 module.exports = {
-  [`GET ${apiPrefix}/dashboard`] (req, res) {
+  [`GET ${apiPrefix}/dashboard`](req, res) {
     res.json(Dashboard)
   },
 }

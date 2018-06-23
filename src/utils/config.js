@@ -46,7 +46,7 @@ module.exports = {
     modules: `${ModuleApi}/`,
     module: `${ModuleApi}/:id`,
     systemInfo: `${SystemInfoApi}/config/`,
-    dashboard: `${APIV1}/dashboard`,
-    menus: `${APIV1}/menus`,
+    systemMenus: `${SystemInfoApi}/menu/`,
+    dashboard: `${SystemInfoApi}/dashboard/`,
   },
 }

@@ -1,7 +1,7 @@
 const { config } = require('./common')
 
 const { apiPrefix } = config
-let database = [
+const database = [
   {
     id: '1',
     icon: 'laptop',
@@ -265,10 +265,9 @@ let database = [
 
 module.exports = {
 
-  [`GET ${apiPrefix}/menus`] (req, res) {
+  [`GET ${apiPrefix}/menu`](req, res) {
     const { query } = req
     const { authToken } = query
-    console.log(query)
 
     if (authToken) {
       res.status(200).json({ list: database, errorCode: 0 })

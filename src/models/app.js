@@ -60,7 +60,7 @@ export default {
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
       if (data.errorCode === 0) {
         const { onlineUser } = data
-        const { list, errorCode } = yield call(menusService.query, { authToken: onlineUser.authToken })
+        const { menu, errorCode } = yield call(menusService.query, { authToken: onlineUser.authToken })
 
         if (errorCode === 0) {
           yield put({
@@ -69,7 +69,7 @@ export default {
               sessionID: data.sessionID,
               authToken: onlineUser.authToken,
               onlineUser,
-              menu: list,
+              menu: JSON.parse(menu),
             },
           })
           if (location.pathname === '/login') {

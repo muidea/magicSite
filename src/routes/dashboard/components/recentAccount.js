@@ -1,45 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Tag } from 'antd'
-import { color } from 'utils'
+import { Table } from 'antd'
 import styles from './recentAccount.less'
-
-const status = {
-  1: {
-    color: color.green,
-    text: 'SALE',
-  },
-  2: {
-    color: color.yellow,
-    text: 'REJECT',
-  },
-  3: {
-    color: color.red,
-    text: 'TAX',
-  },
-  4: {
-    color: color.blue,
-    text: 'EXTENDED',
-  },
-}
 
 function RecentAccount({ data }) {
   const columns = [
     {
-      title: 'NAME',
+      title: '名称',
       dataIndex: 'name',
     }, {
-      title: 'STATUS',
-      dataIndex: 'status',
-      render: text => <Tag color={status[text].color}>{status[text].text}</Tag>,
-    }, {
-      title: 'DATE',
-      dataIndex: 'date',
+      title: '注册时间',
+      dataIndex: 'registerDate',
       render: text => new Date(text).format('yyyy-MM-dd'),
     }, {
-      title: 'PRICE',
-      dataIndex: 'price',
-      render: (text, it) => <span style={{ color: status[it.status].color }}>${text}</span>,
+      title: '最后登录时间',
+      dataIndex: 'lastLoginDate',
+      render: text => new Date(text).format('yyyy-MM-dd'),
     },
   ]
   return (
