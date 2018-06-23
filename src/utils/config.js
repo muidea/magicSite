@@ -1,11 +1,9 @@
-const APIV1 = '/api/v1'
-const APIV2 = '/api/v2'
-const CasApi = '/api/v2/cas'
-const ContentApi = '/api/v2/content'
-const AccountApi = '/api/v2/account'
-const AuthorityApi = '/api/v2/authority'
-const ModuleApi = '/api/v2/module'
-const SystemInfoApi = '/api/v2/system'
+const CasApi = '/api/v1/cas'
+const ContentApi = '/api/v1/content'
+const AccountApi = '/api/v1/account'
+const AuthorityApi = '/api/v1/authority'
+const ModuleApi = '/api/v1/module'
+const SystemInfoApi = '/api/v1/system'
 
 module.exports = {
   name: 'MagicCenter',
@@ -16,8 +14,6 @@ module.exports = {
   iconFontJS: '/iconfont.js',
   openPages: ['/login'],
   apiPrefix: '/api/v1',
-  APIV1,
-  APIV2,
   api: {
     userLogin: `${CasApi}/user/`,
     userLogout: `${CasApi}/user/`,
