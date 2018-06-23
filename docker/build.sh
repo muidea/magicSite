@@ -86,6 +86,8 @@ function rmiImage()
     fi
 }
 
+echo "build magicSite docker image"
+
 cleanUp
 
 prepareFile
