@@ -6,9 +6,9 @@ LABEL Application="magicSite"
 
 RUN mkdir -p /etc/nginx/logs
 
-COPY bin /tmp/
+COPY magicSite /tmp/
 RUN cd /tmp \
- && tar -xvf bin -C /usr/share/nginx/html/ \
- && rm -f bin
+ && tar -xvf magicSite -C /usr/share/nginx/html/ \
+ && rm -f magicSite
 
 ADD nginx.conf /etc/nginx/nginx.conf
