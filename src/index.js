@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import dva from 'dva'
 import createLoading from 'dva-loading'
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createHashHistory'
 
 // 1. Initialize
 const app = dva({
