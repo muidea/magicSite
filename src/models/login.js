@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router'
 import { login } from 'services/login'
+import { queryURL } from '../utils'
 
 export default {
   namespace: 'login',
@@ -20,6 +21,13 @@ export default {
             authToken,
           },
         })
+
+        const from = queryURL('from')
+        if (from) {
+          yield put(routerRedux.push(from))
+        } else {
+          yield put(routerRedux.push('/dashboard'))
+        }
       } else {
         yield put(routerRedux.push('/login'))
       }

@@ -1,6 +1,7 @@
 /* global window */
 import classnames from 'classnames'
 import lodash from 'lodash'
+import qs from 'qs'
 import config from './config'
 import request from './request'
 import { color } from './theme'
@@ -59,10 +60,8 @@ const stripArray = (array, keyAlias = 'id') => {
  */
 
 const queryURL = (name) => {
-  const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i')
-  const r = window.location.search.substr(1).match(reg)
-  if (r != null) return decodeURI(r[2])
-  return null
+  const val = qs.parse(window.location.search, { ignoreQueryPrefix: true })
+  return val[name]
 }
 
 /**

@@ -43,13 +43,6 @@ export default {
 
     setup({ dispatch }) {
       dispatch({ type: 'query' })
-      let tid
-      window.onresize = () => {
-        clearTimeout(tid)
-        tid = setTimeout(() => {
-          dispatch({ type: 'changeNavbar' })
-        }, 300)
-      }
     },
 
   },

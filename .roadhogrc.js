@@ -12,10 +12,10 @@ export default {
   publicPath: `/${version}/`,
   outputPath: `./dist/${version}`,
   proxy: {
-    "/api/v2": {
+    "/api/v1": {
       "target": "http://localhost:8888/",
       "changeOrigin": true,
-      "pathRewrite": { "^/api/v2": "/" }
+      "pathRewrite": { "^/api/v1": "/" }
     }
   },
   env: {
