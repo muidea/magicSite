@@ -12,7 +12,7 @@ export default class RadioItemGroup extends Component {
 
     if ('value' in props) {
       const { value } = props
-      if (value != null) {
+      if (value) {
         if ('id' in value) {
           this.state = { value: value.id }
         }
