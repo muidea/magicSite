@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
+import qs from 'qs'
 import List from './List'
 import Filter from './Filter'
 
@@ -18,11 +19,11 @@ const ModuleRegistry = ({ location, dispatch, moduleRegistry, loading }) => {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
-        query: {
+        search: qs.stringify({
           ...query,
           page: page.current,
           pageSize: page.pageSize,
-        },
+        }),
       }))
     },
     rowSelection: {
