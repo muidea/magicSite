@@ -95,7 +95,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.catalog)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllCatalog' })
+        yield put({ type: 'queryAllCatalog', payload: {} })
       } else {
         throw data
       }
@@ -105,7 +105,7 @@ export default modelExtend(pageModel, {
       const data = yield call(multiDeleteCatalog, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllCatalog' })
+        yield put({ type: 'queryAllCatalog', payload: {} })
       } else {
         throw data
       }
