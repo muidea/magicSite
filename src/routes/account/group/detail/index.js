@@ -1,28 +1,58 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import styles from './index.less'
-import { EditableTagGroup } from '../../../../components'
+import { Link } from 'dva/router'
+import { Table, Divider } from 'antd'
+import { DescriptionList, EditableTagGroup, Status } from 'components'
+
+const { Description } = DescriptionList
 
 const Detail = ({ groupDetail }) => {
-  const { name, description, catalog } = groupDetail
+  const { name, description, catalog, userList } = groupDetail
   const catalogs = [catalog]
+
+  const columns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      render: (text, record) => {
+        return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
+      },
+    },
+    {
+      title: 'EMail',
+      dataIndex: 'email',
+    },
+    {
+      title: '注册时间',
+      dataIndex: 'registerTime',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: (text, record) => {
+        return <Status value={record.status} />
+      },
+    },
+  ]
 
   return (
     <div className="content-inner">
-      <div className={styles.content}>
-        <div className={styles.item}>
-          <div>名称</div>
-          <div>{name}</div>
-        </div>
-        <div className={styles.item}>
-          <div>描述</div>
-          <div>{description}</div>
-        </div>
-        <div className={styles.item}>
-          <div>父分类</div>
-          <div><EditableTagGroup readOnly value={catalogs} /></div>
-        </div>
+      <DescriptionList size="large" title="分组信息" style={{ marginBottom: 32 }}>
+        <Description term="分组名">{name}</Description>
+        <Description term="描述">{description}</Description>
+        <Description term="父分组"><EditableTagGroup readOnly value={catalogs} /></Description>
+      </DescriptionList>
+      <Divider style={{ marginBottom: 32 }} />
+      <div>
+        <h3>成员列表</h3>
+        <Table
+          style={{ marginBottom: 24 }}
+          pagination={false}
+          dataSource={userList}
+          columns={columns}
+          rowKey={record => record.id}
+        />
       </div>
     </div>)
 }

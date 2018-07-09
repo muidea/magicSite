@@ -35,7 +35,7 @@ export default {
       const data = yield call(queryUser, { authToken, id })
       const { success, ...other } = data
       if (success) {
-        const summaryResult = yield call(querySummary, { authToken, user: [id, 12, 13] })
+        const summaryResult = yield call(querySummary, { authToken, user: [id] })
         const { summary } = summaryResult
         yield put({
           type: 'queryUserSuccess',

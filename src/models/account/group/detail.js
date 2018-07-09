@@ -1,5 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryGroup } from 'services/account/group'
+import { queryAllUser } from 'services/account/user'
 
 export default {
 
@@ -9,6 +10,7 @@ export default {
     name: '',
     description: '',
     catalog: { id: 0, name: '' },
+    userList: [],
   },
 
   subscriptions: {
@@ -24,13 +26,16 @@ export default {
 
   effects: {
     * queryGroup({ payload }, { call, put, select }) {
+      const { id } = payload
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryGroup, { authToken, ...payload })
+      const data = yield call(queryGroup, { authToken, id })
       const { success, ...other } = data
       if (success) {
+        const userResult = yield call(queryAllUser, { authToken, group: id })
+        const { user } = userResult
         yield put({
           type: 'queryGroupSuccess',
-          payload: { data: other },
+          payload: { data: { ...other, userList: user } },
         })
       } else {
         throw data
@@ -41,11 +46,12 @@ export default {
   reducers: {
     queryGroupSuccess(state, { payload }) {
       const { data } = payload
-      const { group } = data
+      const { group, userList } = data
 
       return {
         ...state,
         ...group,
+        userList,
       }
     },
   },
