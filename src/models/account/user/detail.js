@@ -1,18 +1,20 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryUser } from 'services/account/user'
+import { querySummary } from 'services/content/summary'
 
 export default {
 
   namespace: 'userDetail',
 
   state: {
-    account: '',
     password: '',
     name: '',
     email: '',
     group: [],
     registerTime: '',
     status: {},
+
+    summary: [],
   },
 
   subscriptions: {
@@ -28,13 +30,16 @@ export default {
 
   effects: {
     * queryUser({ payload }, { call, put, select }) {
+      const { id } = payload
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryUser, { authToken, ...payload })
+      const data = yield call(queryUser, { authToken, id })
       const { success, ...other } = data
       if (success) {
+        const summaryResult = yield call(querySummary, { authToken, user: [id, 12, 13] })
+        const { summary } = summaryResult
         yield put({
           type: 'queryUserSuccess',
-          payload: { data: other },
+          payload: { data: { ...other, summary } },
         })
       } else {
         throw data
@@ -45,11 +50,12 @@ export default {
   reducers: {
     queryUserSuccess(state, { payload }) {
       const { data } = payload
-      const { user } = data
+      const { user, summary } = data
 
       return {
         ...state,
         ...user,
+        summary,
       }
     },
   },
