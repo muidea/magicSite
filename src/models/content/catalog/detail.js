@@ -34,7 +34,7 @@ export default {
       if (success) {
         const { catalog } = other
         const { id } = catalog
-        const summaryResult = yield call(querySummary, { authToken, id })
+        const summaryResult = yield call(querySummary, { authToken, catalog: id })
         const { summary } = summaryResult
         yield put({
           type: 'queryCatalogSuccess',
