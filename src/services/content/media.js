@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { media, medias } = api
+const { media, medias, batchAddMedias } = api
 
 export async function queryAllMedia(params) {
   return request({
@@ -47,6 +47,14 @@ export async function updateMedia(params) {
   return request({
     url: media,
     method: 'put',
+    data: params,
+  })
+}
+
+export async function batchCreateMedia(params) {
+  return request({
+    url: batchAddMedias,
+    method: 'post',
     data: params,
   })
 }

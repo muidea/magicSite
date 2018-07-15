@@ -8,6 +8,7 @@ import EditableTagGroup from './EditableTagGroup'
 import RadioItemGroup from './RadioItemGroup'
 import AutoCompleteSelect from './AutoCompleteSelect'
 import AutoCompleteTagGroup from './AutoCompleteTagGroup'
+import MultiUpload from './MultiUpload'
 import Status from './Status'
 import FilterItem from './FilterItem'
 import Loader from './Loader'
@@ -33,5 +34,6 @@ export {
   RadioItemGroup,
   AutoCompleteSelect,
   AutoCompleteTagGroup,
+  MultiUpload,
   Status,
 }

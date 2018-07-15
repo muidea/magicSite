@@ -1,14 +1,18 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import qs from 'qs'
-import { queryAllMedia, queryMedia, createMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
+import { queryAllMedia, queryMedia, batchCreateMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
+import { config } from 'utils'
 import { pageModel } from '../common'
+
+const { api } = config
+const { fileRegistry } = api
 
 export default modelExtend(pageModel, {
   namespace: 'media',
 
   state: {
-    currentItem: { id: -1, name: '', url: '', descrption: '', expiration: -1, catalog: [] },
+    fileRegistryUrl: '',
     selectedRowKeys: [],
     modalVisible: false,
   },
@@ -30,14 +34,22 @@ export default modelExtend(pageModel, {
   effects: {
 
     * queryAllMedia({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
+      const { sessionID, authToken } = yield select(_ => _.app)
       const data = yield call(queryAllMedia, { ...payload, authToken })
+
+      const param = qs.stringify({ sessionID, authToken, 'key-name': 'file' })
+      const serverUrl = `${fileRegistry}?${param}`
       if (data) {
         const { media } = data
         let totalCount = 0
         if (media) {
           totalCount = media.length
         }
+
+        yield put({
+          type: 'updateStates',
+          payload: { fileRegistryUrl: serverUrl },
+        })
 
         yield put({
           type: 'queryAllSuccess',
@@ -69,7 +81,7 @@ export default modelExtend(pageModel, {
     * saveMedia({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
-      const result = yield call(createMedia, { authToken, ...data })
+      const result = yield call(batchCreateMedia, { authToken, ...data })
       if (result.success) {
         yield put({ type: 'hideModal' })
         yield put(routerRedux.push('/content/media'))
@@ -102,6 +114,10 @@ export default modelExtend(pageModel, {
     },
   },
   reducers: {
+    updateStates(state, { payload }) {
+      return { ...state, ...payload }
+    },
+
     showModal(state, { payload }) {
       return { ...state, ...payload, modalVisible: true }
     },

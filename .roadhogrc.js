@@ -12,11 +12,15 @@ export default {
   publicPath: `/${version}/`,
   outputPath: `./dist/${version}`,
   proxy: {
-    "/api/v1": {
+    "/api/v1/": {
       "target": "http://localhost:8888/",
       "changeOrigin": true,
-      "pathRewrite": { "^/api/v1": "/" }
-    }
+      "pathRewrite": { "^/api/v1/": "/" }
+    },
+    "/static/": {
+      "target": "http://localhost:8888/",
+      "changeOrigin": true,
+    },
   },
   env: {
     development: {

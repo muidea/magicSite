@@ -8,11 +8,11 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Media = ({ location, dispatch, media, loading }) => {
-  const { list, pagination, currentItem, selectedRowKeys, modalVisible } = media
+  const { list, pagination, fileRegistryUrl, selectedRowKeys, modalVisible } = media
   const { pageSize } = pagination
 
   const modalProps = {
-    item: currentItem,
+    serverUrl: fileRegistryUrl,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['media/update'],
@@ -21,7 +21,7 @@ const Media = ({ location, dispatch, media, loading }) => {
     onOk(data) {
       dispatch({
         type: 'media/saveMedia',
-        payload: { data: { id: currentItem.id, ...data } },
+        payload: { data: { ...data } },
       })
     },
     onCancel() {
