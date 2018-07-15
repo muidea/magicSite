@@ -32,7 +32,6 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllMedia({ payload }, { call, put, select }) {
       const { sessionID, authToken } = yield select(_ => _.app)
       const data = yield call(queryAllMedia, { ...payload, authToken })
@@ -96,7 +95,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.media)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllMedia' })
+        yield put({ type: 'queryAllMedia', payload: {} })
       } else {
         throw data
       }
@@ -107,7 +106,7 @@ export default modelExtend(pageModel, {
       const data = yield call(multiDeleteMedia, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllMedia' })
+        yield put({ type: 'queryAllMedia', payload: {} })
       } else {
         throw data
       }

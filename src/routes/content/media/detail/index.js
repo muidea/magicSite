@@ -1,40 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import styles from './index.less'
-import { EditableTagGroup } from '../../../../components'
+import { Button } from 'antd'
+import { DescriptionList, EditableTagGroup } from 'components'
 
+const { Description } = DescriptionList
 
 const Detail = ({ mediaDetail }) => {
-  const { name, url, description, catalog, createDate, creater } = mediaDetail
+  const { name, description, catalog, createDate, creater, fileUrl } = mediaDetail
 
   return (<div className="content-inner">
-    <div className={styles.content}>
-      <div className={styles.item}>
-        <div>名称</div>
-        <div>{name}</div>
-      </div>
-      <div className={styles.item}>
-        <div>分类</div>
-        <div><EditableTagGroup readOnly value={catalog} /></div>
-      </div>
-      <div className={styles.item}>
-        <div>URL</div>
-        <div>{url}</div>
-      </div>
-      <div className={styles.item}>
-        <div>描述</div>
-        <div>{description}</div>
-      </div>
-      <div className={styles.item}>
-        <div>创建时间</div>
-        <div>{createDate}</div>
-      </div>
-      <div className={styles.item}>
-        <div>创建人</div>
-        <div>{creater.name}</div>
-      </div>
-    </div>
+    <DescriptionList size="large" title="文件信息" style={{ marginBottom: 32 }}>
+      <Description term="文件名">{name}</Description>
+      <Description term="描述">{description}</Description>
+      <Description term="分组"><EditableTagGroup readOnly value={catalog} /></Description>
+      <Description term="上传时间">{createDate}</Description>
+      <Description term="上传者">{creater.name}</Description>
+      <Description term="下载文件"><Button style={{ border: 0 }} size="large" icon="download" target="_blank" href={fileUrl} /></Description>
+    </DescriptionList>
   </div>)
 }
 

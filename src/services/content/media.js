@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { media, medias, batchAddMedias } = api
+const { media, medias, batchAddMedias, fileRegistry } = api
 
 export async function queryAllMedia(params) {
   return request({
@@ -55,6 +55,14 @@ export async function batchCreateMedia(params) {
   return request({
     url: batchAddMedias,
     method: 'post',
+    data: params,
+  })
+}
+
+export async function downloadMedia(params) {
+  return request({
+    url: fileRegistry,
+    method: 'get',
     data: params,
   })
 }

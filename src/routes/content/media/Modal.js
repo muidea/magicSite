@@ -43,7 +43,7 @@ const modal = ({
     <Modal {...modalOpts}>
       <Form layout="horizontal">
         <FormItem>
-          {getFieldDecorator('fileList', {
+          {getFieldDecorator('medias', {
             rules: [{
               required: true, message: '文件不能为空',
             }],
