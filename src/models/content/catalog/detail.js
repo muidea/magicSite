@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryCatalog } from 'services/content/catalog'
-import { querySummary } from 'services/content/summary'
+import { querySummaryDetail } from 'services/content/summary'
 
 export default {
 
@@ -34,7 +34,7 @@ export default {
       if (success) {
         const { catalog } = other
         const { id } = catalog
-        const summaryResult = yield call(querySummary, { authToken, catalog: id })
+        const summaryResult = yield call(querySummaryDetail, { authToken, id, type: 'catalog' })
         const { summary } = summaryResult
         yield put({
           type: 'queryCatalogSuccess',
