@@ -6,7 +6,6 @@ export default modelExtend(model, {
   namespace: 'dashboard',
   state: {
     systemSummary: [],
-    systemTrend: [],
     lastContent: [],
     lastAccount: [],
   },

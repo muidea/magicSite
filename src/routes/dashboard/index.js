@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Row, Col, Card } from 'antd'
 import { Page } from 'components'
-import { NumberCard, VisitTrend, RecentContent, RecentAccount } from './components'
+import { NumberCard, RecentContent, RecentAccount } from './components'
 
 const bodyStyle = {
   bodyStyle: {
@@ -13,25 +13,17 @@ const bodyStyle = {
 }
 
 function Dashboard({ dashboard, loading }) {
-  const { systemSummary, systemTrend, lastContent, lastAccount } = dashboard
+  const { systemSummary, lastContent, lastAccount } = dashboard
   const numberCards = systemSummary.map((item, key) => (<Col key={key} lg={6} md={12}>
     <NumberCard {...item} />
   </Col>))
 
   return (
-    <Page loading={loading.models.dashboard && systemTrend.length === 0}>
+    <Page loading={loading.models.dashboard}>
       <Row gutter={24}>
         {numberCards}
-        <Col lg={24} md={24}>
-          <Card
-            bordered={false}
-            bodyStyle={{
-              padding: '24px 36px 24px 0',
-            }}
-          >
-            <VisitTrend data={systemTrend} />
-          </Card>
-        </Col>
+      </Row>
+      <Row gutter={24}>
         <Col lg={12} md={24}>
           <Card bordered={false} {...bodyStyle}>
             <RecentContent data={lastContent} />

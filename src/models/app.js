@@ -65,6 +65,7 @@ export default {
               menu: JSON.parse(menu),
             },
           })
+
           if (location.pathname === '/login') {
             yield put(routerRedux.push({ pathname: '/dashboard' }))
           }

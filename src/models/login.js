@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router'
 import { login } from 'services/login'
-import { queryURL } from '../utils'
+import { queryURL } from 'utils'
 
 export default {
   namespace: 'login',
@@ -14,6 +14,7 @@ export default {
       if (errorCode === 0) {
         const { sessionID, onlineUser } = data
         const { authToken } = onlineUser
+
         yield put({
           type: 'app/query',
           payload: {
