@@ -6,6 +6,7 @@ import qs from 'qs'
 import config from 'config'
 import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
+import { queryHashURL } from 'utils'
 
 const { prefix } = config
 
@@ -66,8 +67,9 @@ export default {
             },
           })
 
-          if (location.pathname === '/login') {
-            yield put(routerRedux.push({ pathname: '/dashboard' }))
+          const from = queryHashURL('from')
+          if (from) {
+            yield put(routerRedux.push({ pathname: from }))
           }
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {

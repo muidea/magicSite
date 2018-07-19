@@ -64,6 +64,18 @@ const queryURL = (name) => {
   return val[name]
 }
 
+const queryHashPathName = () => {
+  const startPos = window.location.hash.indexOf('#')
+  const endPos = window.location.hash.indexOf('?')
+  return window.location.hash.substring(startPos + 1, endPos)
+}
+
+const queryHashURL = (name) => {
+  const pos = window.location.hash.indexOf('?')
+  const val = qs.parse(window.location.hash.substring(pos), { ignoreQueryPrefix: true })
+  return val[name]
+}
+
 /**
  * 数组内查询
  * @param   {array}      array
@@ -118,6 +130,8 @@ module.exports = {
   color,
   classnames,
   queryURL,
+  queryHashPathName,
+  queryHashURL,
   queryArray,
   stripArray,
   arrayToTree,
