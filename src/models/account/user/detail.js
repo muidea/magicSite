@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryUser } from 'services/account/user'
-import { querySummary } from 'services/content/summary'
+import { querySummaryDetail } from 'services/content/summary'
 
 export default {
 
@@ -35,7 +35,7 @@ export default {
       const data = yield call(queryUser, { authToken, id })
       const { success, ...other } = data
       if (success) {
-        const summaryResult = yield call(querySummary, { authToken, user: [id] })
+        const summaryResult = yield call(querySummaryDetail, { authToken, user: [id] })
         const { summary } = summaryResult
         yield put({
           type: 'queryUserSuccess',
