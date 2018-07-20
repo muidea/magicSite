@@ -30,6 +30,7 @@ module.exports = {
     medias: `${ContentApi}/medias/`,
     media: `${ContentApi}/media/:id`,
     batchAddMedias: `${ContentApi}/media/batch/`,
+    getSummary: `${ContentApi}/summary/detail/:id`,
     querySummary: `${ContentApi}/summary/detail/`,
     users: `${AccountApi}/user/`,
     user: `${AccountApi}/user/:id`,
