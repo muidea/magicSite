@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { authEndpoint, authEndpoints } = api
+const { endpointRegistry, endpointRegistrys } = api
 
 export async function queryAllEndpoint(params) {
   return request({
-    url: authEndpoints,
+    url: endpointRegistrys,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,7 @@ export async function queryAllEndpoint(params) {
 
 export async function queryEndpoint(params) {
   return request({
-    url: authEndpoint,
+    url: endpointRegistry,
     method: 'get',
     data: params,
   })
@@ -21,7 +21,7 @@ export async function queryEndpoint(params) {
 
 export async function createEndpoint(params) {
   return request({
-    url: authEndpoint.replace(':id', ''),
+    url: endpointRegistry.replace(':id', ''),
     method: 'post',
     data: params,
   })
@@ -29,7 +29,7 @@ export async function createEndpoint(params) {
 
 export async function deleteEndpoint(params) {
   return request({
-    url: authEndpoint,
+    url: endpointRegistry,
     method: 'delete',
     data: params,
   })
@@ -37,7 +37,7 @@ export async function deleteEndpoint(params) {
 
 export async function updateEndpoint(params) {
   return request({
-    url: authEndpoint,
+    url: endpointRegistry,
     method: 'put',
     data: params,
   })

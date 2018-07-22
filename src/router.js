@@ -105,13 +105,13 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/authority/user/edit')],
       component: () => import('./routes/authority/user/edit/'),
     }, {
-      path: '/authority/endpoint',
-      models: () => [import('./models/authority/endpoint')],
-      component: () => import('./routes/authority/endpoint/'),
+      path: '/endpoint/registry',
+      models: () => [import('./models/endpoint/registry')],
+      component: () => import('./routes/endpoint/registry/'),
     }, {
-      path: '/authority/endpoint/view/:id',
-      models: () => [import('./models/authority/endpoint/detail')],
-      component: () => import('./routes/authority/endpoint/detail/'),
+      path: '/endpoint/registry/view/:id',
+      models: () => [import('./models/endpoint/registry/detail')],
+      component: () => import('./routes/endpoint/registry/detail/'),
     }, {
       path: '/module/registry',
       models: () => [import('./models/module/registry')],

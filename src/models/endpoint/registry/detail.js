@@ -1,5 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryEndpoint } from 'services/authority/endpoint'
+import { queryEndpoint } from 'services/endpoint/registry'
 
 export default {
 
@@ -17,7 +17,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/authority/endpoint/view/:id').exec(location.pathname)
+        const match = pathToRegexp('/endpoint/registry/view/:id').exec(location.pathname)
         if (match) {
           dispatch({
             type: 'queryEndpoint',

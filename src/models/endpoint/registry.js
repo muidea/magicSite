@@ -1,13 +1,13 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import qs from 'qs'
-import { queryAllEndpoint, queryEndpoint, createEndpoint, updateEndpoint, deleteEndpoint } from 'services/authority/endpoint'
+import { queryAllEndpoint, queryEndpoint, createEndpoint, updateEndpoint, deleteEndpoint } from 'services/endpoint/registry'
 import { queryAllUser } from 'services/account/user'
 import { stripArray } from 'utils'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
-  namespace: 'endpoint',
+  namespace: 'registry',
 
   state: {
     currentItem: { id: '', name: '', description: '', user: [], state: 0 },
@@ -20,7 +20,7 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/authority/endpoint') {
+        if (location.pathname === '/endpoint/registry') {
           const query = qs.parse(location.search, { ignoreQueryPrefix: true })
           dispatch({
             type: 'queryAllEndpoint',
@@ -66,10 +66,10 @@ export default modelExtend(pageModel, {
     * queryEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(queryEndpoint, { ...payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.endpoint)
+      const { selectedRowKeys } = yield select(_ => _.registry)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllEndpoint' })
+        yield put({ type: 'queryAllEndpoint', payload: {} })
       } else {
         throw data
       }
@@ -83,7 +83,7 @@ export default modelExtend(pageModel, {
       const result = yield call(createEndpoint, { authToken, ...data, user: stripArray(user), status: status.id })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/endpoint'))
+        yield put(routerRedux.push('/endpoint/registry'))
       } else {
         throw data
       }
@@ -97,7 +97,7 @@ export default modelExtend(pageModel, {
       const result = yield call(updateEndpoint, { authToken, ...data, id: data.id, user: stripArray(user), status: status.id })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/authority/endpoint'))
+        yield put(routerRedux.push('/endpoint/registry'))
       } else {
         throw data
       }
@@ -106,10 +106,10 @@ export default modelExtend(pageModel, {
     * deleteEndpoint({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const data = yield call(deleteEndpoint, { ...payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.endpoint)
+      const { selectedRowKeys } = yield select(_ => _.registry)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllEndpoint' })
+        yield put({ type: 'queryAllEndpoint', payload: {} })
       } else {
         throw data
       }

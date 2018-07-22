@@ -2,6 +2,7 @@ const CasApi = '/api/v1/cas'
 const ContentApi = '/api/v1/content'
 const AccountApi = '/api/v1/account'
 const AuthorityApi = '/api/v1/authority'
+const EndpointApi = '/api/v1/endpoint'
 const ModuleApi = '/api/v1/module'
 const FileRegistryApi = '/api/v1/fileregistry'
 const SystemInfoApi = '/api/v1/system'
@@ -42,8 +43,8 @@ module.exports = {
     authModule: `${AuthorityApi}/module/:id`,
     authUsers: `${AuthorityApi}/user/`,
     authUser: `${AuthorityApi}/user/:id`,
-    authEndpoints: `${AuthorityApi}/endpoint/`,
-    authEndpoint: `${AuthorityApi}/endpoint/:id`,
+    endpointRegistrys: `${EndpointApi}/registry/`,
+    endpointRegistry: `${EndpointApi}/registry/:id`,
     modules: `${ModuleApi}/`,
     module: `${ModuleApi}/:id`,
     systemInfo: `${SystemInfoApi}/config/`,
