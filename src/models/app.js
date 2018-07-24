@@ -70,6 +70,10 @@ export default {
           const from = queryHashURL('from')
           if (from) {
             yield put(routerRedux.push({ pathname: from }))
+          } else {
+            yield put(routerRedux.push({
+              pathname: '/dashboard',
+            }))
           }
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
