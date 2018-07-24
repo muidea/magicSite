@@ -11,8 +11,7 @@ export default {
       const data = yield call(login, payload)
       const { errorCode } = data
       if (errorCode === 0) {
-        const { sessionID, onlineUser } = data
-        const { authToken } = onlineUser
+        const { sessionID, authToken } = data
 
         yield put({
           type: 'app/query',

@@ -55,7 +55,7 @@ const SessionID = 'aeelzsjdaaafdcp3ucuntzvaoef906zr'
 
 module.exports = {
 
-  [`POST ${apiPrefix}/cas/user`] (req, res) {
+  [`POST ${apiPrefix}/cas/user`](req, res) {
     const { account, password } = req.body
     const user = adminUsers.filter(item => item.account === account)
 
@@ -72,7 +72,7 @@ module.exports = {
     }
   },
 
-  [`DELETE ${apiPrefix}/cas/user`] (req, res) {
+  [`DELETE ${apiPrefix}/cas/user`](req, res) {
     const { sessionID, authToken } = req.body
     if (sessionID === SessionID && authToken === AuthToken) {
       res.clearCookie('token')
@@ -82,13 +82,13 @@ module.exports = {
     }
   },
 
-  [`GET ${apiPrefix}/cas/user`] (req, res) {
+  [`GET ${apiPrefix}/cas/user`](req, res) {
     const { query } = req
     const { sessionID, authToken } = query
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const response = {}
-    const onlineUser = {}
+    const onlineEntry = {}
     if (!cookies.token) {
       res.json({ errorCode: -1, reason: 'Not Login' })
       return
@@ -105,15 +105,15 @@ module.exports = {
     if (response.errorCode === 0) {
       const userItem = adminUsers.filter(_ => _.id === token.id)
       if (userItem.length > 0) {
-        onlineUser.Permissions = userItem[0].permissions
-        onlineUser.LoginTime = '1505907360'
-        onlineUser.UpdateTime = '1505907360'
-        onlineUser.Address = '127.0.0.1'
-        onlineUser.Name = userItem[0].name
-        onlineUser.ID = userItem[0].id
+        onlineEntry.Permissions = userItem[0].permissions
+        onlineEntry.LoginTime = '1505907360'
+        onlineEntry.UpdateTime = '1505907360'
+        onlineEntry.Address = '127.0.0.1'
+        onlineEntry.Name = userItem[0].name
+        onlineEntry.ID = userItem[0].id
       }
     }
-    response.onlineUser = onlineUser
+    response.onlineEntry = onlineEntry
     res.json(response)
   },
 

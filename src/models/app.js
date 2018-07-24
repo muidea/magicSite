@@ -53,16 +53,16 @@ export default {
       const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
       const data = yield call(queryStatus, { sessionID, authToken, ...payload })
       if (data.errorCode === 0) {
-        const { onlineUser } = data
-        const { menu, errorCode } = yield call(menusService.query, { authToken: onlineUser.authToken })
+        const { onlineEntry } = data
+        const { menu, errorCode } = yield call(menusService.query, { authToken: data.authToken })
 
         if (errorCode === 0) {
           yield put({
             type: 'updateState',
             payload: {
               sessionID: data.sessionID,
-              authToken: onlineUser.authToken,
-              onlineUser,
+              authToken: data.authToken,
+              onlineUser: onlineEntry,
               menu: JSON.parse(menu),
             },
           })
