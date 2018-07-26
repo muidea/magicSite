@@ -72,7 +72,7 @@ export default {
             yield put(routerRedux.push({ pathname: from }))
           } else {
             yield put(routerRedux.push({
-              pathname: '/dashboard',
+              pathname: locationPathname,
             }))
           }
         }
