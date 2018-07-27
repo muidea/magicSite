@@ -6,7 +6,7 @@ import qs from 'qs'
 import config from 'config'
 import { queryStatus, logout } from 'services/app'
 import * as menusService from 'services/menus'
-import { queryHashURL } from 'utils'
+import { queryHashURL, queryHashPathName } from 'utils'
 
 const { prefix } = config
 
@@ -67,10 +67,11 @@ export default {
             },
           })
 
+          const pathName = queryHashPathName()
           const from = queryHashURL('from')
           if (from) {
             yield put(routerRedux.push({ pathname: from }))
-          } else {
+          } else if (pathName !== locationPathname) {
             yield put(routerRedux.push({
               pathname: locationPathname,
             }))

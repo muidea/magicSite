@@ -67,7 +67,10 @@ const queryURL = (name) => {
 const queryHashPathName = () => {
   const startPos = window.location.hash.indexOf('#')
   const endPos = window.location.hash.indexOf('?')
-  return window.location.hash.substring(startPos + 1, endPos)
+  if (endPos > 0) {
+    return window.location.hash.substring(startPos + 1, endPos)
+  }
+  return window.location.hash.substring(startPos + 1)
 }
 
 const queryHashURL = (name) => {
