@@ -6,7 +6,7 @@ export default {
   namespace: 'articleDetail',
 
   state: {
-    name: '',
+    title: '',
     content: '',
     catalog: [],
     creater: {},
@@ -47,11 +47,11 @@ export default {
   reducers: {
     queryArticleSuccess(state, { payload }) {
       const { article } = payload
-      const { name, content, catalog, creater, createDate } = article
+      const { title, content, catalog, creater, createDate } = article
 
       return {
         ...state,
-        name,
+        title,
         content,
         catalog,
         creater,

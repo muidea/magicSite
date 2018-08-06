@@ -35,7 +35,7 @@ const ArticleEditor = ({
   },
 }) => {
   const { article, actionType } = articleEditor
-  const { id, name, content, catalog } = article
+  const { id, title, content, catalog } = article
 
   const onHandleSummit = () => {
     validateFields((errors) => {
@@ -59,8 +59,8 @@ const ArticleEditor = ({
       <div className={styles.content}>
         <Form layout="horizontal">
           <FormItem label="标题" {...formItemLayout}>
-            {getFieldDecorator('name', {
-              initialValue: name,
+            {getFieldDecorator('title', {
+              initialValue: title,
               rules: [
                 {
                   required: true,
