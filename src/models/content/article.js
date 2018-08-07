@@ -55,7 +55,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.article)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllArticle' })
+        yield put({ type: 'queryAllArticle', payload: {} })
       } else {
         throw data
       }
@@ -66,7 +66,7 @@ export default modelExtend(pageModel, {
       const data = yield call(multiDeleteArticle, { authToken, ...payload })
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllArticle' })
+        yield put({ type: 'queryAllArticle', payload: {} })
       } else {
         throw data
       }

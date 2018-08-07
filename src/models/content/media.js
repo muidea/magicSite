@@ -70,7 +70,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.media)
       if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllMedia' })
+        yield put({ type: 'queryAllMedia', payload: {} })
       } else {
         throw result
       }

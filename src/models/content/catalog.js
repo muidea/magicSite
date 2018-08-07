@@ -60,7 +60,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.catalog)
       if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllCatalog' })
+        yield put({ type: 'queryAllCatalog', payload: {} })
       } else {
         throw result
       }

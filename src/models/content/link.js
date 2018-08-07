@@ -60,7 +60,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.link)
       if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'queryAllLink', payload: {} })
       } else {
         throw result
       }
@@ -95,7 +95,7 @@ export default modelExtend(pageModel, {
       const { selectedRowKeys } = yield select(_ => _.link)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'queryAllLink', payload: {} })
       } else {
         throw data
       }
@@ -105,7 +105,7 @@ export default modelExtend(pageModel, {
       const data = yield call(multiDeleteLink, payload)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllLink' })
+        yield put({ type: 'queryAllLink', payload: {} })
       } else {
         throw data
       }
