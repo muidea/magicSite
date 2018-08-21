@@ -1,5 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryLink } from 'services/content/link'
+import { getSummaryDetail } from 'services/content/summary'
 
 export default {
 
@@ -12,6 +13,7 @@ export default {
     catalog: [],
     creater: {},
     createDate: '',
+    summaryList: [],
   },
 
   subscriptions: {
@@ -30,29 +32,34 @@ export default {
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryLink, { authToken, ...payload })
-      const { success, ...other } = data
+      const linkResult = yield call(queryLink, { authToken, ...payload })
+      const { success, ...other } = linkResult
       if (success) {
+        const { link } = other
+        const { id } = link
+        const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'link' })
+        const { summary } = summaryResult
         yield put({
           type: 'queryLinkSuccess',
           payload: {
-            data: other,
+            ...other,
+            summary,
           },
         })
       } else {
-        throw data
+        throw linkResult
       }
     },
   },
 
   reducers: {
     queryLinkSuccess(state, { payload }) {
-      const { data } = payload
-      const { link } = data
+      const { link, summary } = payload
 
       return {
         ...state,
         ...link,
+        summaryList: summary,
       }
     },
   },

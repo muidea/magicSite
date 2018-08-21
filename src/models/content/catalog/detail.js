@@ -12,7 +12,7 @@ export default {
     catalog: [],
     creater: {},
     createDate: '',
-    summary: [],
+    summaryList: [],
   },
 
   subscriptions: {
@@ -39,7 +39,7 @@ export default {
         yield put({
           type: 'queryCatalogSuccess',
           payload: {
-            data: other,
+            ...other,
             summary,
           },
         })
@@ -51,13 +51,12 @@ export default {
 
   reducers: {
     queryCatalogSuccess(state, { payload }) {
-      const { data, summary } = payload
-      const { catalog } = data
+      const { catalog, summary } = payload
 
       return {
         ...state,
         ...catalog,
-        summary,
+        summaryList: summary,
       }
     },
   },

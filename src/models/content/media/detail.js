@@ -1,6 +1,7 @@
 import pathToRegexp from 'path-to-regexp'
 import qs from 'qs'
 import { queryMedia, downloadMedia } from 'services/content/media'
+import { getSummaryDetail } from 'services/content/summary'
 
 export default {
 
@@ -14,6 +15,7 @@ export default {
     creater: {},
     fileUrl: '',
     expiration: 0,
+    summaryList: [],
   },
 
   subscriptions: {
@@ -33,27 +35,31 @@ export default {
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryMedia, { authToken, ...payload })
-      const { errorCode, media } = result
+      const mediaResult = yield call(queryMedia, { authToken, ...payload })
+      const { errorCode, media } = mediaResult
       if (errorCode === 0) {
-        const { name, description, catalog, createDate, creater, fileToken, expiration } = media
+        const { id, name, description, catalog, createDate, creater, fileToken, expiration } = media
         const downloadResult = yield call(downloadMedia, { fileToken, authToken })
         const { errorCode, redirectUrl } = downloadResult
         const param = qs.stringify({ authToken })
         if (errorCode === 0) {
-          yield put({ type: 'queryMediaSuccess', payload: { name, description, catalog, createDate, creater, expiration, fileUrl: `${redirectUrl}?${param}` } })
+          const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'media' })
+          const { summary } = summaryResult
+          yield put({ type: 'queryMediaSuccess', payload: { name, description, catalog, createDate, creater, expiration, fileUrl: `${redirectUrl}?${param}`, summary } })
         }
       } else {
-        throw result
+        throw mediaResult
       }
     },
   },
 
   reducers: {
     queryMediaSuccess(state, { payload }) {
+      const { summary, ...other } = payload
       return {
         ...state,
-        ...payload,
+        ...other,
+        summaryList: summary,
       }
     },
   },

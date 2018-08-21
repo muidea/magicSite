@@ -1,5 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryArticle } from 'services/content/article'
+import { getSummaryDetail } from 'services/content/summary'
 
 export default {
 
@@ -11,6 +12,7 @@ export default {
     catalog: [],
     creater: {},
     createDate: '',
+    summaryList: [],
   },
 
   subscriptions: {
@@ -29,24 +31,29 @@ export default {
       payload,
     }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryArticle, { authToken, ...payload })
-      const { success, ...other } = data
+      const articleResult = yield call(queryArticle, { authToken, ...payload })
+      const { success, ...other } = articleResult
       if (success) {
+        const { article } = other
+        const { id } = article
+        const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'article' })
+        const { summary } = summaryResult
         yield put({
           type: 'queryArticleSuccess',
           payload: {
             ...other,
+            summary,
           },
         })
       } else {
-        throw data
+        throw articleResult
       }
     },
   },
 
   reducers: {
     queryArticleSuccess(state, { payload }) {
-      const { article } = payload
+      const { article, summary } = payload
       const { title, content, catalog, creater, createDate } = article
 
       return {
@@ -56,6 +63,7 @@ export default {
         catalog,
         creater,
         createDate,
+        summaryList: summary,
       }
     },
   },

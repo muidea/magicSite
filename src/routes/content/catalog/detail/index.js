@@ -1,47 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Link } from 'dva/router'
-import { Table, Divider } from 'antd'
+import { Divider } from 'antd'
 import { DescriptionList, EditableTagGroup } from 'components'
+import { SummaryListView } from '../../common'
 
 const { Description } = DescriptionList
 
 const Detail = ({ catalogDetail }) => {
-  const { name, description, catalog, creater, createDate, summary } = catalogDetail
-
-  const columns = [
-    {
-      title: '名称',
-      dataIndex: 'name',
-      render: (text, record) => {
-        if (record.type === 'article') {
-          return <Link to={`/content/article/view/${record.id}`}>{text}</Link>
-        } else if (record.type === 'catalog') {
-          return <Link to={`/content/catalog/view/${record.id}`}>{text}</Link>
-        } else if (record.type === 'link') {
-          return <Link to={`/content/link/view/${record.id}`}>{text}</Link>
-        } else if (record.type === 'media') {
-          return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
-        }
-
-        return <span>{text}</span>
-      },
-    },
-    {
-      title: '类型',
-      dataIndex: 'type',
-    },
-    {
-      title: '创建人',
-      dataIndex: 'creater',
-      render: (text, record) => <span>{record.creater.name}</span>,
-    },
-    {
-      title: '更新日期',
-      dataIndex: 'createDate',
-    },
-  ]
+  const { name, description, catalog, creater, createDate, summaryList } = catalogDetail
 
   return (
     <div className="content-inner">
@@ -55,13 +22,7 @@ const Detail = ({ catalogDetail }) => {
       <Divider style={{ marginBottom: 32 }} />
       <div>
         <h3>分类内容</h3>
-        <Table
-          style={{ marginBottom: 24 }}
-          pagination={false}
-          dataSource={summary}
-          columns={columns}
-          rowKey={record => record.id + record.type}
-        />
+        <SummaryListView summaryList={summaryList} />
       </div>
     </div>)
 }
