@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Badge } from 'antd'
 
-const statusMap = ['success', 'processing', 'warning', 'error']
+const statusMap = ['processing', 'success', 'warning', 'error']
 
 export default class Status extends Component {
   render() {
