@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
 import { AutoCompleteTagGroup } from 'components'
+import { ToCatalogUnit } from '../../util'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -28,7 +29,10 @@ const modal = ({
         return
       }
       const data = { ...getFieldsValue() }
-      onOk(data)
+      const { name, description, catalog } = data
+      const catalogUnit = ToCatalogUnit(catalog)
+
+      onOk({ name, description, catalog: catalogUnit })
     })
   }
 

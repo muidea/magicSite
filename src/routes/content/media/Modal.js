@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, InputNumber, Modal } from 'antd'
 import { EditableTagGroup, MultiUpload } from 'components'
+import { ToCatalogUnit } from '../../util'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -27,10 +28,12 @@ const modal = ({
       }
 
       const { description } = values
+      const catalogUnit = ToCatalogUnit(values.catalog)
+
       if (!description) {
         values = { ...values, description: '' }
       }
-      onOk(values)
+      onOk({ ...values, catalog: catalogUnit })
     })
   }
 

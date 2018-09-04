@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
 import { EditableTagGroup } from 'components'
+import { ToCatalogUnit } from '../../util'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -30,7 +31,9 @@ const modal = ({
         ...getFieldsValue(),
         key: item.key,
       }
-      onOk(data)
+      const catalogUnit = ToCatalogUnit(data.catalog)
+
+      onOk({ ...data, catalog: catalogUnit })
     })
   }
 

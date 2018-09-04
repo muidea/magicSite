@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { RichEditor, EditableTagGroup } from 'components'
 import { Form, Input, Button } from 'antd'
+import { ToCatalogUnit } from '../../../util'
 import styles from './index.less'
 
 const FormItem = Form.Item
@@ -44,11 +45,14 @@ const ArticleEditor = ({
       }
       const data = { ...getFieldsValue() }
 
+      const catalogUnits = ToCatalogUnit(data.catalog)
+
       dispatch({
         type: (actionType === 'create') ? 'articleEditor/createArticle' : 'articleEditor/updateArticle',
         payload: {
           id,
           ...data,
+          catalog: catalogUnits,
         },
       })
     })
