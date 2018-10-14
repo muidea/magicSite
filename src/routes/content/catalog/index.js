@@ -8,6 +8,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Catalog = ({ location, dispatch, catalog, loading }) => {
+  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
   const { list, pagination, currentItem, selectedRowKeys, modalVisible, modalType } = catalog
   const { pageSize } = pagination
 
@@ -41,7 +42,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -75,11 +76,10 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        query: {
+        search: qs.stringify({
           ...value,
-          page: 1,
           pageSize,
-        },
+        }),
       }))
     },
     onSearch(fieldsValue) {

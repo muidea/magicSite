@@ -8,7 +8,7 @@ import List from './List'
 import Filter from './Filter'
 
 const Article = ({ location, dispatch, article, loading }) => {
-  location.query = qs.parse(location.search)
+  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
   const { list, pagination, selectedRowKeys } = article
   const { pageSize } = pagination
 
@@ -19,11 +19,12 @@ const Article = ({ location, dispatch, article, loading }) => {
     location,
     onChange(page) {
       const { query, pathname } = location
+
       dispatch(routerRedux.push({
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -56,7 +57,6 @@ const Article = ({ location, dispatch, article, loading }) => {
         pathname: location.pathname,
         search: qs.stringify({
           ...value,
-          page: 1,
           pageSize,
         }),
       }))
