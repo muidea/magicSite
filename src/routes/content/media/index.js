@@ -8,6 +8,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Media = ({ location, dispatch, media, loading }) => {
+  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
   const { list, pagination, fileRegistryUrl, selectedRowKeys, modalVisible } = media
   const { pageSize } = pagination
 
@@ -40,7 +41,7 @@ const Media = ({ location, dispatch, media, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -70,7 +71,6 @@ const Media = ({ location, dispatch, media, loading }) => {
         pathname: location.pathname,
         query: {
           ...value,
-          page: 1,
           pageSize,
         },
       }))

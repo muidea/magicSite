@@ -39,11 +39,7 @@ export default modelExtend(pageModel, {
       const param = qs.stringify({ sessionID, authToken, 'key-name': 'file' })
       const serverUrl = `${fileRegistry}?${param}`
       if (data) {
-        const { media } = data
-        let totalCount = 0
-        if (media) {
-          totalCount = media.length
-        }
+        const { total, media } = data
 
         yield put({
           type: 'updateStates',
@@ -55,9 +51,9 @@ export default modelExtend(pageModel, {
           payload: {
             list: media,
             pagination: {
-              current: Number(payload.page) || 1,
+              current: Number(payload.pageNum) || 1,
               pageSize: Number(payload.pageSize) || 10,
-              total: Number(totalCount) || 0,
+              total: Number(total) || 0,
             },
           },
         })

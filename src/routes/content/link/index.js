@@ -8,6 +8,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Link = ({ location, dispatch, link, loading }) => {
+  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
   const { list, pagination, currentItem, selectedRowKeys, modalVisible, modalType } = link
   const { pageSize } = pagination
 
@@ -40,7 +41,7 @@ const Link = ({ location, dispatch, link, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -76,7 +77,6 @@ const Link = ({ location, dispatch, link, loading }) => {
         pathname: location.pathname,
         query: {
           ...value,
-          page: 1,
           pageSize,
         },
       }))
