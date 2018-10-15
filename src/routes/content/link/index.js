@@ -75,24 +75,11 @@ const Link = ({ location, dispatch, link, loading }) => {
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        query: {
+        search: qs.stringify({
           ...value,
           pageSize,
-        },
+        }),
       }))
-    },
-    onSearch(fieldsValue) {
-      if (fieldsValue.keyword.length) {
-        dispatch(routerRedux.push({
-          pathname: '/link',
-          query: {
-            field: fieldsValue.field,
-            keyword: fieldsValue.keyword,
-          },
-        }))
-      } else {
-        dispatch(routerRedux.push({ pathname: '/link' }))
-      }
     },
     onAdd() {
       dispatch({
