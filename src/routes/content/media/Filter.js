@@ -55,12 +55,12 @@ const Filter = ({
     onDeleteItems()
   }
 
-  const { name } = filter
+  const { filterValue } = filter
 
   return (
     <Row gutter={24}>
       <Col {...ColProps} xl={{ span: 14 }} md={{ span: 14 }}>
-        {getFieldDecorator('filterValue', { initialValue: name })(<Search placeholder="查找文件" size="large" onSearch={handleSubmit} />)}
+        {getFieldDecorator('filterValue', { initialValue: filterValue })(<Search placeholder="查找文件" size="large" onSearch={handleSubmit} />)}
       </Col>
       <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 10 }} sm={{ span: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
