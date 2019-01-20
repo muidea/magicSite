@@ -28,6 +28,11 @@ export default modelExtend(pageModel, {
   effects: {
     * queryAllArticle({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
+      const { pageNum } = payload
+      if (!pageNum) {
+        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      }
+
       const data = yield call(queryAllArticle, { ...payload, authToken })
       if (data) {
         const { total, article } = data

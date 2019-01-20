@@ -32,6 +32,11 @@ export default modelExtend(pageModel, {
 
     * queryAllCatalog({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
+      const { pageNum } = payload
+      if (!pageNum) {
+        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      }
+
       const data = yield call(queryAllCatalog, { ...payload, authToken })
       if (data) {
         const { total, catalog } = data

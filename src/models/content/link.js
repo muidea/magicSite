@@ -32,6 +32,11 @@ export default modelExtend(pageModel, {
 
     * queryAllLink({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
+      const { pageNum } = payload
+      if (!pageNum) {
+        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      }
+
       const data = yield call(queryAllLink, { ...payload, authToken })
       if (data) {
         const { total, link } = data

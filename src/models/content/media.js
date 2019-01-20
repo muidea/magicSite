@@ -34,6 +34,11 @@ export default modelExtend(pageModel, {
   effects: {
     * queryAllMedia({ payload }, { call, put, select }) {
       const { sessionID, authToken } = yield select(_ => _.app)
+      const { pageNum } = payload
+      if (!pageNum) {
+        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      }
+
       const data = yield call(queryAllMedia, { ...payload, authToken })
 
       const param = qs.stringify({ sessionID, authToken, 'key-name': 'file' })
