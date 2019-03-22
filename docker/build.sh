@@ -2,7 +2,7 @@
 
 rootPath=$GOPATH
 projectName=magicSite
-projectPath=$rootPath/src/muidea.com/magicSite
+projectPath=$rootPath/src/github.com/muidea/magicSite
 binPath=$projectPath/dist
 imageID=""
 imageNamespace=muidea.ai/develop
