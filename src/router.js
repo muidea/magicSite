@@ -13,10 +13,6 @@ const Routers = ({ history, app }) => {
   })
   const routes = [
     {
-      path: '/dashboard',
-      models: () => [import('./models/dashboard')],
-      component: () => import('./routes/dashboard/'),
-    }, {
       path: '/content/article',
       models: () => [import('./models/content/article')],
       component: () => import('./routes/content/article/'),
@@ -133,9 +129,9 @@ const Routers = ({ history, app }) => {
 
   return (
     <ConnectedRouter history={history}>
-      <App>
-        <Switch>
-          <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} />
+      <Switch>
+        <App>
+          <Route exact path="/" render={() => (<Redirect to="/content/article" />)} />
           {
             routes.map(({ path, ...dynamics }, key) => (
               <Route
@@ -150,8 +146,8 @@ const Routers = ({ history, app }) => {
             ))
           }
           <Route component={error} />
-        </Switch>
-      </App>
+        </App>
+      </Switch>
     </ConnectedRouter>
   )
 }
