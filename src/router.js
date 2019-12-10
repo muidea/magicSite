@@ -129,8 +129,8 @@ const Routers = ({ history, app }) => {
 
   return (
     <ConnectedRouter history={history}>
-      <Switch>
-        <App>
+      <App>
+        <Switch>
           <Route exact path="/" render={() => (<Redirect to="/content/article" />)} />
           {
             routes.map(({ path, ...dynamics }, key) => (
@@ -146,8 +146,8 @@ const Routers = ({ history, app }) => {
             ))
           }
           <Route component={error} />
-        </App>
-      </Switch>
+        </Switch>
+      </App>
     </ConnectedRouter>
   )
 }

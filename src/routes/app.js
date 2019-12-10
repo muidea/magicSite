@@ -76,6 +76,7 @@ const App = ({ children, dispatch, app, loading, location }) => {
   if (openPages && openPages.includes(pathname)) {
     return (<div> <Loader fullScreen spinning={loading.effects['app/query']} /> {children} </div>)
   }
+
   return (
     <div>
       <Loader fullScreen spinning={loading.effects['app/query']} />
