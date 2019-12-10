@@ -3,18 +3,17 @@
 /* global location */
 import { routerRedux } from 'dva/router'
 import qs from 'qs'
+import { notification } from 'antd'
 import config from 'config'
-import { queryStatus, logout } from 'services/app'
-import * as menusService from 'services/menus'
-import { queryHashURL, queryHashPathName } from 'utils'
+import { userStatus, userLogin, userLogout } from 'services/app'
 
 const { prefix } = config
+
 
 export default {
   namespace: 'app',
   state: {
-    sessionID: window.localStorage.getItem(`${prefix}SessionID`),
-    authToken: window.localStorage.getItem(`${prefix}AuthToken`),
+    sessionInfo: qs.parse(window.localStorage.getItem(`${prefix}SessionInfo`)),
     onlineUser: { },
     menu: [
       {
@@ -32,50 +31,43 @@ export default {
     locationPathname: '',
     locationQuery: {},
   },
+
   subscriptions: {
     setupHistory({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
-          type: 'updateState',
-          payload: { locationPathname: location.pathname },
+          type: 'status',
+          payload: {
+            locationPathname: location.pathname,
+            locationQuery: qs.parse(location.search),
+          },
         })
       })
     },
-
-    setup({ dispatch }) {
-      dispatch({ type: 'query' })
-    },
-
   },
 
   effects: {
-    * query({ payload }, { call, put, select }) {
-      const { sessionID, authToken, locationPathname } = yield select(_ => _.app)
-      const data = yield call(queryStatus, { sessionID, authToken, ...payload })
-      if (data.errorCode === 0) {
-        const { onlineEntry } = data
-        const { menu, errorCode } = yield call(menusService.query, { authToken: data.authToken })
+    * status({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      if (sessionInfo) {
+        payload = { ...payload, ...sessionInfo }
+      }
 
+      const { locationPathname } = payload
+      const result = yield call(userStatus, { ...payload })
+      const { success, data } = result
+      if (success) {
+        const { errorCode, reason } = data
         if (errorCode === 0) {
           yield put({
-            type: 'updateState',
+            type: 'saveSession',
             payload: {
-              sessionID: data.sessionID,
-              authToken: data.authToken,
-              onlineUser: onlineEntry,
-              menu: JSON.parse(menu),
+              sessionInfo: data.sessionInfo,
+              onlineUser: data.account,
             },
           })
-
-          const pathName = queryHashPathName()
-          const from = queryHashURL('from')
-          if (from) {
-            yield put(routerRedux.push({ pathname: from }))
-          } else if (pathName !== locationPathname) {
-            yield put(routerRedux.push({
-              pathname: locationPathname,
-            }))
-          }
+        } else {
+          notification.error({ message: '错误信息', description: reason })
         }
       } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
         yield put(routerRedux.push({
@@ -85,14 +77,40 @@ export default {
       }
     },
 
-    * logout({ payload }, { call, put, select }) {
-      const { sessionID, authToken } = yield select(_ => _.app)
-      const data = yield call(logout, { sessionID, authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'clearStatus' })
-        yield put({ type: 'query' })
+    *login({ payload }, { call, put }) {
+      const result = yield call(userLogin, { ...payload })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, sessionInfo, account } = data
+        if (errorCode === 0) {
+          yield put({ type: 'saveSession', payload: { isLogin: true, sessionInfo, onlineUser: account } })
+          yield put(routerRedux.push({
+            pathname: '/index',
+          }))
+        } else {
+          notification.error({ message: '登陆失败', description: reason })
+        }
       } else {
-        throw (data)
+        notification.error({ message: '登陆失败', description: message })
+      }
+    },
+
+    * logout({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      payload = { ...payload, ...sessionInfo }
+
+      const result = yield call(userLogout, { ...payload })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode } = data
+        if (errorCode === 0) {
+          yield put({ type: 'clearSession', payload: { isLogin: false, sessionInfo: null, onlineUser: null } })
+          yield put(routerRedux.push({
+            pathname: '/login',
+          }))
+        }
+      } else {
+        notification.error({ message: '注销失败', description: message })
       }
     },
 
@@ -107,31 +125,20 @@ export default {
   },
 
   reducers: {
-    updateState(state, { payload }) {
-      const { sessionID, authToken } = payload
+    saveSession(state, { payload }) {
+      const { sessionInfo } = payload
 
-      if (sessionID && authToken) {
-        window.localStorage.setItem(`${prefix}SessionID`, sessionID)
-        window.localStorage.setItem(`${prefix}AuthToken`, authToken)
+      if (sessionInfo) {
+        window.localStorage.setItem(`${prefix}SessionInfo`, qs.stringify(sessionInfo))
       }
 
-      return {
-        ...state,
-        ...payload,
-      }
+      return { ...state, ...payload }
     },
 
-    clearStatus(state) {
-      window.localStorage.removeItem(`${prefix}SessionID`)
-      window.localStorage.removeItem(`${prefix}AuthToken`)
+    clearSession(state, { payload }) {
+      window.localStorage.removeItem(`${prefix}SessionInfo`)
 
-      return {
-        ...state,
-        sessionID: '',
-        authToken: '',
-        onlineUser: {},
-        permissions: { visit: [] },
-      }
+      return { ...state, ...payload }
     },
 
     switchSider(state) {

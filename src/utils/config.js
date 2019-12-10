@@ -1,4 +1,4 @@
-const CasApi = '/api/v1/cas'
+const CasApi = '/api/v1/'
 const ContentApi = '/api/v1/content'
 const AccountApi = '/api/v1/account'
 const AuthorityApi = '/api/v1/authority'
@@ -19,9 +19,10 @@ module.exports = {
   apiPrefix: '/api/v1',
   APIV1: `${APIV1}`,
   api: {
-    userLogin: `${CasApi}/user/`,
-    userLogout: `${CasApi}/user/`,
-    userInfo: `${CasApi}/user/`,
+    userLoginUrl: `${CasApi}/user/login/`,
+    userLogoutUrl: `${CasApi}/user/logout/`,
+    userStatusUrl: `${CasApi}/user/status/`,
+
     articles: `${ContentApi}/articles/`,
     article: `${ContentApi}/article/:id`,
     catalogs: `${ContentApi}/catalogs/`,

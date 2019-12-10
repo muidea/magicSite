@@ -13,7 +13,7 @@ export default {
   outputPath: `./dist/${version}`,
   proxy: {
     "/api/v1/": {
-      "target": "http://localhost:8888/",
+      "target": "http://localhost:8880/",
       "changeOrigin": true,
       "pathRewrite": { "^/api/v1/": "/" }
     },
