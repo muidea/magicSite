@@ -2,7 +2,19 @@
 import axios from 'axios'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
-import { message } from 'antd'
+import qs from 'qs'
+
+const successResponse = (message, data) => {
+  return { message, data, success: true }
+}
+
+const failedResponse = (message, data) => {
+  return { message, data, success: false }
+}
+
+const exceptionResponse = (message) => {
+  return { message, data: {}, success: false }
+}
 
 const fetch = (options) => {
   const { method = 'get', data } = options
@@ -25,46 +37,56 @@ const fetch = (options) => {
     }
     url = domin + url
   } catch (e) {
-    message.error(e.message)
+    return Promise.resolve(exceptionResponse(e.message))
   }
 
-  switch (method.toLowerCase()) {
-    case 'get':
-      return axios.get(url, { params: cloneData })
-    case 'delete':
-      return axios.delete(url, { data: cloneData })
-    case 'post':
-      return axios.post(url, cloneData)
-    case 'put':
-      return axios.put(url, cloneData)
-    case 'patch':
-      return axios.patch(url, cloneData)
-    default:
-      return axios(options)
+  try {
+    switch (method.toLowerCase()) {
+      case 'get':
+        return axios.get(url, { params: cloneData })
+      case 'delete':
+        return axios.delete(url, { data: cloneData })
+      case 'post':
+        return axios.post(url, cloneData)
+      case 'put':
+        return axios.put(url, cloneData)
+      case 'patch':
+        return axios.patch(url, cloneData)
+      default:
+        return axios(options)
+    }
+  } catch (e) {
+    return Promise.resolve(exceptionResponse(e.message))
   }
 }
 
-const request = (options) => {
-  if (options.url && options.url.indexOf('//') > -1) {
-    const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`
-    if (window.location.origin !== origin) {
-      options.fetchType = 'JSONP'
-    }
-  }
-
+export default function request(options) {
   if (options.url) {
     if (options.data) {
-      const { id, authToken } = options.data
-      const { method } = options
+      const { id, sessionToken, sessionScope, sessionID } = options.data
       let { url } = options
-      if (id !== undefined && (method !== 'post')) {
+      if (id !== undefined) {
         delete options.data.id
         url = url.replace(':id', id)
       }
 
-      if (authToken !== undefined) {
-        delete options.data.authToken
-        url = url.concat('?authToken='.concat(authToken))
+      let param = {}
+      if (sessionToken !== undefined) {
+        delete options.data.sessionToken
+        param = { ...param, sessionToken }
+      }
+      if (sessionScope !== undefined) {
+        delete options.data.sessionScope
+        param = { ...param, sessionScope }
+      }
+      if (sessionID !== undefined) {
+        delete options.data.sessionID
+        param = { ...param, sessionID }
+      }
+
+      const extParam = qs.stringify({ ...param, browserTimestamp: new Date().getTime() })
+      if (extParam) {
+        url = url.concat('?'.concat(extParam))
       }
 
       options = {
@@ -74,39 +96,25 @@ const request = (options) => {
     }
   }
 
-  console.log(options)
-
   return fetch(options).then((response) => {
-    const { statusText, status } = response
-    let { data } = response
-    if (data instanceof Array) {
-      data = { list: data }
+    const { statusText, status, data } = response
+
+    let responseMsg = failedResponse(statusText, data)
+    if (status === 200) {
+      responseMsg = successResponse(statusText, data)
     }
 
-    console.log(data)
-
-    return Promise.resolve({
-      success: true,
-      message: statusText,
-      statusCode: status,
-      ...data,
-    })
+    return Promise.resolve(responseMsg)
   }).catch((error) => {
     const { response } = error
     let msg
-    let statusCode
     if (response && response instanceof Object) {
-      const { data, statusText } = response
-      statusCode = response.status
-      msg = data.message || statusText
+      const { statusText } = response
+      msg = statusText
     } else {
-      statusCode = 600
       msg = error.message || 'Network Error'
     }
 
-    const val = { success: false, statusCode, message: msg }
-    return Promise.reject(val)
+    return Promise.resolve(exceptionResponse(msg))
   })
 }
-
-export default request

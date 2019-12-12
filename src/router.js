@@ -122,7 +122,6 @@ const Routers = ({ history, app }) => {
       component: () => import('./routes/system/config/'),
     }, {
       path: '/login',
-      models: () => [import('./models/login')],
       component: () => import('./routes/login/'),
     },
   ]

@@ -1,4 +1,4 @@
-const CasApi = '/api/v1/'
+const CasApi = '/api/v1'
 const ContentApi = '/api/v1/content'
 const AccountApi = '/api/v1/account'
 const AuthorityApi = '/api/v1/authority'
