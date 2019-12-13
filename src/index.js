@@ -5,12 +5,13 @@ import { createBrowserHistory as createHistory } from 'history'
 
 // 1. Initialize
 const app = dva({
-  ...createLoading({ effects: true }),
   history: createHistory(),
   onError(error) {
     message.error(error.message)
   },
 })
+
+app.use(createLoading({ effects: true }))
 
 // 2. Model
 app.model(require('models/app'))

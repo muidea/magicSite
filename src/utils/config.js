@@ -19,6 +19,7 @@ module.exports = {
   apiPrefix: '/api/v1',
   APIV1: `${APIV1}`,
   api: {
+    systemInfoUrl: `${SystemInfoApi}/info/`,
     userLoginUrl: `${CasApi}/user/login/`,
     userLogoutUrl: `${CasApi}/user/logout/`,
     userStatusUrl: `${CasApi}/user/status/`,

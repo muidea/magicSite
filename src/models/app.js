@@ -5,7 +5,7 @@ import { routerRedux } from 'dva/router'
 import qs from 'qs'
 import { notification } from 'antd'
 import config from 'config'
-import { userStatus, userLogin, userLogout } from 'services/app'
+import { systemInfo, userStatus, userLogin, userLogout } from 'services/app'
 
 const { prefix } = config
 
@@ -24,8 +24,8 @@ export default {
       },
     ],
     menuPopoverVisible: false,
-    siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
-    darkTheme: window.localStorage.getItem(`${prefix}darkTheme`) === 'true',
+    siderFold: window.localStorage.getItem(`${prefix}SiderFold`) === 'true',
+    darkTheme: window.localStorage.getItem(`${prefix}DarkTheme`) === 'true',
     isNavbar: document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(window.localStorage.getItem(`${prefix}navOpenKeys`)) || [],
     locationPathname: '',
@@ -36,7 +36,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
-          type: 'status',
+          type: 'loading',
           payload: {
             locationPathname: location.pathname,
             locationQuery: qs.parse(location.search),
@@ -47,13 +47,22 @@ export default {
   },
 
   effects: {
+    * loading({ payload }, { call, put }) {
+      yield call(systemInfo, { ...payload })
+
+      yield put({
+        type: 'status',
+        payload,
+      })
+    },
+
     * status({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       if (sessionInfo) {
         payload = { ...payload, ...sessionInfo }
       }
 
-      const { locationPathname } = payload
+      const { locationPathname, locationQuery } = payload
       const result = yield call(userStatus, { ...payload })
       const { success, data } = result
       if (success) {
@@ -64,6 +73,8 @@ export default {
             payload: {
               sessionInfo: data.sessionInfo,
               onlineUser: data.account,
+              locationPathname,
+              locationQuery,
             },
           })
         } else {
@@ -142,7 +153,7 @@ export default {
     },
 
     switchSider(state) {
-      window.localStorage.setItem(`${prefix}siderFold`, !state.siderFold)
+      window.localStorage.setItem(`${prefix}SiderFold`, !state.siderFold)
       return {
         ...state,
         siderFold: !state.siderFold,
@@ -150,7 +161,7 @@ export default {
     },
 
     switchTheme(state) {
-      window.localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
+      window.localStorage.setItem(`${prefix}DarkTheme`, !state.darkTheme)
       return {
         ...state,
         darkTheme: !state.darkTheme,

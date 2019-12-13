@@ -73,13 +73,14 @@ const App = ({ children, dispatch, app, loading, location }) => {
     menu,
     location,
   }
+
   if (openPages && openPages.includes(pathname)) {
-    return (<div> <Loader fullScreen spinning={loading.effects['app/status']} /> {children} </div>)
+    return (<div> <Loader fullScreen spinning={loading.effects['app/loading']} /> {children} </div>)
   }
 
   return (
     <div>
-      <Loader fullScreen spinning={loading.effects['app/status']} />
+      <Loader fullScreen spinning={loading.effects['app/loading']} />
       <Helmet>
         <title>MagicCenter</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

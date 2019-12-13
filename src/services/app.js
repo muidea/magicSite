@@ -1,7 +1,15 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { userStatusUrl, userLogoutUrl, userLoginUrl } = api
+const { systemInfoUrl, userStatusUrl, userLogoutUrl, userLoginUrl } = api
+
+export async function systemInfo(params) {
+  return request({
+    url: systemInfoUrl,
+    method: 'get',
+    data: params,
+  })
+}
 
 export async function userLogin(params) {
   return request({
