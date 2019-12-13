@@ -9,7 +9,6 @@ import { systemInfo, userStatus, userLogin, userLogout } from 'services/app'
 
 const { prefix } = config
 
-
 export default {
   namespace: 'app',
   state: {
@@ -48,7 +47,21 @@ export default {
 
   effects: {
     * loading({ payload }, { call, put }) {
-      yield call(systemInfo, { ...payload })
+      const result = yield call(systemInfo, { ...payload })
+      const { success, message, data } = result
+      if (success) {
+        const { menu } = data
+
+        yield put({
+          type: 'saveSession',
+          payload: {
+            menu,
+          },
+        })
+      } else {
+        notification.error({ message: '错误信息', description: message })
+        return
+      }
 
       yield put({
         type: 'status',

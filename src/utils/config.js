@@ -1,11 +1,14 @@
-const CasApi = '/api/v1'
+
+const SystemInfoApi = '/api/v1/system'
+
+const CasInfoApi = '/api/v1/user'
+
 const ContentApi = '/api/v1/content'
 const AccountApi = '/api/v1/account'
 const AuthorityApi = '/api/v1/authority'
 const EndpointApi = '/api/v1/endpoint'
 const ModuleApi = '/api/v1/module'
 const FileRegistryApi = '/api/v1/fileregistry'
-const SystemInfoApi = '/api/v1/system'
 const APIV1 = '/api/v1'
 
 module.exports = {
@@ -20,9 +23,10 @@ module.exports = {
   APIV1: `${APIV1}`,
   api: {
     systemInfoUrl: `${SystemInfoApi}/info/`,
-    userLoginUrl: `${CasApi}/user/login/`,
-    userLogoutUrl: `${CasApi}/user/logout/`,
-    userStatusUrl: `${CasApi}/user/status/`,
+
+    casLoginUrl: `${CasInfoApi}/login/`,
+    casLogoutUrl: `${CasInfoApi}/logout/`,
+    casStatusUrl: `${CasInfoApi}/status/`,
 
     articles: `${ContentApi}/articles/`,
     article: `${ContentApi}/article/:id`,
