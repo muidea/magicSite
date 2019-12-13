@@ -7,19 +7,19 @@ import request from './request'
 import { color } from './theme'
 
 // 连字符转驼峰
-String.prototype.hyphenToHump = function () {
+String.prototype.hyphenToHump = () => {
   return this.replace(/-(\w)/g, (...args) => {
     return args[1].toUpperCase()
   })
 }
 
 // 驼峰转连字符
-String.prototype.humpToHyphen = function () {
+String.prototype.humpToHyphen = () => {
   return this.replace(/([A-Z])/g, '-$1').toLowerCase()
 }
 
 // 日期格式化
-Date.prototype.format = function (format) {
+Date.prototype.format = (format) => {
   const o = {
     'M+': this.getMonth() + 1,
     'd+': this.getDate(),

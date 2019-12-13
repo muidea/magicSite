@@ -33,7 +33,7 @@ export default {
   },
 
   subscriptions: {
-    setupHistory({ dispatch, history }) {
+    setup({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
           type: 'status',
