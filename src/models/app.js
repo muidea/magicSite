@@ -46,27 +46,45 @@ export default {
   },
 
   effects: {
-    * loading({ payload }, { call, put }) {
-      const result = yield call(systemInfo, { ...payload })
-      const { success, message, data } = result
-      if (success) {
-        const { menu } = data
+    * loading({ payload }, { call, put, select }) {
+      const { locationPathname } = payload
+      const { sessionInfo } = yield select(_ => _.app)
+      const { sessionID } = sessionInfo
 
-        yield put({
-          type: 'saveSession',
-          payload: {
-            menu,
-          },
-        })
-      } else {
-        notification.error({ message: '错误信息', description: message })
-        return
+      if (locationPathname !== '/login') {
+        if (sessionID) {
+          const result = yield call(systemInfo, { ...payload })
+          const { success, message, data } = result
+          if (success) {
+            const { menu } = data
+
+            yield put({
+              type: 'saveSession',
+              payload: {
+                menu,
+              },
+            })
+          } else {
+            notification.error({ message: '错误信息', description: message })
+            return
+          }
+
+          yield put({
+            type: 'status',
+            payload,
+          })
+        } else {
+          yield put(routerRedux.push({
+            pathname: '/login',
+            search: qs.stringify({ from: locationPathname }),
+          }))
+        }
+      } else if (sessionID) {
+        yield put(routerRedux.push({
+          pathname: '/',
+          search: qs.stringify({ from: locationPathname }),
+        }))
       }
-
-      yield put({
-        type: 'status',
-        payload,
-      })
     },
 
     * status({ payload }, { call, put, select }) {
@@ -77,7 +95,7 @@ export default {
 
       const { locationPathname, locationQuery } = payload
       const result = yield call(userStatus, { ...payload })
-      const { success, data } = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
@@ -91,13 +109,20 @@ export default {
             },
           })
         } else {
+          yield put({
+            type: 'saveSession',
+            payload: {
+              sessionInfo: {},
+              onlineUser: {},
+              locationPathname,
+              locationQuery,
+            },
+          })
+
           notification.error({ message: '错误信息', description: reason })
         }
-      } else if (config.openPages && config.openPages.indexOf(locationPathname) < 0) {
-        yield put(routerRedux.push({
-          pathname: '/login',
-          search: qs.stringify({ from: locationPathname }),
-        }))
+      } else {
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
@@ -107,9 +132,9 @@ export default {
       if (success) {
         const { errorCode, reason, sessionInfo, account } = data
         if (errorCode === 0) {
-          yield put({ type: 'saveSession', payload: { isLogin: true, sessionInfo, onlineUser: account } })
+          yield put({ type: 'saveSession', payload: { sessionInfo, onlineUser: account } })
           yield put(routerRedux.push({
-            pathname: '/index',
+            pathname: '/',
           }))
         } else {
           notification.error({ message: '登陆失败', description: reason })
@@ -128,7 +153,7 @@ export default {
       if (success) {
         const { errorCode } = data
         if (errorCode === 0) {
-          yield put({ type: 'clearSession', payload: { isLogin: false, sessionInfo: null, onlineUser: null } })
+          yield put({ type: 'clearSession', payload: { sessionInfo: {}, onlineUser: {} } })
           yield put(routerRedux.push({
             pathname: '/login',
           }))
