@@ -23,6 +23,7 @@ module.exports = {
   APIV1: `${APIV1}`,
   api: {
     systemInfoUrl: `${SystemInfoApi}/info/`,
+    systemDashBoardUrl: `${SystemInfoApi}/dashboard/`,
 
     casLoginUrl: `${CasInfoApi}/login/`,
     casLogoutUrl: `${CasInfoApi}/logout/`,
@@ -56,6 +57,5 @@ module.exports = {
     systemInfo: `${SystemInfoApi}/config/`,
     systemMenus: `${SystemInfoApi}/menu/`,
     fileRegistry: `${FileRegistryApi}/file/`,
-    dashboard: `${SystemInfoApi}/dashboard/`,
   },
 }

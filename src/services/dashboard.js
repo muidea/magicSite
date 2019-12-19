@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { dashboard } = api
+const { systemDashBoardUrl } = api
 
-export async function query(params) {
+export async function queryDashboard(params) {
   return request({
-    url: dashboard,
+    url: systemDashBoardUrl,
     method: 'get',
     data: params,
   })

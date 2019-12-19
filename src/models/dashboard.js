@@ -1,5 +1,5 @@
 import modelExtend from 'dva-model-extend'
-import { query } from 'services/dashboard'
+import { queryDashboard } from 'services/dashboard'
 import { model } from 'models/common'
 
 export default modelExtend(model, {
@@ -23,16 +23,25 @@ export default modelExtend(model, {
     * query({
       payload,
     }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(query, { authToken, ...payload })
-      const { errorCode, reason, ...other } = data
-      if (errorCode === 0) {
-        yield put({
-          type: 'updateModelState',
-          payload: { ...other },
-        })
+      const { sessionInfo } = yield select(_ => _.app)
+      if (sessionInfo) {
+        payload = { ...payload, ...sessionInfo }
+      }
+
+      const result = yield call(queryDashboard, { ...payload })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, ...other } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'updateModelState',
+            payload: { ...other },
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }  
       } else {
-        throw (reason)
+        notification.error({ message: '错误信息', description: message })
       }
     },
   },
