@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { media, medias, batchAddMedias, fileRegistry } = api
+const { queryAllMediaUrl, queryMediaUrl,filterMediaUrl,deleteMediaUrl,createMediaUrl,updateMediaUrl } = api
 
 export async function queryAllMedia(params) {
   return request({
-    url: medias,
+    url: queryAllMediaUrl,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,15 @@ export async function queryAllMedia(params) {
 
 export async function queryMedia(params) {
   return request({
-    url: media,
+    url: queryMediaUrl,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function filterMedia(params) {
+  return request({
+    url: filterMediaUrl,
     method: 'get',
     data: params,
   })
@@ -21,7 +29,7 @@ export async function queryMedia(params) {
 
 export async function createMedia(params) {
   return request({
-    url: media.replace(':id', ''),
+    url: createMediaUrl,
     method: 'post',
     data: params,
   })
@@ -29,7 +37,7 @@ export async function createMedia(params) {
 
 export async function deleteMedia(params) {
   return request({
-    url: media,
+    url: deleteMediaUrl,
     method: 'delete',
     data: params,
   })
@@ -37,7 +45,7 @@ export async function deleteMedia(params) {
 
 export async function multiDeleteMedia(params) {
   return request({
-    url: medias,
+    url: articles,
     method: 'delete',
     data: params,
   })
@@ -45,24 +53,8 @@ export async function multiDeleteMedia(params) {
 
 export async function updateMedia(params) {
   return request({
-    url: media,
+    url: updateMediaUrl,
     method: 'put',
-    data: params,
-  })
-}
-
-export async function batchCreateMedia(params) {
-  return request({
-    url: batchAddMedias,
-    method: 'post',
-    data: params,
-  })
-}
-
-export async function downloadMedia(params) {
-  return request({
-    url: fileRegistry,
-    method: 'get',
     data: params,
   })
 }

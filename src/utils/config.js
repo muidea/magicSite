@@ -2,8 +2,8 @@
 const SystemInfoApi = '/api/v1/system'
 
 const CasInfoApi = '/api/v1/user'
+const ContentApi = '/api/v1'
 
-const ContentApi = '/api/v1/content'
 const AccountApi = '/api/v1/account'
 const AuthorityApi = '/api/v1/authority'
 const EndpointApi = '/api/v1/endpoint'
@@ -29,31 +29,48 @@ module.exports = {
     casLogoutUrl: `${CasInfoApi}/logout/`,
     casStatusUrl: `${CasInfoApi}/status/`,
 
-    articles: `${ContentApi}/articles/`,
-    article: `${ContentApi}/article/:id`,
-    catalogs: `${ContentApi}/catalogs/`,
-    catalog: `${ContentApi}/catalog/:id`,
-    links: `${ContentApi}/links/`,
-    link: `${ContentApi}/link/:id`,
-    medias: `${ContentApi}/medias/`,
-    media: `${ContentApi}/media/:id`,
-    batchAddMedias: `${ContentApi}/media/batch/`,
+    queryAllArticleUrl: `${ContentApi}/article/query/all/`,
+    queryArticleUrl: `${ContentApi}/article/query/:id`,
+    filterArticleUrl: `${ContentApi}/article/query/`,
+    deleteArticleUrl: `${ContentApi}/article/delete/:id`,
+    createArticleUrl: `${ContentApi}/article/create/`,
+    updateArticleUrl: `${ContentApi}/article/update/:id`,
+
+    queryAllCatalogUrl: `${ContentApi}/catalog/query/all/`,
+    queryCatalogUrl: `${ContentApi}/catalog/query/:id`,
+    filterCatalogUrl: `${ContentApi}/catalog/query/`,
+    deleteCatalogUrl: `${ContentApi}/catalog/delete/:id`,
+    createCatalogUrl: `${ContentApi}/catalog/create/`,
+    updateCatalogUrl: `${ContentApi}/catalog/update/:id`,
+
+    queryAllLinkUrl: `${ContentApi}/link/query/all/`,
+    queryLinkUrl: `${ContentApi}/link/query/:id`,
+    filterLinkUrl: `${ContentApi}/link/query/`,
+    deleteLinkUrl: `${ContentApi}/link/delete/:id`,
+    createLinkUrl: `${ContentApi}/link/create/`,
+    updateLinkUrl: `${ContentApi}/link/update/:id`,
+
+    queryAllMediaUrl: `${ContentApi}/media/query/all/`,
+    queryMediaUrl: `${ContentApi}/media/query/:id`,
+    filterMediaUrl: `${ContentApi}/media/query/`,
+    deleteMediaUrl: `${ContentApi}/media/delete/:id`,
+    createMediaUrl: `${ContentApi}/media/create/`,
+    updateMediaUrl: `${ContentApi}/media/update/:id`,
+
+    queryAllCommentUrl: `${ContentApi}/comment/query/all/`,
+    queryCommentUrl: `${ContentApi}/comment/query/:id`,
+    filterCommentUrl: `${ContentApi}/comment/query/`,
+    deleteCommentUrl: `${ContentApi}/comment/delete/:id`,
+    createCommentUrl: `${ContentApi}/comment/create/`,
+    updateCommentUrl: `${ContentApi}/comment/update/:id`,
+
     getSummary: `${ContentApi}/summary/:id`,
     querySummary: `${ContentApi}/summarys/`,
     users: `${AccountApi}/user/`,
     user: `${AccountApi}/user/:id`,
     groups: `${AccountApi}/group/`,
     group: `${AccountApi}/group/:id`,
-    acls: `${AuthorityApi}/acl/`,
-    acl: `${AuthorityApi}/acl/:id`,
-    authModules: `${AuthorityApi}/module/`,
-    authModule: `${AuthorityApi}/module/:id`,
-    authUsers: `${AuthorityApi}/user/`,
-    authUser: `${AuthorityApi}/user/:id`,
-    endpointRegistrys: `${EndpointApi}/registry/`,
-    endpointRegistry: `${EndpointApi}/registry/:id`,
-    modules: `${ModuleApi}/`,
-    module: `${ModuleApi}/:id`,
+
     systemInfo: `${SystemInfoApi}/config/`,
     systemMenus: `${SystemInfoApi}/menu/`,
     fileRegistry: `${FileRegistryApi}/file/`,

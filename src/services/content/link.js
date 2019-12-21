@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { link, links } = api
+const { queryAllLinkUrl, queryLinkUrl,filterLinkUrl,deleteLinkUrl,createLinkUrl,updateLinkUrl } = api
 
 export async function queryAllLink(params) {
   return request({
-    url: links,
+    url: queryAllLinkUrl,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,15 @@ export async function queryAllLink(params) {
 
 export async function queryLink(params) {
   return request({
-    url: link,
+    url: queryLinkUrl,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function filterLink(params) {
+  return request({
+    url: filterLinkUrl,
     method: 'get',
     data: params,
   })
@@ -21,7 +29,7 @@ export async function queryLink(params) {
 
 export async function createLink(params) {
   return request({
-    url: link.replace(':id', ''),
+    url: createLinkUrl,
     method: 'post',
     data: params,
   })
@@ -29,7 +37,7 @@ export async function createLink(params) {
 
 export async function deleteLink(params) {
   return request({
-    url: link,
+    url: deleteLinkUrl,
     method: 'delete',
     data: params,
   })
@@ -37,7 +45,7 @@ export async function deleteLink(params) {
 
 export async function multiDeleteLink(params) {
   return request({
-    url: links,
+    url: articles,
     method: 'delete',
     data: params,
   })
@@ -45,7 +53,7 @@ export async function multiDeleteLink(params) {
 
 export async function updateLink(params) {
   return request({
-    url: link,
+    url: updateLinkUrl,
     method: 'put',
     data: params,
   })

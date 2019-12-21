@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { article, articles } = api
+const { queryAllArticleUrl, queryArticleUrl,filterArticleUrl,deleteArticleUrl,createArticleUrl,updateArticleUrl } = api
 
 export async function queryAllArticle(params) {
   return request({
-    url: articles,
+    url: queryAllArticleUrl,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,15 @@ export async function queryAllArticle(params) {
 
 export async function queryArticle(params) {
   return request({
-    url: article,
+    url: queryArticleUrl,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function filterArticle(params) {
+  return request({
+    url: filterArticleUrl,
     method: 'get',
     data: params,
   })
@@ -21,7 +29,7 @@ export async function queryArticle(params) {
 
 export async function createArticle(params) {
   return request({
-    url: article.replace(':id', ''),
+    url: createArticleUrl,
     method: 'post',
     data: params,
   })
@@ -29,7 +37,7 @@ export async function createArticle(params) {
 
 export async function deleteArticle(params) {
   return request({
-    url: article,
+    url: deleteArticleUrl,
     method: 'delete',
     data: params,
   })
@@ -45,7 +53,7 @@ export async function multiDeleteArticle(params) {
 
 export async function updateArticle(params) {
   return request({
-    url: article,
+    url: updateArticleUrl,
     method: 'put',
     data: params,
   })

@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { catalog, catalogs } = api
+const { queryAllCatalogUrl, queryCatalogUrl,filterCatalogUrl,deleteCatalogUrl,createCatalogUrl,updateCatalogUrl } = api
 
 export async function queryAllCatalog(params) {
   return request({
-    url: catalogs,
+    url: queryAllCatalogUrl,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,15 @@ export async function queryAllCatalog(params) {
 
 export async function queryCatalog(params) {
   return request({
-    url: catalog,
+    url: queryCatalogUrl,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function filterCatalog(params) {
+  return request({
+    url: filterCatalogUrl,
     method: 'get',
     data: params,
   })
@@ -21,7 +29,7 @@ export async function queryCatalog(params) {
 
 export async function createCatalog(params) {
   return request({
-    url: catalog.replace(':id', ''),
+    url: createCatalogUrl,
     method: 'post',
     data: params,
   })
@@ -29,7 +37,7 @@ export async function createCatalog(params) {
 
 export async function deleteCatalog(params) {
   return request({
-    url: catalog,
+    url: deleteCatalogUrl,
     method: 'delete',
     data: params,
   })
@@ -37,7 +45,7 @@ export async function deleteCatalog(params) {
 
 export async function multiDeleteCatalog(params) {
   return request({
-    url: catalogs,
+    url: articles,
     method: 'delete',
     data: params,
   })
@@ -45,7 +53,7 @@ export async function multiDeleteCatalog(params) {
 
 export async function updateCatalog(params) {
   return request({
-    url: catalog,
+    url: updateCatalogUrl,
     method: 'put',
     data: params,
   })
