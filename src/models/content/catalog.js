@@ -31,7 +31,7 @@ export default modelExtend(pageModel, {
   effects: {
 
     * queryAllCatalog({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
+      const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }

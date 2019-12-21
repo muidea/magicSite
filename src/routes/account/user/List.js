@@ -23,8 +23,8 @@ const List = ({ onDeleteItem, ...tableProps }) => {
   const columns = [
     {
       title: '账号',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'account',
+      key: 'account',
       render: (text, record) => {
         return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
       },

@@ -1,5 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import qs from 'qs'
+import { notification } from 'antd'
 import { queryAllArticle, deleteArticle, multiDeleteArticle } from 'services/content/article'
 import { pageModel } from '../common'
 
@@ -27,26 +28,33 @@ export default modelExtend(pageModel, {
 
   effects: {
     * queryAllArticle({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
+      const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const data = yield call(queryAllArticle, { ...payload, authToken })
-      if (data) {
-        const { total, article } = data
-        yield put({
-          type: 'queryAllSuccess',
-          payload: {
-            list: article,
-            pagination: {
-              current: Number(payload.pageNum) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: Number(total) || 0,
+      const result = yield call(queryAllArticle, { ...payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode,reason, total, articles } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'queryAllSuccess',
+            payload: {
+              list: articles,
+              pagination: {
+                current: Number(payload.pageNum) || 1,
+                pageSize: Number(payload.pageSize) || 10,
+                total: Number(total) || 0,
+              },
             },
-          },
-        })
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
       }
     },
 

@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
-import { queryAllUser, queryUser, createUser, deleteUser, multiDeleteUser } from 'services/account/user'
-import { queryAllGroup } from 'services/account/group'
+import { queryAllUser, updateUser, createUser, deleteUser } from 'services/account/user'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -29,39 +28,34 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllUser({ payload = {} }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryAllUser, { authToken })
-      if (result.success) {
-        const { user } = result
-        let totalCount = 0
-        if (user) {
-          totalCount = user.length
-        }
+      const { sessionInfo } = yield select(_ => _.app)
+      const { pageNum } = payload
+      if (!pageNum) {
+        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      }
 
-        const groupResult = yield call(queryAllGroup, { authToken })
-        if (groupResult.success) {
-          const { group } = groupResult
+      const result = yield call(queryAllUser, { ...payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode, reason, total, accounts } = data
+        if (errorCode === 0) {
           yield put({
-            type: 'updateGroups',
-            payload: { groupList: group },
-          })
-        }
-
-        yield put({
-          type: 'queryAllSuccess',
-          payload: {
-            list: user,
-            pagination: {
-              current: Number(payload.page) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: Number(totalCount) || 0,
+            type: 'queryAllSuccess',
+            payload: {
+              list: accounts,
+              pagination: {
+                current: Number(payload.pageNum) || 1,
+                pageSize: Number(payload.pageSize) || 10,
+                total: Number(total) || 0,
+              },
             },
-          },
-        })
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 

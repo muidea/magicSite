@@ -3,11 +3,8 @@ const SystemInfoApi = '/api/v1/system'
 
 const CasInfoApi = '/api/v1/user'
 const ContentApi = '/api/v1'
+const AccountApi = '/api/v1/user'
 
-const AccountApi = '/api/v1/account'
-const AuthorityApi = '/api/v1/authority'
-const EndpointApi = '/api/v1/endpoint'
-const ModuleApi = '/api/v1/module'
 const FileRegistryApi = '/api/v1/fileregistry'
 const APIV1 = '/api/v1'
 
@@ -64,12 +61,10 @@ module.exports = {
     createCommentUrl: `${ContentApi}/comment/create/`,
     updateCommentUrl: `${ContentApi}/comment/update/:id`,
 
-    getSummary: `${ContentApi}/summary/:id`,
-    querySummary: `${ContentApi}/summarys/`,
-    users: `${AccountApi}/user/`,
-    user: `${AccountApi}/user/:id`,
-    groups: `${AccountApi}/group/`,
-    group: `${AccountApi}/group/:id`,
+    queryAllUserUrl: `${AccountApi}/query/all/`,
+    createUserUrl: `${AccountApi}/create/`,
+    deleteUserUrl: `${AccountApi}/delete/:id`,
+    updateUserUrl: `${AccountApi}/update/:id`,
 
     systemInfo: `${SystemInfoApi}/config/`,
     systemMenus: `${SystemInfoApi}/menu/`,
