@@ -32,7 +32,7 @@ const User = ({ location, dispatch, user, loading }) => {
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['user/query'],
+    loading: loading.effects['user/queryAllUser'],
     pagination,
     location,
     onChange(page) {

@@ -65,13 +65,13 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/account/user/detail')],
       component: () => import('./routes/account/user/detail/'),
     }, {
-      path: '/account/group',
-      models: () => [import('./models/account/group')],
-      component: () => import('./routes/account/group/'),
+      path: '/account/private',
+      models: () => [import('./models/account/private')],
+      component: () => import('./routes/account/private/'),
     }, {
-      path: '/account/group/view/:id',
-      models: () => [import('./models/account/group/detail')],
-      component: () => import('./routes/account/group/detail/'),
+      path: '/account/private/view/:id',
+      models: () => [import('./models/account/private/detail')],
+      component: () => import('./routes/account/private/detail/'),
     }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],

@@ -29,7 +29,7 @@ const List = ({ onDeleteItem, ...tableProps }) => {
         return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '分组',
+      title: '权限组',
       dataIndex: 'group',
       key: 'group',
       render: (text, record) => {

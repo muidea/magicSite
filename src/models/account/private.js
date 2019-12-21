@@ -1,11 +1,11 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { notification } from 'antd'
-import { queryAllUser, updateUser, createUser, deleteUser } from 'services/account/user'
+import { queryAllPrivate, savePrivate, destoryPrivate } from 'services/account/private'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
-  namespace: 'user',
+  namespace: 'privateGroup',
 
   state: {
     currentItem: { id: -1, account: '', email: '', name: '', group: [] },
@@ -18,9 +18,9 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/account/user') {
+        if (location.pathname === '/account/private') {
           dispatch({
-            type: 'queryAllUser',
+            type: 'queryAllPrivate',
             payload: {},
           })
         }
@@ -29,14 +29,14 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllUser({ payload = {} }, { call, put, select }) {
+    * queryAllPrivate({ payload = {} }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const result = yield call(queryAllUser, { ...payload, ...sessionInfo })
+      const result = yield call(queryAllPrivate, { ...payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason, total, accounts } = data
@@ -60,66 +60,46 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryUser({ payload }, { call, put, select }) {
+    * queryPrivate({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryUser, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.user)
+      const result = yield call(queryPrivate, { id: payload, authToken })
+      const { selectedRowKeys } = yield select(_ => _.private)
       if (result.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllUser' })
+        yield put({ type: 'queryAllPrivate' })
       } else {
         throw result
       }
     },
 
-    * updateUser({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryUser, { id: payload, authToken })
-      if (result.success) {
-        const { user } = result
-        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: user } })
-      } else {
-        throw result
-      }
-    },
-
-    * saveUser({ payload }, { call, put, select }) {
+    * savePrivate({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
       const { data } = payload
-      const result = yield call(createUser, { authToken, ...data })
+      const result = yield call(createPrivate, { authToken, ...data })
       if (result.success) {
         yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/account/user'))
+        yield put(routerRedux.push('/account/private'))
       } else {
         throw data
       }
     },
 
-    * deleteUser({ payload }, { call, put, select }) {
+    * destoryPrivate({ payload }, { call, put, select }) {
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteUser, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.user)
+      const data = yield call(deletePrivate, { id: payload, authToken })
+      const { selectedRowKeys } = yield select(_ => _.private)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllUser' })
+        yield put({ type: 'queryAllPrivate' })
       } else {
         throw data
       }
     },
 
-    * multiDeleteUser({ payload }, { call, put }) {
-      const data = yield call(multiDeleteUser, payload)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllUser' })
-      } else {
-        throw data
-      }
-    },
   },
 
   reducers: {
-    updateGroups(state, { payload }) {
+    updatePrivates(state, { payload }) {
       return { ...state, ...payload }
     },
 

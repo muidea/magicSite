@@ -4,6 +4,7 @@ const SystemInfoApi = '/api/v1/system'
 const CasInfoApi = '/api/v1/user'
 const ContentApi = '/api/v1'
 const AccountApi = '/api/v1/user'
+const PrivateApi = '/api/v1/private'
 
 const FileRegistryApi = '/api/v1/fileregistry'
 const APIV1 = '/api/v1'
@@ -65,6 +66,10 @@ module.exports = {
     createUserUrl: `${AccountApi}/create/`,
     deleteUserUrl: `${AccountApi}/delete/:id`,
     updateUserUrl: `${AccountApi}/update/:id`,
+
+    queryAllPrivateUrl: `${PrivateApi}/query/`,
+    savePrivateUrl: `${PrivateApi}/save/`,
+    destoryPrivateUrl: `${PrivateApi}/destory/`,
 
     systemInfo: `${SystemInfoApi}/config/`,
     systemMenus: `${SystemInfoApi}/menu/`,

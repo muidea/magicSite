@@ -7,32 +7,32 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Group = ({ location, dispatch, group, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = group
+const Private = ({ location, dispatch, privateGroup, loading }) => {
+  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = privateGroup
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
-    groupList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
+    privateList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['group/update'],
+    confirmLoading: loading.effects['private/update'],
     title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'group/saveGroup',
+        type: 'privateGroup/savePrivate',
         payload: { action: modalType, data: { id: currentItem.id, ...data } },
       })
     },
     onCancel() {
-      dispatch({ type: 'group/hideModal' })
+      dispatch({ type: 'privateGroup/hideModal' })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['group/query'],
+    loading: loading.effects['privateGroup/queryAllPrivate'],
     pagination,
     location,
     onChange(page) {
@@ -48,13 +48,13 @@ const Group = ({ location, dispatch, group, loading }) => {
     },
     onDeleteItem(id) {
       dispatch({
-        type: 'group/deleteGroup',
+        type: 'privateGroup/deletePrivate',
         payload: id,
       })
     },
     onEditItem(id) {
       dispatch({
-        type: 'group/updateGroup',
+        type: 'privateGroup/updatePrivate',
         payload: id,
       })
     },
@@ -62,7 +62,7 @@ const Group = ({ location, dispatch, group, loading }) => {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'group/updateModelState',
+          type: 'privateGroup/updateModelState',
           payload: { selectedRowKeys: keys },
         })
       },
@@ -85,25 +85,25 @@ const Group = ({ location, dispatch, group, loading }) => {
     onSearch(fieldsValue) {
       if (fieldsValue.keyword.length > 0) {
         dispatch(routerRedux.push({
-          pathname: '/group',
+          pathname: '/private',
           query: {
             field: fieldsValue.field,
             keyword: fieldsValue.keyword,
           },
         }))
       } else {
-        dispatch(routerRedux.push({ pathname: '/group' }))
+        dispatch(routerRedux.push({ pathname: '/private' }))
       }
     },
     onAdd() {
       dispatch({
-        type: 'group/showModal',
+        type: 'privateGroup/showModal',
         payload: { modalType: 'create' },
       })
     },
     onDeleteItems() {
       dispatch({
-        type: 'group/multiDeleteGroup',
+        type: 'privateGroup/multiDeletePrivate',
         payload: { ids: selectedRowKeys },
       })
     },
@@ -118,11 +118,11 @@ const Group = ({ location, dispatch, group, loading }) => {
   )
 }
 
-Group.propTypes = {
-  group: PropTypes.object,
+Private.propTypes = {
+  privateGroup: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ group, loading }) => ({ group, loading }))(Group)
+export default connect(({ privateGroup, loading }) => ({ privateGroup, loading }))(Private)

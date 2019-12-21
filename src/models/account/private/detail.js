@@ -1,10 +1,10 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryGroup } from 'services/account/group'
+import { queryPrivate } from 'services/account/private'
 import { queryAllUser } from 'services/account/user'
 
 export default {
 
-  namespace: 'groupDetail',
+  namespace: 'privateDetail',
 
   state: {
     name: '',
@@ -16,25 +16,25 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/account/group/view/:id').exec(location.pathname)
+        const match = pathToRegexp('/account/private/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'queryGroup', payload: { id: match[1] } })
+          dispatch({ type: 'queryPrivate', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    * queryGroup({ payload }, { call, put, select }) {
+    * queryPrivate({ payload }, { call, put, select }) {
       const { id } = payload
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryGroup, { authToken, id })
+      const data = yield call(queryPrivate, { authToken, id })
       const { success, ...other } = data
       if (success) {
-        const userResult = yield call(queryAllUser, { authToken, group: id })
+        const userResult = yield call(queryAllUser, { authToken, private: id })
         const { user } = userResult
         yield put({
-          type: 'queryGroupSuccess',
+          type: 'queryPrivateSuccess',
           payload: { data: { ...other, userList: user } },
         })
       } else {
@@ -44,13 +44,12 @@ export default {
   },
 
   reducers: {
-    queryGroupSuccess(state, { payload }) {
+    queryPrivateSuccess(state, { payload }) {
       const { data } = payload
-      const { group, userList } = data
+      const { userList } = data
 
       return {
         ...state,
-        ...group,
         userList,
       }
     },
