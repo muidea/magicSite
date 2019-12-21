@@ -31,13 +31,9 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
         return <Link to={`/account/group/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: '父分组',
-      dataIndex: 'catalog',
-      key: 'catalog',
-      render: (text, record) => {
-        const { catalog } = record
-        return catalog.name
-      },
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
     }, {
       title: '操作',
       key: 'operation',

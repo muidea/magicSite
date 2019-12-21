@@ -39,12 +39,12 @@ export default modelExtend(pageModel, {
       const result = yield call(queryAllPrivate, { ...payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
-        const { errorCode, reason, total, accounts } = data
+        const { errorCode, reason, total, privates } = data
         if (errorCode === 0) {
           yield put({
             type: 'queryAllSuccess',
             payload: {
-              list: accounts,
+              list: privates,
               pagination: {
                 current: Number(payload.pageNum) || 1,
                 pageSize: Number(payload.pageSize) || 10,
