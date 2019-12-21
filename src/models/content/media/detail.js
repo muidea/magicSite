@@ -1,7 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import qs from 'qs'
 import { queryMedia, downloadMedia } from 'services/content/media'
-import { getSummaryDetail } from 'services/content/summary'
 
 export default {
 

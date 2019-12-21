@@ -1,6 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryLink } from 'services/content/link'
-import { getSummaryDetail } from 'services/content/summary'
 
 export default {
 

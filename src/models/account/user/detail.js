@@ -1,6 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
 import { queryUser } from 'services/account/user'
-import { querySummaryDetail } from 'services/content/summary'
 
 export default {
 

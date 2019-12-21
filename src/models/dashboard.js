@@ -1,5 +1,5 @@
 import modelExtend from 'dva-model-extend'
-import { queryDashboard } from 'services/dashboard'
+import { queryDashboard } from 'services/app'
 import { model } from 'models/common'
 
 export default modelExtend(model, {
