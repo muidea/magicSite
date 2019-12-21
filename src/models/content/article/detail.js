@@ -11,7 +11,6 @@ export default {
     catalog: [],
     creater: {},
     createDate: '',
-    summaryList: [],
   },
 
   subscriptions: {

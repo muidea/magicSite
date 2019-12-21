@@ -14,7 +14,6 @@ export default {
     creater: {},
     fileUrl: '',
     expiration: 0,
-    summaryList: [],
   },
 
   subscriptions: {
