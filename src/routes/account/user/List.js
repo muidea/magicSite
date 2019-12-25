@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { Link } from 'dva/router'
-import { Table, Modal } from 'antd'
+import { Table, Modal, Tag } from 'antd'
 import styles from './List.less'
-import { DropOption, EditableTagGroup } from '../../../components'
+import { DropOption, Status } from '../../../components'
 
 const { confirm } = Modal
 
@@ -30,10 +30,17 @@ const List = ({ onDeleteItem, ...tableProps }) => {
       },
     }, {
       title: '权限组',
-      dataIndex: 'group',
-      key: 'group',
+      dataIndex: 'privateGroup',
+      key: 'privateGroup',
       render: (text, record) => {
-        return <EditableTagGroup readOnly value={record.group} />
+        return <Tag> {record.privateGroup.name} </Tag>
+      },
+    }, {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text, record) => {
+        return <Status value={record.status} />
       },
     }, {
       title: '操作',

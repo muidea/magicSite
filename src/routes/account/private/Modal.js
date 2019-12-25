@@ -13,7 +13,6 @@ const formItemLayout = {
 
 const modal = ({
   item,
-  groupList,
   onOk,
   form: {
     getFieldDecorator,
@@ -51,17 +50,6 @@ const modal = ({
         <FormItem label="描述" {...formItemLayout}>
           {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={3} cols={3} />)}
         </FormItem>
-        <FormItem label="父分组" {...formItemLayout}>
-          {getFieldDecorator('catalog', {
-            initialValue: item.catalog,
-            rules: [
-              { required: true },
-            ],
-          })(<AutoCompleteSelect
-            dataSource={groupList}
-            placeholder="input here"
-          />)}
-        </FormItem>
       </Form>
     </Modal>
   )
@@ -71,7 +59,6 @@ modal.propTypes = {
   form: PropTypes.object.isRequired,
   type: PropTypes.string,
   item: PropTypes.object,
-  groupList: PropTypes.array,
   onOk: PropTypes.func,
 }
 

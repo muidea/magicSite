@@ -13,11 +13,10 @@ const Private = ({ location, dispatch, privateGroup, loading }) => {
 
   const modalProps = {
     item: currentItem,
-    privateList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['private/update'],
-    title: `${modalType === 'create' ? '新建分组' : '修改分组'}`,
+    title: `${modalType === 'create' ? '新建权限组' : '修改权限组'}`,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
