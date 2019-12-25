@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Table, Modal } from 'antd'
-import styles from './List.less'
 import { DropOption, EditableTagGroup } from '../../../components'
 
 const { confirm } = Modal
@@ -54,8 +52,6 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
     <div>
       <Table
         {...tableProps}
-        className={classnames({ [styles.table]: true })}
-        bordered
         scroll={{ x: '100%' }}
         columns={columns}
         simple
