@@ -27,9 +27,6 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const { pathname } = location
-
-        if (pathname === '/dashboard') {          
           dispatch({
             type: 'loading',
             payload: {
@@ -37,16 +34,7 @@ export default {
               locationQuery: qs.parse(location.search, {'ignoreQueryPrefix': true}),
             },
           })
-        } else {
-          dispatch({
-            type: 'status',
-            payload: {
-              locationPathname: location.pathname,
-              locationQuery: qs.parse(location.search, {'ignoreQueryPrefix': true}),
-            },
-          })
-        }
-    })
+      })
     },
   },
 
@@ -61,7 +49,6 @@ export default {
           const { success, message, data } = result
           if (success) {
             const { menu } = data
-
             yield put({
               type: 'saveSession',
               payload: {
@@ -84,7 +71,6 @@ export default {
     * status({ payload }, { call, put, select }) {
       const { locationPathname, locationQuery } = payload
       const { sessionInfo } = yield select(_ => _.app)
-      const { sessionID } = sessionInfo
 
       payload = { ...payload, ...sessionInfo }
       const result = yield call(userStatus, { ...payload })
@@ -96,13 +82,13 @@ export default {
           redirectUrl = from
         }
 
-        const { errorCode, reason } = data
+        const { errorCode, reason, sessionInfo, account } = data
         if (errorCode === 0) {
           yield put({
             type: 'saveSession',
             payload: {
-              sessionInfo: data.sessionInfo,
-              onlineUser: data.account,
+              sessionInfo,
+              onlineUser: account,
               locationPathname,
             },
           })

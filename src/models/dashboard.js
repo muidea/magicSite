@@ -13,15 +13,15 @@ export default modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
-        if (pathname === '/dashboard' || pathname === '/') {
-          dispatch({ type: 'query' })
+        if (pathname === '/dashboard') {
+          dispatch({ type: 'queryDashboard' })
         }
       })
     },
 
   },
   effects: {
-    * query({
+    * queryDashboard({
       payload,
     }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
