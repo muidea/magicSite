@@ -1,4 +1,5 @@
 import modelExtend from 'dva-model-extend'
+import { notification } from 'antd'
 import { queryDashboard } from 'services/app'
 import { model } from 'models/common'
 

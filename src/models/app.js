@@ -14,14 +14,7 @@ export default {
   state: {
     sessionInfo: qs.parse(window.localStorage.getItem(`${prefix}SessionInfo`)),
     onlineUser: { },
-    menu: [
-      {
-        id: 1,
-        icon: 'laptop',
-        name: 'Dashboard',
-        router: '/dashboard',
-      },
-    ],
+    menu: [],
     menuPopoverVisible: false,
     siderFold: window.localStorage.getItem(`${prefix}SiderFold`) === 'true',
     darkTheme: window.localStorage.getItem(`${prefix}DarkTheme`) === 'true',
@@ -34,25 +27,36 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        dispatch({
-          type: 'loading',
-          payload: {
-            locationPathname: location.pathname,
-            locationQuery: qs.parse(location.search),
-          },
-        })
-      })
+        const { pathname } = location
+
+        if (pathname === '/dashboard') {          
+          dispatch({
+            type: 'loading',
+            payload: {
+              locationPathname: location.pathname,
+              locationQuery: qs.parse(location.search, {'ignoreQueryPrefix': true}),
+            },
+          })
+        } else {
+          dispatch({
+            type: 'status',
+            payload: {
+              locationPathname: location.pathname,
+              locationQuery: qs.parse(location.search, {'ignoreQueryPrefix': true}),
+            },
+          })
+        }
+    })
     },
   },
 
   effects: {
     * loading({ payload }, { call, put, select }) {
       const { locationPathname } = payload
-      const { sessionInfo } = yield select(_ => _.app)
-      const { sessionID } = sessionInfo
+      const { menu } = yield select(_ => _.app)
 
       if (locationPathname !== '/login') {
-        if (sessionID) {
+        if (menu.length === 0) {
           const result = yield call(systemInfo, { ...payload })
           const { success, message, data } = result
           if (success) {
@@ -68,35 +72,30 @@ export default {
             notification.error({ message: '错误信息', description: message })
             return
           }
+        }
+      }
 
-          yield put({
+      yield put({
             type: 'status',
             payload,
           })
-        } else {
-          yield put(routerRedux.push({
-            pathname: '/login',
-            search: qs.stringify({ from: locationPathname }),
-          }))
-        }
-      } else if (sessionID) {
-        yield put(routerRedux.push({
-          pathname: '/',
-          search: qs.stringify({ from: locationPathname }),
-        }))
-      }
     },
 
     * status({ payload }, { call, put, select }) {
-      const { sessionInfo } = yield select(_ => _.app)
-      if (sessionInfo) {
-        payload = { ...payload, ...sessionInfo }
-      }
-
       const { locationPathname, locationQuery } = payload
+      const { sessionInfo } = yield select(_ => _.app)
+      const { sessionID } = sessionInfo
+
+      payload = { ...payload, ...sessionInfo }
       const result = yield call(userStatus, { ...payload })
       const { success, message, data } = result
       if (success) {
+        const { from } =locationQuery
+        let redirectUrl =  locationPathname
+        if (from){
+          redirectUrl = from
+        }
+
         const { errorCode, reason } = data
         if (errorCode === 0) {
           yield put({
@@ -105,9 +104,12 @@ export default {
               sessionInfo: data.sessionInfo,
               onlineUser: data.account,
               locationPathname,
-              locationQuery,
             },
           })
+
+          if (redirectUrl === '/login'){
+            redirectUrl = '/'
+          }
         } else {
           yield put({
             type: 'saveSession',
@@ -115,11 +117,23 @@ export default {
               sessionInfo: {},
               onlineUser: {},
               locationPathname,
-              locationQuery,
             },
           })
 
-          notification.error({ message: '错误信息', description: reason })
+          if (locationPathname !== '/login'){
+            notification.error({ message: '错误信息', description: reason })
+          }
+
+          if (redirectUrl !== '/login'){
+            redirectUrl = '/login'
+          }
+        }
+
+        if (redirectUrl !== locationPathname) {
+          yield put(routerRedux.push({
+            pathname: redirectUrl,
+            search: qs.stringify({ from: locationPathname }),
+          }))
         }
       } else {
         notification.error({ message: '错误信息', description: message })
@@ -153,7 +167,7 @@ export default {
       if (success) {
         const { errorCode } = data
         if (errorCode === 0) {
-          yield put({ type: 'clearSession', payload: { sessionInfo: {}, onlineUser: {} } })
+          yield put({ type: 'clearSession', payload: { sessionInfo: {},menu:[], onlineUser: {} } })
           yield put(routerRedux.push({
             pathname: '/login',
           }))
