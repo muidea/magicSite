@@ -6,8 +6,12 @@ import { DropOption, Status } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onDeleteItem, ...tableProps }) => {
+const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
+    if (e.key === '1') {
+      onUpdateItem(record.id)
+    }
+
     if (e.key === '2') {
       confirm({
         title: '确认删除用户?',
@@ -31,7 +35,12 @@ const List = ({ onDeleteItem, ...tableProps }) => {
       dataIndex: 'privateGroup',
       key: 'privateGroup',
       render: (text, record) => {
-        return <Tag> {record.privateGroup.name} </Tag>
+        let tag = { name: '-' }
+        if (record.privateGroup){
+          tag = record.privateGroup
+        }
+
+        return <Tag> {tag.name} </Tag>
       },
     }, {
       title: '状态',
@@ -45,7 +54,7 @@ const List = ({ onDeleteItem, ...tableProps }) => {
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '更新' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
@@ -64,6 +73,7 @@ const List = ({ onDeleteItem, ...tableProps }) => {
 }
 
 List.propTypes = {
+  onUpdateItem: PropTypes.func,
   onDeleteItem: PropTypes.func,
 }
 

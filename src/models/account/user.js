@@ -8,10 +8,11 @@ export default modelExtend(pageModel, {
   namespace: 'user',
 
   state: {
-    currentItem: { id: -1, account: '', email: '', name: '', group: [] },
+    currentItem: {},
     groupList: [],
     selectedRowKeys: [],
     modalVisible: false,
+    modalTitle: '新增用户',
     modalType: 'create',
   },
 
@@ -61,74 +62,118 @@ export default modelExtend(pageModel, {
     },
 
     * queryUser({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryUser, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.user)
-      if (result.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllUser' })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryUser, { id: payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode, reason, account } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateItemState', payload: { currentItem: account } })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * updateUser({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryUser, { id: payload, authToken })
-      if (result.success) {
-        const { user } = result
-        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: user } })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(updateUser, { ...payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllUser' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * saveUser({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const { data } = payload
-      const result = yield call(createUser, { authToken, ...data })
-      if (result.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/account/user'))
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(createUser, { ...payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllUser' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * deleteUser({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteUser, { id: payload, authToken })
+      const { sessionInfo } = yield select(_ => _.app)
       const { selectedRowKeys } = yield select(_ => _.user)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllUser' })
+      const result = yield call(deleteUser, { id: payload, ...sessionInfo })
+      const {success,message, data} = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+          yield put({ type: 'queryAllUser' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
-    * multiDeleteUser({ payload }, { call, put }) {
-      const data = yield call(multiDeleteUser, payload)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllUser' })
+    * submitUser({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.user)
+      if (modalType === 'create'){
+        yield put({ type: 'saveUser', payload })
       } else {
-        throw data
+        yield put({ type: 'updateUser', payload })
       }
     },
+    
+    * cancelUser({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.user)
+      if (modalType === 'create'){
+        yield put({ type: 'cancelNewUser', payload })
+      } else {
+        yield put({ type: 'cancelUpdateUser', payload })
+      }
+    },
+
+    * invokeNewUser({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"新增用户", modalType: 'create' } })
+    },
+
+    * cancelNewUser({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
+    },
+
+    * invokeUpdateUser({ payload }, { put }) {
+      yield put({ type: 'queryUser', payload })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"修改用户",  modalType: 'update' } })
+    },
+
+    * cancelUpdateUser({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
+    },    
   },
 
   reducers: {
-    updateGroups(state, { payload }) {
+    updateItemState(state, { payload }) {
       return { ...state, ...payload }
     },
 
-    showModal(state, { payload }) {
-      return { ...state, ...payload, modalVisible: true }
+    showModal(state) {
+      return { ...state, modalVisible: true }
     },
 
     hideModal(state) {
-      return { ...state, currentItem: { id: -1, account: '', email: '', name: '', group: [] }, modalVisible: false }
+      return { ...state, modalVisible: false }
     },
   },
 

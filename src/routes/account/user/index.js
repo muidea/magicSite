@@ -8,7 +8,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const User = ({ location, dispatch, user, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, groupList, modalVisible } = user
+  const { list, selectedRowKeys, pagination, currentItem, groupList, modalTitle, modalVisible } = user
   const { pageSize } = pagination
 
   const modalProps = {
@@ -17,16 +17,16 @@ const User = ({ location, dispatch, user, loading }) => {
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['user/update'],
-    title: '新建用户',
+    title: modalTitle,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'user/saveUser',
+        type: 'user/submitUser',
         payload: { data: { id: currentItem.id, ...data } },
       })
     },
     onCancel() {
-      dispatch({ type: 'user/hideModal' })
+      dispatch({ type: 'user/cancelUser' })
     },
   }
 
@@ -46,6 +46,13 @@ const User = ({ location, dispatch, user, loading }) => {
         }),
       }))
     },
+    onUpdateItem(id) {
+      dispatch({
+        type: 'user/invokeUpdateUser',
+        payload: id,
+      })
+    },
+
     onDeleteItem(id) {
       dispatch({
         type: 'user/deleteUser',
@@ -66,6 +73,7 @@ const User = ({ location, dispatch, user, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
+
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
@@ -76,6 +84,7 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
+
     onSearch(fieldsValue) {
       if (fieldsValue.keyword.length) {
         dispatch(routerRedux.push({
@@ -89,14 +98,9 @@ const User = ({ location, dispatch, user, loading }) => {
         dispatch(routerRedux.push({ pathname: '/user' }))
       }
     },
+
     onAdd() {
-      dispatch({ type: 'user/showModal' })
-    },
-    onDeleteItems() {
-      dispatch({
-        type: 'user/multiDeleteUser',
-        payload: { ids: selectedRowKeys },
-      })
+      dispatch({ type: 'user/invokeNewUser' })
     },
   }
 

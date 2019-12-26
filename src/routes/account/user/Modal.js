@@ -17,6 +17,8 @@ const modal = ({
   form: {
     getFieldDecorator,
     validateFields,
+    getFieldValue,
+    setFields,
     getFieldsValue,
   },
   ...modalProps
@@ -26,6 +28,14 @@ const modal = ({
       if (errors) {
         return
       }
+
+      const password = getFieldValue('password')
+      const repassword = getFieldValue('repassword')
+      if (password !== repassword) {
+        setFields({ repassword: { value: repassword, errors: [new Error('两次密码输入不一致')] } })
+        return
+      }
+
       const data = { ...getFieldsValue() }
       onOk(data)
     })
@@ -35,6 +45,7 @@ const modal = ({
     ...modalProps,
     onOk: handleOk,
   }
+
 
   return (
     <Modal {...modalOpts}>
@@ -55,23 +66,13 @@ const modal = ({
             ],
           })(<Input type="password" />)}
         </FormItem>
-        <FormItem label="EMail" {...formItemLayout}>
-          {getFieldDecorator('email', {
-            initialValue: item.email,
+        <FormItem label="确认密码" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('repassword', {
+            initialValue: item.repassword,
             rules: [
               { required: true },
             ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="分组" {...formItemLayout}>
-          {getFieldDecorator('group', {
-            initialValue: item.group,
-            rules: [
-              { required: true },
-            ],
-          })(<AutoCompleteTagGroup
-            dataSource={groupList}
-          />)}
+          })(<Input type="password" />)}
         </FormItem>
       </Form>
     </Modal>
