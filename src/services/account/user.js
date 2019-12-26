@@ -1,11 +1,19 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllUserUrl, createUserUrl,deleteUserUrl,updateUserUrl } = api
+const { queryAllUserUrl, queryUserUrl, createUserUrl, deleteUserUrl, updateUserUrl } = api
 
 export async function queryAllUser(params) {
   return request({
     url: queryAllUserUrl,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function queryUser(params) {
+  return request({
+    url: queryUserUrl,
     method: 'get',
     data: params,
   })

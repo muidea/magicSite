@@ -1,7 +1,6 @@
 import modelExtend from 'dva-model-extend'
-import { routerRedux } from 'dva/router'
 import { notification } from 'antd'
-import { queryAllUser, updateUser, createUser, deleteUser } from 'services/account/user'
+import { queryAllUser, queryUser, updateUser, createUser, deleteUser } from 'services/account/user'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -134,6 +133,8 @@ export default modelExtend(pageModel, {
       } else {
         yield put({ type: 'updateUser', payload })
       }
+
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
     },
     
     * cancelUser({ payload }, { put, select }) {
@@ -166,14 +167,6 @@ export default modelExtend(pageModel, {
   reducers: {
     updateItemState(state, { payload }) {
       return { ...state, ...payload }
-    },
-
-    showModal(state) {
-      return { ...state, modalVisible: true }
-    },
-
-    hideModal(state) {
-      return { ...state, modalVisible: false }
     },
   },
 

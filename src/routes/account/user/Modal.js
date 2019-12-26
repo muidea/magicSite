@@ -37,7 +37,7 @@ const modal = ({
       }
 
       const data = { ...getFieldsValue() }
-      onOk(data)
+      onOk({ ...data })
     })
   }
 

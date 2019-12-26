@@ -22,7 +22,7 @@ const User = ({ location, dispatch, user, loading }) => {
     onOk(data) {
       dispatch({
         type: 'user/submitUser',
-        payload: { data: { id: currentItem.id, ...data } },
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel() {
