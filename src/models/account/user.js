@@ -11,7 +11,7 @@ export default modelExtend(pageModel, {
     groupList: [],
     selectedRowKeys: [],
     modalVisible: false,
-    modalTitle: '新增用户',
+    modalTitle: '新增账号',
     modalType: 'create',
   },
 
@@ -147,7 +147,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewUser({ payload }, { put }) {
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"新增用户", modalType: 'create' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"新增账号", modalType: 'create' } })
     },
 
     * cancelNewUser({ payload }, { put }) {
@@ -156,7 +156,7 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateUser({ payload }, { put }) {
       yield put({ type: 'queryUser', payload })
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"修改用户",  modalType: 'update' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"修改账号",  modalType: 'update' } })
     },
 
     * cancelUpdateUser({ payload }, { put }) {

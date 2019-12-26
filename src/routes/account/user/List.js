@@ -14,7 +14,7 @@ const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
 
     if (e.key === '2') {
       confirm({
-        title: '确认删除用户?',
+        title: '确认删除账号?',
         onOk() {
           onDeleteItem(record.id)
         },
