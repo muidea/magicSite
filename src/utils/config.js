@@ -62,11 +62,11 @@ module.exports = {
     createCommentUrl: `${ContentApi}/comment/create/`,
     updateCommentUrl: `${ContentApi}/comment/update/:id`,
 
-    queryAllUserUrl: `${AccountApi}/query/all/`,
-    queryUserUrl: `${AccountApi}/query/:id`,
-    createUserUrl: `${AccountApi}/create/`,
-    deleteUserUrl: `${AccountApi}/delete/:id`,
-    updateUserUrl: `${AccountApi}/update/:id`,
+    queryAllAccountUrl: `${AccountApi}/query/all/`,
+    queryAccountUrl: `${AccountApi}/query/:id`,
+    createAccountUrl: `${AccountApi}/create/`,
+    deleteAccountUrl: `${AccountApi}/delete/:id`,
+    updateAccountUrl: `${AccountApi}/update/:id`,
 
     queryAllPrivateUrl: `${PrivateApi}/query/`,
     savePrivateUrl: `${PrivateApi}/save/`,

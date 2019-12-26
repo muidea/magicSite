@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryPrivate } from 'services/account/private'
-import { queryAllUser } from 'services/account/user'
+import { queryPrivate } from 'services/authority/private'
+import { queryAllUser } from 'services/authority/account'
 
 export default {
 
@@ -10,13 +10,13 @@ export default {
     name: '',
     description: '',
     catalog: { id: 0, name: '' },
-    userList: [],
+    accountList: [],
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/account/private/view/:id').exec(location.pathname)
+        const match = pathToRegexp('/authority/private/view/:id').exec(location.pathname)
         if (match) {
           dispatch({ type: 'queryPrivate', payload: { id: match[1] } })
         }
@@ -31,11 +31,11 @@ export default {
       const data = yield call(queryPrivate, { authToken, id })
       const { success, ...other } = data
       if (success) {
-        const userResult = yield call(queryAllUser, { authToken, private: id })
-        const { user } = userResult
+        const accountResult = yield call(queryAllUser, { authToken, private: id })
+        const { account } = accountResult
         yield put({
           type: 'queryPrivateSuccess',
-          payload: { data: { ...other, userList: user } },
+          payload: { data: { ...other, accountList: account } },
         })
       } else {
         throw data
@@ -46,11 +46,11 @@ export default {
   reducers: {
     queryPrivateSuccess(state, { payload }) {
       const { data } = payload
-      const { userList } = data
+      const { accountList } = data
 
       return {
         ...state,
-        userList,
+        accountList,
       }
     },
   },

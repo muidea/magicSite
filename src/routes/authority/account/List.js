@@ -28,7 +28,7 @@ const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
       dataIndex: 'account',
       key: 'account',
       render: (text, record) => {
-        return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
+        return <Link to={`/authority/account/view/${record.id}`}>{text}</Link>
       },
     }, {
       title: '权限组',

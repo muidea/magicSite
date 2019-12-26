@@ -57,21 +57,21 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/content/media/detail')],
       component: () => import('./routes/content/media/detail/'),
     }, {
-      path: '/account/user',
-      models: () => [import('./models/account/user')],
-      component: () => import('./routes/account/user/'),
+      path: '/authority/account',
+      models: () => [import('./models/authority/account')],
+      component: () => import('./routes/authority/account/'),
     }, {
-      path: '/account/user/view/:id',
-      models: () => [import('./models/account/user/detail')],
-      component: () => import('./routes/account/user/detail/'),
+      path: '/authority/account/view/:id',
+      models: () => [import('./models/authority/account/detail')],
+      component: () => import('./routes/authority/account/detail/'),
     }, {
-      path: '/account/private',
-      models: () => [import('./models/account/private')],
-      component: () => import('./routes/account/private/'),
+      path: '/authority/private',
+      models: () => [import('./models/authority/private')],
+      component: () => import('./routes/authority/private/'),
     }, {
-      path: '/account/private/view/:id',
-      models: () => [import('./models/account/private/detail')],
-      component: () => import('./routes/account/private/detail/'),
+      path: '/authority/private/view/:id',
+      models: () => [import('./models/authority/private/detail')],
+      component: () => import('./routes/authority/private/detail/'),
     }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],

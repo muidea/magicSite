@@ -1,9 +1,9 @@
 import pathToRegexp from 'path-to-regexp'
-import { queryUser } from 'services/account/user'
+import { queryAccount } from 'services/authority/account'
 
 export default {
 
-  namespace: 'userDetail',
+  namespace: 'AccountDetail',
 
   state: {
     password: '',
@@ -19,25 +19,25 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/account/user/view/:id').exec(location.pathname)
+        const match = pathToRegexp('/authority/Account/view/:id').exec(location.pathname)
         if (match) {
-          dispatch({ type: 'queryUser', payload: { id: match[1] } })
+          dispatch({ type: 'queryAccount', payload: { id: match[1] } })
         }
       })
     },
   },
 
   effects: {
-    * queryUser({ payload }, { call, put, select }) {
+    * queryAccount({ payload }, { call, put, select }) {
       const { id } = payload
       const { authToken } = yield select(_ => _.app)
-      const data = yield call(queryUser, { authToken, id })
+      const data = yield call(queryAccount, { authToken, id })
       const { success, ...other } = data
       if (success) {
-        const summaryResult = yield call(querySummaryDetail, { authToken, user: [id] })
+        const summaryResult = yield call(querySummaryDetail, { authToken, Account: [id] })
         const { summary } = summaryResult
         yield put({
-          type: 'queryUserSuccess',
+          type: 'queryAccountSuccess',
           payload: { data: { ...other, summary } },
         })
       } else {
@@ -47,13 +47,13 @@ export default {
   },
 
   reducers: {
-    queryUserSuccess(state, { payload }) {
+    queryAccountSuccess(state, { payload }) {
       const { data } = payload
-      const { user, summary } = data
+      const { Account, summary } = data
 
       return {
         ...state,
-        ...user,
+        ...Account,
         summary,
       }
     },

@@ -1,10 +1,10 @@
 import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
-import { queryAllUser, queryUser, updateUser, createUser, deleteUser } from 'services/account/user'
+import { queryAllAccount, queryAccount, updateAccount, createAccount, deleteAccount } from 'services/authority/account'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
-  namespace: 'user',
+  namespace: 'account',
 
   state: {
     currentItem: {},
@@ -18,9 +18,9 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/account/user') {
+        if (location.pathname === '/authority/account') {
           dispatch({
-            type: 'queryAllUser',
+            type: 'queryAllAccount',
             payload: {},
           })
         }
@@ -29,14 +29,14 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-    * queryAllUser({ payload = {} }, { call, put, select }) {
+    * queryAllAccount({ payload = {} }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const result = yield call(queryAllUser, { ...payload, ...sessionInfo })
+      const result = yield call(queryAllAccount, { ...payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason, total, accounts } = data
@@ -60,9 +60,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryUser({ payload }, { call, put, select }) {
+    * queryAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(queryUser, { id: payload, ...sessionInfo })
+      const result = yield call(queryAccount, { id: payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason, account } = data
@@ -76,14 +76,14 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * updateUser({ payload }, { call, put, select }) {
+    * updateAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(updateUser, { ...payload, ...sessionInfo })
+      const result = yield call(updateAccount, { ...payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllUser' })
+          yield put({ type: 'queryAllAccount' })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -92,14 +92,14 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * saveUser({ payload }, { call, put, select }) {
+    * saveAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(createUser, { ...payload, ...sessionInfo })
+      const result = yield call(createAccount, { ...payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllUser' })
+          yield put({ type: 'queryAllAccount' })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -108,16 +108,16 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * deleteUser({ payload }, { call, put, select }) {
+    * deleteAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const { selectedRowKeys } = yield select(_ => _.user)
-      const result = yield call(deleteUser, { id: payload, ...sessionInfo })
+      const { selectedRowKeys } = yield select(_ => _.account)
+      const result = yield call(deleteAccount, { id: payload, ...sessionInfo })
       const {success,message, data} = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
           yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-          yield put({ type: 'queryAllUser' })
+          yield put({ type: 'queryAllAccount' })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -126,40 +126,40 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * submitUser({ payload }, { put, select }) {
-      const { modalType } = yield select(_ => _.user)
+    * submitAccount({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.account)
       if (modalType === 'create'){
-        yield put({ type: 'saveUser', payload })
+        yield put({ type: 'saveAccount', payload })
       } else {
-        yield put({ type: 'updateUser', payload })
+        yield put({ type: 'updateAccount', payload })
       }
 
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
     },
     
-    * cancelUser({ payload }, { put, select }) {
-      const { modalType } = yield select(_ => _.user)
+    * cancelAccount({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.account)
       if (modalType === 'create'){
-        yield put({ type: 'cancelNewUser', payload })
+        yield put({ type: 'cancelNewAccount', payload })
       } else {
-        yield put({ type: 'cancelUpdateUser', payload })
+        yield put({ type: 'cancelUpdateAccount', payload })
       }
     },
 
-    * invokeNewUser({ payload }, { put }) {
+    * invokeNewAccount({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"新增账号", modalType: 'create' } })
     },
 
-    * cancelNewUser({ payload }, { put }) {
+    * cancelNewAccount({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
     },
 
-    * invokeUpdateUser({ payload }, { put }) {
-      yield put({ type: 'queryUser', payload })
+    * invokeUpdateAccount({ payload }, { put }) {
+      yield put({ type: 'queryAccount', payload })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"修改账号",  modalType: 'update' } })
     },
 
-    * cancelUpdateUser({ payload }, { put }) {
+    * cancelUpdateAccount({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
     },    
   },

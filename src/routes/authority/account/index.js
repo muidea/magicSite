@@ -7,8 +7,8 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const User = ({ location, dispatch, user, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, groupList, modalTitle, modalVisible } = user
+const Account = ({ location, dispatch, account, loading }) => {
+  const { list, selectedRowKeys, pagination, currentItem, groupList, modalTitle, modalVisible } = account
   const { pageSize } = pagination
 
   const modalProps = {
@@ -16,23 +16,23 @@ const User = ({ location, dispatch, user, loading }) => {
     groupList,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['user/update'],
+    confirmLoading: loading.effects['account/update'],
     title: modalTitle,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'user/submitUser',
+        type: 'account/submitAccount',
         payload: { id: currentItem.id, ...data },
       })
     },
     onCancel() {
-      dispatch({ type: 'user/cancelUser' })
+      dispatch({ type: 'account/cancelAccount' })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['user/queryAllUser'],
+    loading: loading.effects['account/queryAllAccount'],
     pagination,
     location,
     onChange(page) {
@@ -48,14 +48,14 @@ const User = ({ location, dispatch, user, loading }) => {
     },
     onUpdateItem(id) {
       dispatch({
-        type: 'user/invokeUpdateUser',
+        type: 'account/invokeUpdateAccount',
         payload: id,
       })
     },
 
     onDeleteItem(id) {
       dispatch({
-        type: 'user/deleteUser',
+        type: 'account/deleteAccount',
         payload: id,
       })
     },
@@ -63,7 +63,7 @@ const User = ({ location, dispatch, user, loading }) => {
       selectedRowKeys,
       onChange: (keys) => {
         dispatch({
-          type: 'user/updateModelState',
+          type: 'account/updateModelState',
           payload: { selectedRowKeys: keys },
         })
       },
@@ -88,19 +88,19 @@ const User = ({ location, dispatch, user, loading }) => {
     onSearch(fieldsValue) {
       if (fieldsValue.keyword.length) {
         dispatch(routerRedux.push({
-          pathname: '/user',
+          pathname: '/account',
           query: {
             field: fieldsValue.field,
             keyword: fieldsValue.keyword,
           },
         }))
       } else {
-        dispatch(routerRedux.push({ pathname: '/user' }))
+        dispatch(routerRedux.push({ pathname: '/account' }))
       }
     },
 
     onAdd() {
-      dispatch({ type: 'user/invokeNewUser' })
+      dispatch({ type: 'account/invokeNewAccount' })
     },
   }
 
@@ -113,11 +113,11 @@ const User = ({ location, dispatch, user, loading }) => {
   )
 }
 
-User.propTypes = {
-  user: PropTypes.object,
+Account.propTypes = {
+  account: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ user, loading }) => ({ user, loading }))(User)
+export default connect(({ account, loading }) => ({ account, loading }))(Account)

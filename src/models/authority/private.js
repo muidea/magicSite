@@ -1,7 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import { routerRedux } from 'dva/router'
 import { notification } from 'antd'
-import { queryAllPrivate, savePrivate, destoryPrivate } from 'services/account/private'
+import { queryAllPrivate, savePrivate, destoryPrivate } from 'services/authority/private'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {

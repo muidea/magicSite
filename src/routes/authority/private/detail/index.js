@@ -8,7 +8,7 @@ import { DescriptionList, EditableTagGroup, Status } from 'components'
 const { Description } = DescriptionList
 
 const Detail = ({ groupDetail }) => {
-  const { name, description, catalog, userList } = groupDetail
+  const { name, description, catalog, accountList } = groupDetail
   const catalogs = [catalog]
 
   const columns = [
@@ -16,7 +16,7 @@ const Detail = ({ groupDetail }) => {
       title: '名称',
       dataIndex: 'name',
       render: (text, record) => {
-        return <Link to={`/account/user/view/${record.id}`}>{text}</Link>
+        return <Link to={`/authority/account/view/${record.id}`}>{text}</Link>
       },
     },
     {
@@ -49,7 +49,7 @@ const Detail = ({ groupDetail }) => {
         <Table
           style={{ marginBottom: 24 }}
           pagination={false}
-          dataSource={userList}
+          dataSource={accountList}
           columns={columns}
           rowKey={record => record.id}
         />
