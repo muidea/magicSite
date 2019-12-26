@@ -1,9 +1,9 @@
 
 const SystemInfoApi = '/api/v1/system'
 
-const CasInfoApi = '/api/v1/user'
+const CasInfoApi = '/api/v1/account'
 const ContentApi = '/api/v1'
-const AccountApi = '/api/v1/user'
+const AccountApi = '/api/v1/account'
 const PrivateApi = '/api/v1/private'
 
 const FileRegistryApi = '/api/v1/fileregistry'
