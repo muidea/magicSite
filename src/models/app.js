@@ -106,10 +106,6 @@ export default {
             },
           })
 
-          if (locationPathname !== '/login'){
-            notification.error({ message: '错误信息', description: reason })
-          }
-
           if (redirectUrl !== '/login'){
             redirectUrl = '/login'
           }
