@@ -1,7 +1,15 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllPrivateUrl, savePrivateUrl,destoryPrivateUrl } = api
+const { enumInitPrivateUrl, queryAllPrivateUrl, savePrivateUrl, destoryPrivateUrl } = api
+
+export async function enumInitPrivate(params) {
+  return request({
+    url: enumInitPrivateUrl,
+    method: 'get',
+    data: params,
+  })
+}
 
 export async function queryAllPrivate(params) {
   return request({

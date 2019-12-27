@@ -68,12 +68,12 @@ module.exports = {
     deleteAccountUrl: `${AccountApi}/delete/:id`,
     updateAccountUrl: `${AccountApi}/update/:id`,
 
+    enumInitPrivateUrl: `${APIV1}/_/internal/private/enum/`,
     queryAllPrivateUrl: `${PrivateApi}/query/`,
     savePrivateUrl: `${PrivateApi}/save/`,
     destoryPrivateUrl: `${PrivateApi}/destory/`,
 
     systemInfo: `${SystemInfoApi}/config/`,
-    systemMenus: `${SystemInfoApi}/menu/`,
     fileRegistry: `${FileRegistryApi}/file/`,
   },
 }
