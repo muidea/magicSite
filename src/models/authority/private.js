@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
-import { enumInitPrivateUrl, queryAllPrivateUrl, savePrivateUrl, destoryPrivateUrl } from 'services/authority/private'
+import { enumInitPrivate, queryAllPrivate, savePrivate, destoryPrivate } from 'services/authority/private'
 
 import { pageModel } from '../common'
 
@@ -17,7 +17,7 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/account/private') {
+        if (location.pathname === '/authority/private') {
           dispatch({
             type: 'queryAllPrivate',
             payload: {},
@@ -30,7 +30,7 @@ export default modelExtend(pageModel, {
   effects: {
     *enumInitPrivate({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(enumInitPrivateUrl, { ...payload, ...sessionInfo })
+      const result = yield call(enumInitPrivate, { ...payload, ...sessionInfo })
       const { success, data } = result
       if (success) {
         const { errorCode, privates } = data
@@ -60,7 +60,7 @@ export default modelExtend(pageModel, {
 
     *queryAllPrivate({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(queryAllPrivateUrl, { ...payload, ...sessionInfo })
+      const result = yield call(queryAllPrivate, { ...payload, ...sessionInfo })
       const { success, data } = result
       if (success) {
         const { errorCode, privates } = data
@@ -121,7 +121,7 @@ export default modelExtend(pageModel, {
 
     *savePrivate({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(savePrivateUrl, { ...payload, ...sessionInfo })
+      const result = yield call(savePrivate, { ...payload, ...sessionInfo })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
@@ -147,7 +147,7 @@ export default modelExtend(pageModel, {
 
     *destoryPrivate({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(destoryPrivateUrl, { ...payload, ...sessionInfo })
+      const result = yield call(destoryPrivate, { ...payload, ...sessionInfo })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
