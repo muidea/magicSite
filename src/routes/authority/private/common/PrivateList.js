@@ -4,32 +4,52 @@ import { Row, Col, List, Checkbox } from 'antd'
 import { RowProps } from './common'
 
 export default class PrivateList extends React.Component {
-
   constructor(props) {
     super(props)
 
+    let value = []
+    if (props.value) {
+      value = props.value
+    }
+
     this.state = {
-      selectPrivateList: [],
+      value,
     }
   }
 
-  onChange = (e, item) => {
-    let newList = []
-    const { selectPrivateList } = this.state
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value) {
+      this.setState({ value: nextProps.value })
+    }
+  }
+
+  onChange = (e, index) => {
+    let { value } = this.state
     if (e.target.checked) {
-      newList = selectPrivateList
-      newList.push(item)
+      value.push(index)
     } else {
-      selectPrivateList.forEach((val) => {
-        if (val.namePath !== item.namePath) {
-          newList.push(val)
-        }
-      })
+      value = value.filter(_ => _ !== index)
     }
 
-    this.setState({ selectPrivateList: newList })
+    this.props.onChange(value)
+  }
 
-    this.props.onChange(newList)
+  renderItem = (item, index) => {
+    const { value } = this.state
+    let checked = false
+    if (value) {
+      checked = value.includes(index)
+    }
+
+    return (
+      <List.Item
+        actions={[
+          <Checkbox onChange={e => this.onChange(e, index)} checked={checked} />,
+        ]}
+      >
+        <List.Item.Meta title={item.namePath} />
+      </List.Item>
+    )
   }
 
   render() {
@@ -43,15 +63,7 @@ export default class PrivateList extends React.Component {
             size="small"
             style={{ paddingRight: '30px' }}
             dataSource={this.props.onInitPrivateList()}
-            renderItem={item => (
-              <List.Item
-                actions={[
-                  <Checkbox onChange={e => this.onChange(e, item)} />,
-                ]}
-              >
-                <List.Item.Meta title={item.namePath} />
-              </List.Item>
-        )}
+            renderItem={this.renderItem}
           />
         </Col>
       </Row>

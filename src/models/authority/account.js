@@ -37,7 +37,7 @@ export default modelExtend(pageModel, {
       }
 
       const result = yield call(queryAllAccount, { ...payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason, total, accounts } = data
         if (errorCode === 0) {
@@ -63,7 +63,7 @@ export default modelExtend(pageModel, {
     * queryAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const result = yield call(queryAccount, { id: payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason, account } = data
         if (errorCode === 0) {
@@ -79,7 +79,7 @@ export default modelExtend(pageModel, {
     * updateAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const result = yield call(updateAccount, { ...payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
@@ -95,7 +95,7 @@ export default modelExtend(pageModel, {
     * saveAccount({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const result = yield call(createAccount, { ...payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
@@ -112,7 +112,7 @@ export default modelExtend(pageModel, {
       const { sessionInfo } = yield select(_ => _.app)
       const { selectedRowKeys } = yield select(_ => _.account)
       const result = yield call(deleteAccount, { id: payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
@@ -128,7 +128,7 @@ export default modelExtend(pageModel, {
 
     * submitAccount({ payload }, { put, select }) {
       const { modalType } = yield select(_ => _.account)
-      if (modalType === 'create'){
+      if (modalType === 'create') {
         yield put({ type: 'saveAccount', payload })
       } else {
         yield put({ type: 'updateAccount', payload })
@@ -136,10 +136,10 @@ export default modelExtend(pageModel, {
 
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
     },
-    
+
     * cancelAccount({ payload }, { put, select }) {
       const { modalType } = yield select(_ => _.account)
-      if (modalType === 'create'){
+      if (modalType === 'create') {
         yield put({ type: 'cancelNewAccount', payload })
       } else {
         yield put({ type: 'cancelUpdateAccount', payload })
@@ -147,7 +147,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewAccount({ payload }, { put }) {
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"新增账号", modalType: 'create' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle: '新增账号', modalType: 'create' } })
     },
 
     * cancelNewAccount({ payload }, { put }) {
@@ -156,12 +156,12 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateAccount({ payload }, { put }) {
       yield put({ type: 'queryAccount', payload })
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle:"修改账号",  modalType: 'update' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle: '修改账号', modalType: 'update' } })
     },
 
     * cancelUpdateAccount({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
-    },    
+    },
   },
 
   reducers: {

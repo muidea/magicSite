@@ -43,7 +43,7 @@ export default class PrivateGroupSteps extends React.Component {
   onFinishClick =() => {
     if (this.props.modalProps.onOk) {
       const { privateGroup, privateList } = this.state
-      this.props.modalProps.onOk({ ...privateGroup, privates: privateList })
+      this.props.modalProps.onOk({ ...privateGroup, privates: this.props.initPrivateList.filter((_, idx) => { return privateList.includes(idx) }) })
     }
   }
 
@@ -105,7 +105,7 @@ export default class PrivateGroupSteps extends React.Component {
     }, {
       title: '权限组总结',
       content: <PrivateSummary
-        value={{ ...privateGroup, privates: privateList }}
+        value={{ ...privateGroup, privates: this.props.initPrivateList.filter((_, idx) => { return privateList.includes(idx) }) }}
       />,
     }]
 

@@ -27,13 +27,13 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-          dispatch({
-            type: 'loading',
-            payload: {
-              locationPathname: location.pathname,
-              locationQuery: qs.parse(location.search, {'ignoreQueryPrefix': true}),
-            },
-          })
+        dispatch({
+          type: 'loading',
+          payload: {
+            locationPathname: location.pathname,
+            locationQuery: qs.parse(location.search, { ignoreQueryPrefix: true }),
+          },
+        })
       })
     },
   },
@@ -48,11 +48,10 @@ export default {
           const result = yield call(systemInfo, { ...payload })
           const { success, message, data } = result
           if (success) {
-            const { menu } = data
             yield put({
               type: 'saveSession',
               payload: {
-                menu,
+                menu: data.menu,
               },
             })
           } else {
@@ -63,9 +62,9 @@ export default {
       }
 
       yield put({
-            type: 'status',
-            payload,
-          })
+        type: 'status',
+        payload,
+      })
     },
 
     * status({ payload }, { call, put, select }) {
@@ -76,24 +75,24 @@ export default {
       const result = yield call(userStatus, { ...payload })
       const { success, message, data } = result
       if (success) {
-        const { from } =locationQuery
-        let redirectUrl =  locationPathname
-        if (from){
+        const { from } = locationQuery
+        let redirectUrl = locationPathname
+        if (from) {
           redirectUrl = from
         }
 
-        const { errorCode, reason, sessionInfo, account } = data
+        const { errorCode, account } = data
         if (errorCode === 0) {
           yield put({
             type: 'saveSession',
             payload: {
-              sessionInfo,
+              sessionInfo: data.sessionInfo,
               onlineUser: account,
               locationPathname,
             },
           })
 
-          if (redirectUrl === '/login'){
+          if (redirectUrl === '/login') {
             redirectUrl = '/'
           }
         } else {
@@ -106,7 +105,7 @@ export default {
             },
           })
 
-          if (redirectUrl !== '/login'){
+          if (redirectUrl !== '/login') {
             redirectUrl = '/login'
           }
         }
@@ -149,7 +148,7 @@ export default {
       if (success) {
         const { errorCode } = data
         if (errorCode === 0) {
-          yield put({ type: 'clearSession', payload: { sessionInfo: {},menu:[], onlineUser: {} } })
+          yield put({ type: 'clearSession', payload: { sessionInfo: {}, menu: [], onlineUser: {} } })
           yield put(routerRedux.push({
             pathname: '/login',
           }))
