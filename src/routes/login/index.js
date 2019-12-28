@@ -39,7 +39,7 @@ const Login = ({
                 message: '请输入账号',
               },
             ],
-          })(<Input size="large" onPressEnter={handleOk} placeholder="账号" />)}
+          })(<Input size="large" onPressEnter={handleOk} placeholder="账号" autoComplete="account" />)}
         </FormItem>
         <FormItem hasFeedback>
           {getFieldDecorator('password', {
@@ -49,7 +49,7 @@ const Login = ({
                 message: '请输入密码',
               },
             ],
-          })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="密码" />)}
+          })(<Input size="large" type="password" onPressEnter={handleOk} autoComplete="password" placeholder="密码" />)}
         </FormItem>
         <Row>
           <Button type="primary" size="large" onClick={handleOk} loading={loading.effects.login}>
