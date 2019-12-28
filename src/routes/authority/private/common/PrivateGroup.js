@@ -46,7 +46,7 @@ export default class PrivateGroup extends React.Component {
   render() {
     return (
       <div>
-        <Row {...RowProps} type="flex" justify="left" >
+        <Row {...RowProps} >
           <Col span={12}>
             <Row>
               <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>

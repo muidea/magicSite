@@ -10,23 +10,11 @@ const Step = Steps.Step
 export default class PrivateGroupSteps extends React.Component {
   constructor(props) {
     super(props)
-    let initPrivateList = []
-    if (props.initPrivateList) {
-      initPrivateList = props.initPrivateList
-    }
-
     this.state = {
       currentStep: 0,
       currentStatus: 'process',
       privateGroup: {},
       privateList: [],
-      initPrivateList,
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.initPrivateList) {
-      this.setState({ initPrivateList: nextProps.initPrivateList })
     }
   }
 
@@ -97,8 +85,12 @@ export default class PrivateGroupSteps extends React.Component {
     return ok
   }
 
+  onInitPrivateList =() => {
+    return this.props.initPrivateList
+  }
+
   render() {
-    const { currentStep, currentStatus, privateGroup, privateList, initPrivateList } = this.state
+    const { currentStep, currentStatus, privateGroup, privateList } = this.state
 
     const modalOpts = {
       ...this.props.modalProps,
@@ -109,7 +101,7 @@ export default class PrivateGroupSteps extends React.Component {
       content: <PrivateGroup value={privateGroup} onChange={this.onPrivateGroupChange} />,
     }, {
       title: '权限列表',
-      content: <PrivateList value={privateList} initPrivateList={initPrivateList} onChange={this.onPrivateListChange} />,
+      content: <PrivateList value={privateList} onInitPrivateList={this.onInitPrivateList} onChange={this.onPrivateListChange} />,
     }, {
       title: '权限组总结',
       content: <PrivateSummary

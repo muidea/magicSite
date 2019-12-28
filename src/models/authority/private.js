@@ -129,7 +129,7 @@ export default modelExtend(pageModel, {
           notification.error({ message: '保存权限组失败', description: reason })
         } else {
           yield put({
-            type: 'queryPrivate',
+            type: 'queryAllPrivate',
           })
 
           yield put({
@@ -155,7 +155,7 @@ export default modelExtend(pageModel, {
           notification.error({ message: '删除权限组失败', description: reason })
         } else {
           yield put({
-            type: 'queryPrivate',
+            type: 'queryAllPrivate',
           })
         }
       } else {

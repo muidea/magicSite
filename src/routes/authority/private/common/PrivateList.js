@@ -4,24 +4,12 @@ import { Row, Col, List, Checkbox } from 'antd'
 import { RowProps } from './common'
 
 export default class PrivateList extends React.Component {
+
   constructor(props) {
     super(props)
 
-    let initPrivateList = []
-    if (props.initPrivateList) {
-      initPrivateList = props.initPrivateList
-    }
-
     this.state = {
-      initPrivateList,
       selectPrivateList: [],
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { selectPrivateList } = this.state
-    if (nextProps.initPrivateList) {
-      this.setState({ selectPrivateList, initPrivateList: nextProps.initPrivateList })
     }
   }
 
@@ -54,7 +42,7 @@ export default class PrivateList extends React.Component {
           <List
             size="small"
             style={{ paddingRight: '30px' }}
-            dataSource={this.state.initPrivateList}
+            dataSource={this.props.onInitPrivateList()}
             renderItem={item => (
               <List.Item
                 actions={[
@@ -72,6 +60,6 @@ export default class PrivateList extends React.Component {
 }
 
 PrivateList.propTypes = {
-  initPrivateList: PropTypes.arrary,
+  onInitPrivateList: PropTypes.func,
   onChange: PropTypes.func,
 }
