@@ -34,7 +34,7 @@ export default class PrivateList extends React.Component {
 
   render() {
     return (
-      <Row {...RowProps} type="flex" justify="left" >
+      <Row {...RowProps}>
         <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>
           <span>权限列表</span>
         </Col>
