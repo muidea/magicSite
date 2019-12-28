@@ -21,7 +21,7 @@ export default class PrivateGroupSteps extends React.Component {
   onNextClick = () => {
     let currentStep = this.state.currentStep
     let state = 'process'
-    if (!this.verifyStatus(currentStep)) {
+    if (!this.onVerifyStatus(currentStep)) {
       state = 'error'
     } else {
       currentStep += 1
@@ -33,7 +33,7 @@ export default class PrivateGroupSteps extends React.Component {
   onPrevClick = () => {
     const currentStep = this.state.currentStep - 1
     let state = 'process'
-    if (!this.verifyStatus(currentStep)) {
+    if (!this.onVerifyStatus(currentStep)) {
       state = 'error'
     }
 
@@ -55,7 +55,7 @@ export default class PrivateGroupSteps extends React.Component {
     this.setState({ privateList: value })
   }
 
-  verifyStatus =(currentStep) => {
+  onVerifyStatus =(currentStep) => {
     let ok = false
     switch (currentStep) {
       case 0: {
