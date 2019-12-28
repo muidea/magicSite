@@ -8,11 +8,11 @@ export default modelExtend(pageModel, {
 
   state: {
     currentItem: {},
-    groupList: [],
+    privateGroupList: [],
     selectedRowKeys: [],
     modalVisible: false,
-    modalTitle: '新增账号',
-    modalType: 'create',
+    panelVisible: false,
+    invokeActionType: 'create',
   },
 
   subscriptions: {
@@ -127,19 +127,19 @@ export default modelExtend(pageModel, {
     },
 
     * submitAccount({ payload }, { put, select }) {
-      const { modalType } = yield select(_ => _.account)
-      if (modalType === 'create') {
+      const { invokeActionType } = yield select(_ => _.account)
+      if (invokeActionType === 'create') {
         yield put({ type: 'saveAccount', payload })
       } else {
         yield put({ type: 'updateAccount', payload })
       }
 
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, panelVisible: false } })
     },
 
     * cancelAccount({ payload }, { put, select }) {
-      const { modalType } = yield select(_ => _.account)
-      if (modalType === 'create') {
+      const { invokeActionType } = yield select(_ => _.account)
+      if (invokeActionType === 'create') {
         yield put({ type: 'cancelNewAccount', payload })
       } else {
         yield put({ type: 'cancelUpdateAccount', payload })
@@ -147,20 +147,20 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewAccount({ payload }, { put }) {
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle: '新增账号', modalType: 'create' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, invokeActionType: 'create' } })
     },
 
     * cancelNewAccount({ payload }, { put }) {
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, invokeActionType: 'create' } })
     },
 
     * invokeUpdateAccount({ payload }, { put }) {
       yield put({ type: 'queryAccount', payload })
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalTitle: '修改账号', modalType: 'update' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, panelVisible: true, invokeActionType: 'update' } })
     },
 
     * cancelUpdateAccount({ payload }, { put }) {
-      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, panelVisible: false, invokeActionType: 'update' } })
     },
   },
 

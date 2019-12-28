@@ -6,23 +6,43 @@ import qs from 'qs'
 import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
+import Panel from './Panel'
 
 const Account = ({ location, dispatch, account, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, groupList, modalTitle, modalVisible } = account
+  const { list, selectedRowKeys, pagination, currentItem, privateGroupList, modalVisible, panelVisible } = account
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
-    groupList,
+    privateGroupList,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['account/update'],
-    title: modalTitle,
+    confirmLoading: loading.effects['account/submitAccount'],
+    title: '新建账号',
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
         type: 'account/submitAccount',
         payload: { id: currentItem.id, ...data },
+      })
+    },
+    onCancel() {
+      dispatch({ type: 'account/cancelAccount' })
+    },
+  }
+
+  const panelProps = {
+    visible: panelVisible,
+    maskClosable: false,
+    confirmLoading: loading.effects['account/submitAccount'],
+    title: '更新账号',
+    wrapClassName: 'vertical-center-modal',
+    currentAccount: currentItem,
+    privateGroupList,
+    onOk(data) {
+      dispatch({
+        type: 'account/submitAccount',
+        payload: { ...data },
       })
     },
     onCancel() {
@@ -109,6 +129,7 @@ const Account = ({ location, dispatch, account, loading }) => {
       <Filter {...filterProps} />
       <List {...listProps} />
       {modalVisible && <Modal {...modalProps} />}
+      {panelVisible && <Panel {...panelProps} />}
     </div>
   )
 }

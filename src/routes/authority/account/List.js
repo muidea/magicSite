@@ -27,16 +27,13 @@ const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
       title: '账号',
       dataIndex: 'account',
       key: 'account',
-      render: (text, record) => {
-        return <Link to={`/authority/account/view/${record.id}`}>{text}</Link>
-      },
     }, {
       title: '权限组',
       dataIndex: 'privateGroup',
       key: 'privateGroup',
       render: (text, record) => {
         let tag = { name: '-' }
-        if (record.privateGroup){
+        if (record.privateGroup) {
           tag = record.privateGroup
         }
 
@@ -49,6 +46,10 @@ const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
       render: (text, record) => {
         return <Status value={record.status} />
       },
+    }, {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
     }, {
       title: '操作',
       key: 'operation',

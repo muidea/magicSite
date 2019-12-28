@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
-import { AutoCompleteTagGroup } from '../../../components'
 
 const FormItem = Form.Item
 
@@ -12,7 +11,6 @@ const formItemLayout = {
 
 const modal = ({
   item,
-  groupList,
   onOk,
   form: {
     getFieldDecorator,
