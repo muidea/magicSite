@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { Modal, Steps, Button } from 'antd'
 import PrivateGroup from './PrivateGroup'
 import PrivateList from './PrivateList'
-import PrivateSummary from './PrivateSummary'
+import PrivateGroupSummary from './PrivateGroupSummary'
 
 const Step = Steps.Step
 
-export default class PrivateGroupSteps extends React.Component {
+export default class PrivateGroupWizard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -104,7 +104,7 @@ export default class PrivateGroupSteps extends React.Component {
       content: <PrivateList value={privateList} onInitPrivateList={this.onInitPrivateList} onChange={this.onPrivateListChange} />,
     }, {
       title: '权限组总结',
-      content: <PrivateSummary
+      content: <PrivateGroupSummary
         value={{ ...privateGroup, privates: this.props.initPrivateList.filter((_, idx) => { return privateList.includes(idx) }) }}
       />,
     }]
@@ -138,7 +138,7 @@ export default class PrivateGroupSteps extends React.Component {
   }
 }
 
-PrivateGroupSteps.propTypes = {
+PrivateGroupWizard.propTypes = {
   modalProps: PropTypes.object,
   initPrivateList: PropTypes.array,
 }

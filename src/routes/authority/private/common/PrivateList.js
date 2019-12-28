@@ -55,10 +55,10 @@ export default class PrivateList extends React.Component {
   render() {
     return (
       <Row {...RowProps}>
-        <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>
+        <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={4}>
           <span>权限列表</span>
         </Col>
-        <Col span={21}>
+        <Col span={20}>
           <List
             size="small"
             style={{ paddingRight: '30px' }}

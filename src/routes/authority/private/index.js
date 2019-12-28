@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Spin } from 'antd'
 import { connect } from 'dva'
 
-import { PrivateGroupPanel, PrivateGroupSteps } from './common'
+import { PrivateGroupPanel, PrivateGroupWizard } from './common'
 
 const Private = ({ dispatch, privateGroup, loading }) => {
   const { privateGroupList, initPrivateList, currentPrivateGroup, showPrivateGroupWizard } = privateGroup
@@ -48,14 +49,16 @@ const Private = ({ dispatch, privateGroup, loading }) => {
 
   return (
     <div className="content-inner">
-      <PrivateGroupPanel
-        onNewItem={onNewPrivateGroupItem}
-        onSelectItem={onSelectPrivateGroupItem}
-        onDeleteItem={onDeletePrivateGroupItem}
-        currentItem={currentPrivateGroup}
-        groupItemList={privateGroupList}
-      />
-      {showPrivateGroupWizard && <PrivateGroupSteps modalProps={modalProps} initPrivateList={initPrivateList} /> }
+      <Spin spinning={loading.effects['privateGroup/queryAllPrivate']}>
+        <PrivateGroupPanel
+          onNewItem={onNewPrivateGroupItem}
+          onSelectItem={onSelectPrivateGroupItem}
+          onDeleteItem={onDeletePrivateGroupItem}
+          currentItem={currentPrivateGroup}
+          groupItemList={privateGroupList}
+        />
+        {showPrivateGroupWizard && <PrivateGroupWizard modalProps={modalProps} initPrivateList={initPrivateList} /> }
+      </Spin>
     </div>
   )
 }

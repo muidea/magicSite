@@ -1,4 +1,4 @@
 import PrivateGroupPanel from './PrivateGroupPanel'
-import PrivateGroupSteps from './PrivateGroupSteps'
+import PrivateGroupWizard from './PrivateGroupWizard'
 
-export { PrivateGroupPanel, PrivateGroupSteps }
+export { PrivateGroupPanel, PrivateGroupWizard }

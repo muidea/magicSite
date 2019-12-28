@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, Button } from 'antd'
 
-export default class PrivateGroupListView extends React.Component {
+export default class PrivateGroupView extends React.Component {
   onNewClick = () => {
     this.props.onNewItem()
   }
@@ -41,5 +41,5 @@ export default class PrivateGroupListView extends React.Component {
   }
 }
 
-PrivateGroupListView.propTypes = {
+PrivateGroupView.propTypes = {
 }

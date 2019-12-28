@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Row, Col, List } from 'antd'
 import { RowProps } from './common'
 
-export default class PrivateSummary extends React.Component {
+export default class PrivateGroupSummary extends React.Component {
   constructor(props) {
     super(props)
 
@@ -29,26 +29,26 @@ export default class PrivateSummary extends React.Component {
     return (
       <div>
         <Row {...RowProps} type="flex">
-          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>
+          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={4}>
             <span>权限组名称</span>
           </Col>
-          <Col span={21}>
+          <Col span={20}>
             {value.name}
           </Col>
         </Row>
         <Row {...RowProps} type="flex">
-          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>
+          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={4}>
             <span>权限组描述</span>
           </Col>
-          <Col span={21}>
+          <Col span={20}>
             {value.description}
           </Col>
         </Row>
         <Row {...RowProps} type="flex">
-          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={3}>
+          <Col style={{ marginTop: 'auto', marginBottom: 'auto' }} span={4}>
             <span>权限列表</span>
           </Col>
-          <Col span={21}>
+          <Col span={20}>
             <List
               size="small"
               style={{ paddingRight: '30px' }}
@@ -66,6 +66,6 @@ export default class PrivateSummary extends React.Component {
   }
 }
 
-PrivateSummary.propTypes = {
+PrivateGroupSummary.propTypes = {
   value: PropTypes.object,
 }

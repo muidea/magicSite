@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'antd'
-import PrivateListView from './PrivateListView'
-import PrivateSummary from './PrivateSummary'
+import PrivateGroupView from './PrivateGroupView'
+import PrivateGroupSummary from './PrivateGroupSummary'
 
 const PrivateGroupPanel = ({
   loading,
@@ -13,8 +13,8 @@ const PrivateGroupPanel = ({
   groupItemList,
 }) => (
   <Row type="flex" align="top">
-    <Col md={8} lg={10}>
-      <PrivateListView
+    <Col md={8} lg={8}>
+      <PrivateGroupView
         loading={loading}
         onNewItem={onNewItem}
         onSelectItem={onSelectItem}
@@ -22,8 +22,8 @@ const PrivateGroupPanel = ({
         groupItemList={groupItemList}
       />
     </Col>
-    <Col md={12} offset={2} lg={10}>
-      <PrivateSummary value={currentItem} />
+    <Col md={12} offset={2} lg={12}>
+      <PrivateGroupSummary value={currentItem} />
     </Col>
   </Row>
 )
