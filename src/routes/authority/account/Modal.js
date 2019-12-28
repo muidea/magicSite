@@ -44,7 +44,6 @@ const modal = ({
     onOk: handleOk,
   }
 
-
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">

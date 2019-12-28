@@ -1,6 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
 import { queryAllAccount, queryAccount, updateAccount, createAccount, deleteAccount } from 'services/authority/account'
+import { queryAllPrivate } from 'services/authority/private'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -146,7 +147,20 @@ export default modelExtend(pageModel, {
       }
     },
 
+    *queryAllPrivate({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryAllPrivate, { ...payload, ...sessionInfo })
+      const { success, data } = result
+      if (success) {
+        const { errorCode, privates } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateItemState', payload: { privateGroupList: privates } })
+        }
+      }
+    },
+
     * invokeNewAccount({ payload }, { put }) {
+      yield put({ type: 'queryAllPrivate', payload })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, invokeActionType: 'create' } })
     },
 
@@ -155,6 +169,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeUpdateAccount({ payload }, { put }) {
+      yield put({ type: 'queryAllPrivate', payload })
       yield put({ type: 'queryAccount', payload })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, panelVisible: true, invokeActionType: 'update' } })
     },

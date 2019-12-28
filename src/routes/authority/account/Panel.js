@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Modal, Select, Radio } from 'antd'
+import { Form, Modal, Input, Select, Radio } from 'antd'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -21,8 +21,8 @@ class Panel extends Component {
     if ('currentAccount' in props) {
       currentAccount = props.currentAccount
       if (currentAccount) {
-        const { status, privateGroup } = currentAccount
-        let val = { }
+        const { account, status, privateGroup } = currentAccount
+        let val = { account }
         if (status) {
           val = { ...val, status: status.id.toString() }
         }
@@ -52,11 +52,8 @@ class Panel extends Component {
     if ('currentAccount' in nextProps) {
       currentAccount = nextProps.currentAccount
       if (currentAccount) {
-        const { member, status, privateGroup } = currentAccount
-        let val = { }
-        if (member) {
-          val = { ...val, isaccount: member.isaccount }
-        }
+        const { account, status, privateGroup } = currentAccount
+        let val = { account }
         if (status) {
           val = { ...val, status: status.id.toString() }
         }
@@ -101,6 +98,14 @@ class Panel extends Component {
 
     return (<Modal {...this.props} onOk={this.handleOk} >
       <Form layout="horizontal">
+        <FormItem label="账号" {...formItemLayout}>
+          {this.props.form.getFieldDecorator('account', {
+            initialValue: currentAccount.account,
+            rules: [
+              { required: true },
+            ],
+          })(<Input readOnly />)}
+        </FormItem>
         <FormItem label="权限组" {...formItemLayout}>
           {this.props.form.getFieldDecorator('privateGroup', {
             rules: [
@@ -111,7 +116,7 @@ class Panel extends Component {
             <Select
               mode="default"
               style={{ width: '100%' }}
-              placeholder="Please select"
+              placeholder="请选择权限组"
             >
               {privateGroupOpts}
             </Select>,
