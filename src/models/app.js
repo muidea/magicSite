@@ -89,6 +89,7 @@ export default {
               sessionInfo: data.sessionInfo,
               onlineUser: account,
               locationPathname,
+              locationQuery,
             },
           })
 
@@ -102,6 +103,7 @@ export default {
               sessionInfo: {},
               onlineUser: {},
               locationPathname,
+              locationQuery,
             },
           })
 
@@ -121,15 +123,22 @@ export default {
       }
     },
 
-    *login({ payload }, { call, put }) {
+    *login({ payload }, { call, put, select }) {
+      const { locationQuery } = yield select(_ => _.app)
       const result = yield call(userLogin, { ...payload })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason, sessionInfo, account } = data
         if (errorCode === 0) {
+          let redirectUrl = '/'
+          const { from } = locationQuery
+          if (from) {
+            redirectUrl = from
+          }
+
           yield put({ type: 'saveSession', payload: { sessionInfo, onlineUser: account } })
           yield put(routerRedux.push({
-            pathname: '/',
+            pathname: redirectUrl,
           }))
         } else {
           notification.error({ message: '登陆失败', description: reason })
