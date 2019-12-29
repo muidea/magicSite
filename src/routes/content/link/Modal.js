@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
-import { EditableTagGroup } from 'components'
-import { ToCatalogUnit } from '../../util'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -27,13 +25,9 @@ const modal = ({
       if (errors) {
         return
       }
-      const data = {
-        ...getFieldsValue(),
-        key: item.key,
-      }
-      const catalogUnit = ToCatalogUnit(data.catalog)
 
-      onOk({ ...data, catalog: catalogUnit })
+      const data = { ...getFieldsValue() }
+      onOk({ ...data })
     })
   }
 
@@ -60,10 +54,7 @@ const modal = ({
           {getFieldDecorator('logo', { initialValue: item.logo })(<TextArea rows={2} cols={3} />)}
         </FormItem>
         <FormItem label="描述" {...formItemLayout}>
-          {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={4} cols={3} />)}
-        </FormItem>
-        <FormItem label="分类" {...formItemLayout}>
-          {getFieldDecorator('catalog', { initialValue: item.catalog })(<EditableTagGroup />)}
+          {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={3} cols={3} />)}
         </FormItem>
       </Form>
     </Modal>

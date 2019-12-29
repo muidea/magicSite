@@ -8,31 +8,30 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Media = ({ location, dispatch, media, loading }) => {
-  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
-  const { list, pagination, fileRegistryUrl, selectedRowKeys, modalVisible } = media
+  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = media
   const { pageSize } = pagination
 
   const modalProps = {
-    serverUrl: fileRegistryUrl,
+    item: currentItem,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['media/update'],
-    title: '新增文件',
+    confirmLoading: loading.effects['media/submitMedia'],
+    title: `${modalType === 'create' ? '新增文件' : '更新文件'}`,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'media/saveMedia',
-        payload: { data: { ...data } },
+        type: 'media/submitMedia',
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel() {
-      dispatch({ type: 'media/hideModal' })
+      dispatch({ type: 'media/cancelMedia' })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['media/query'],
+    loading: loading.effects['media/queryAllMedia'],
     pagination,
     location,
     onChange(page) {
@@ -41,11 +40,18 @@ const Media = ({ location, dispatch, media, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          pageNum: page.current,
+          page: page.current,
           pageSize: page.pageSize,
         }),
       }))
     },
+    onUpdateItem(id) {
+      dispatch({
+        type: 'media/invokeUpdateMedia',
+        payload: id,
+      })
+    },
+
     onDeleteItem(id) {
       dispatch({
         type: 'media/deleteMedia',
@@ -66,23 +72,34 @@ const Media = ({ location, dispatch, media, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
+
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: qs.stringify({
+        query: {
           ...value,
+          page: 1,
           pageSize,
-        }),
+        },
       }))
     },
-    onAdd() {
-      dispatch({ type: 'media/showModal' })
+
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/media',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/media' }))
+      }
     },
-    onDeleteItems() {
-      dispatch({
-        type: 'media/multiDeleteMedia',
-        payload: { ids: selectedRowKeys },
-      })
+
+    onAdd() {
+      dispatch({ type: 'media/invokeNewMedia' })
     },
   }
 

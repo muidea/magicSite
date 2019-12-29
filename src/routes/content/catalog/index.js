@@ -8,32 +8,30 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Catalog = ({ location, dispatch, catalog, loading }) => {
-  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
-  const { list, pagination, currentItem, selectedRowKeys, modalVisible, modalType } = catalog
+  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = catalog
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
-    catalogList: modalType === 'create' ? list : list.filter(item => item.id < currentItem.id),
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['catalog/update'],
+    confirmLoading: loading.effects['catalog/submitCatalog'],
     title: `${modalType === 'create' ? '新建分类' : '修改分类'}`,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'catalog/saveCatalog',
-        payload: { action: modalType, data: { id: currentItem.id, ...data } },
+        type: 'catalog/submitCatalog',
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel() {
-      dispatch({ type: 'catalog/hideModal' })
+      dispatch({ type: 'catalog/cancelCatalog' })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['catalog/query'],
+    loading: loading.effects['catalog/queryAllCatalog'],
     pagination,
     location,
     onChange(page) {
@@ -42,20 +40,21 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          pageNum: page.current,
+          page: page.current,
           pageSize: page.pageSize,
         }),
       }))
     },
-    onDeleteItem(id) {
+    onUpdateItem(id) {
       dispatch({
-        type: 'catalog/deleteCatalog',
+        type: 'catalog/invokeUpdateCatalog',
         payload: id,
       })
     },
-    onEditItem(id) {
+
+    onDeleteItem(id) {
       dispatch({
-        type: 'catalog/updateCatalog',
+        type: 'catalog/deleteCatalog',
         payload: id,
       })
     },
@@ -73,15 +72,18 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
+
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: qs.stringify({
+        query: {
           ...value,
+          page: 1,
           pageSize,
-        }),
+        },
       }))
     },
+
     onSearch(fieldsValue) {
       if (fieldsValue.keyword.length) {
         dispatch(routerRedux.push({
@@ -95,17 +97,9 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         dispatch(routerRedux.push({ pathname: '/catalog' }))
       }
     },
+
     onAdd() {
-      dispatch({
-        type: 'catalog/showModal',
-        payload: { modalType: 'create' },
-      })
-    },
-    onDeleteItems() {
-      dispatch({
-        type: 'catalog/multiDeleteCatalog',
-        payload: { ids: selectedRowKeys },
-      })
+      dispatch({ type: 'catalog/invokeNewCatalog' })
     },
   }
 

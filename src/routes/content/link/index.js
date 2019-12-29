@@ -8,31 +8,30 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Link = ({ location, dispatch, link, loading }) => {
-  location.query = qs.parse(location.search, { ignoreQueryPrefix: true })
-  const { list, pagination, currentItem, selectedRowKeys, modalVisible, modalType } = link
+  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = link
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['link/update'],
+    confirmLoading: loading.effects['link/submitLink'],
     title: `${modalType === 'create' ? '新建链接' : '修改链接'}`,
     wrapClassName: 'vertical-center-modal',
     onOk(data) {
       dispatch({
-        type: 'link/saveLink',
-        payload: { action: modalType, data: { id: currentItem.id, ...data } },
+        type: 'link/submitLink',
+        payload: { id: currentItem.id, ...data },
       })
     },
     onCancel() {
-      dispatch({ type: 'link/hideModal' })
+      dispatch({ type: 'link/cancelLink' })
     },
   }
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['link/query'],
+    loading: loading.effects['link/queryAllLink'],
     pagination,
     location,
     onChange(page) {
@@ -41,20 +40,21 @@ const Link = ({ location, dispatch, link, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          pageNum: page.current,
+          page: page.current,
           pageSize: page.pageSize,
         }),
       }))
     },
-    onDeleteItem(id) {
+    onUpdateItem(id) {
       dispatch({
-        type: 'link/deleteLink',
+        type: 'link/invokeUpdateLink',
         payload: id,
       })
     },
-    onEditItem(id) {
+
+    onDeleteItem(id) {
       dispatch({
-        type: 'link/updateLink',
+        type: 'link/deleteLink',
         payload: id,
       })
     },
@@ -72,26 +72,34 @@ const Link = ({ location, dispatch, link, loading }) => {
   const filterProps = {
     selectedRowKeys,
     filter: { ...location.query },
+
     onFilterChange(value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
-        search: qs.stringify({
+        query: {
           ...value,
+          page: 1,
           pageSize,
-        }),
+        },
       }))
     },
-    onAdd() {
-      dispatch({
-        type: 'link/showModal',
-        payload: { modalType: 'create' },
-      })
+
+    onSearch(fieldsValue) {
+      if (fieldsValue.keyword.length) {
+        dispatch(routerRedux.push({
+          pathname: '/link',
+          query: {
+            field: fieldsValue.field,
+            keyword: fieldsValue.keyword,
+          },
+        }))
+      } else {
+        dispatch(routerRedux.push({ pathname: '/link' }))
+      }
     },
-    onDeleteItems() {
-      dispatch({
-        type: 'link/multiDeleteLink',
-        payload: { ids: selectedRowKeys },
-      })
+
+    onAdd() {
+      dispatch({ type: 'link/invokeNewLink' })
     },
   }
 
