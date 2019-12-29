@@ -1,20 +1,17 @@
 import modelExtend from 'dva-model-extend'
-import { routerRedux } from 'dva/router'
 import qs from 'qs'
-import { queryAllMedia, queryMedia, batchCreateMedia, deleteMedia, multiDeleteMedia } from 'services/content/media'
-import { config } from 'utils'
+import { notification } from 'antd'
+import { queryAllMedia, queryMedia, createMedia, updateMedia, deleteMedia } from 'services/content/media'
 import { pageModel } from '../common'
-
-const { api } = config
-const { fileRegistry } = api
 
 export default modelExtend(pageModel, {
   namespace: 'media',
 
   state: {
-    fileRegistryUrl: '',
+    currentItem: {},
     selectedRowKeys: [],
     modalVisible: false,
+    modalType: 'create',
   },
 
   subscriptions: {
@@ -33,97 +30,143 @@ export default modelExtend(pageModel, {
 
   effects: {
     * queryAllMedia({ payload }, { call, put, select }) {
-      const { sessionID, authToken } = yield select(_ => _.app)
+      const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const data = yield call(queryAllMedia, { ...payload, authToken })
-
-      const param = qs.stringify({ sessionID, authToken, 'key-name': 'file' })
-      const serverUrl = `${fileRegistry}?${param}`
-      if (data) {
-        const { total, media } = data
-
-        yield put({
-          type: 'updateStates',
-          payload: { fileRegistryUrl: serverUrl },
-        })
-
-        yield put({
-          type: 'queryAllSuccess',
-          payload: {
-            list: media,
-            pagination: {
-              current: Number(payload.pageNum) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: Number(total) || 0,
+      const result = yield call(queryAllMedia, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, total, medias } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'queryAllSuccess',
+            payload: {
+              list: medias,
+              pagination: {
+                current: Number(payload.pageNum) || 1,
+                pageSize: Number(payload.pageSize) || 10,
+                total: Number(total) || 0,
+              },
             },
-          },
-        })
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * queryMedia({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryMedia, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.media)
-      if (result.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllMedia', payload: {} })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryMedia, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, media } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateItemState', payload: { currentItem: media } })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
+    * updateMedia({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(updateMedia, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllMedia' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
+      }
+    },
 
     * saveMedia({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const { data } = payload
-      const result = yield call(batchCreateMedia, { authToken, ...data })
-      if (result.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/media'))
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(createMedia, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllMedia' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * deleteMedia({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteMedia, { id: payload, authToken })
+      const { sessionInfo } = yield select(_ => _.app)
       const { selectedRowKeys } = yield select(_ => _.media)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllMedia', payload: {} })
+      const result = yield call(deleteMedia, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+          yield put({ type: 'queryAllMedia' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
-    * multiDeleteMedia({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(multiDeleteMedia, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllMedia', payload: {} })
+    * submitMedia({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.media)
+      if (modalType === 'create') {
+        yield put({ type: 'saveMedia', payload })
       } else {
-        throw data
+        yield put({ type: 'updateMedia', payload })
       }
+
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
+    },
+
+    * cancelMedia({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.media)
+      if (modalType === 'create') {
+        yield put({ type: 'cancelNewMedia', payload })
+      } else {
+        yield put({ type: 'cancelUpdateMedia', payload })
+      }
+    },
+
+    * invokeNewMedia({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
+    },
+
+    * cancelNewMedia({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
+    },
+
+    * invokeUpdateMedia({ payload }, { put }) {
+      yield put({ type: 'queryMedia', payload })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
+    },
+
+    * cancelUpdateMedia({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
     },
   },
+
   reducers: {
-    updateStates(state, { payload }) {
+    updateItemState(state, { payload }) {
       return { ...state, ...payload }
-    },
-
-    showModal(state, { payload }) {
-      return { ...state, ...payload, modalVisible: true }
-    },
-
-    hideModal(state) {
-      return { ...state, currentItem: { id: -1, name: '', url: '', descrption: '', expiration: -1, catalog: [] }, modalVisible: false }
     },
   },
 

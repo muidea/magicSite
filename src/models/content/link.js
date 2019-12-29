@@ -1,14 +1,14 @@
 import modelExtend from 'dva-model-extend'
-import { routerRedux } from 'dva/router'
 import qs from 'qs'
-import { queryAllLink, queryLink, createLink, updateLink, deleteLink, multiDeleteLink } from 'services/content/link'
+import { notification } from 'antd'
+import { queryAllLink, queryLink, createLink, updateLink, deleteLink } from 'services/content/link'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
   namespace: 'link',
 
   state: {
-    currentItem: { id: -1, name: '', description: '', url: '', logo: '', catalog: [] },
+    currentItem: {},
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -29,97 +29,144 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllLink({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
+      const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
       if (!pageNum) {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const data = yield call(queryAllLink, { ...payload, authToken })
-      if (data) {
-        const { total, link } = data
-
-        yield put({
-          type: 'queryAllSuccess',
-          payload: {
-            list: link,
-            pagination: {
-              current: Number(payload.pageNum) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: Number(total) || 0,
+      const result = yield call(queryAllLink, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, total, links } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'queryAllSuccess',
+            payload: {
+              list: links,
+              pagination: {
+                current: Number(payload.pageNum) || 1,
+                pageSize: Number(payload.pageSize) || 10,
+                total: Number(total) || 0,
+              },
             },
-          },
-        })
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * queryLink({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryLink, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.link)
-      if (result.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllLink', payload: {} })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryLink, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, link } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateItemState', payload: { currentItem: link } })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * updateLink({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryLink, { id: payload, authToken })
-      if (result.success) {
-        const { link } = result
-        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: link } })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(updateLink, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllLink' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * saveLink({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const { action, data } = payload
-      const result = yield call(action === 'create' ? createLink : updateLink, { authToken, ...data })
-      if (result.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/link'))
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(createLink, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllLink' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * deleteLink({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteLink, { id: payload, authToken })
+      const { sessionInfo } = yield select(_ => _.app)
       const { selectedRowKeys } = yield select(_ => _.link)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllLink', payload: {} })
+      const result = yield call(deleteLink, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+          yield put({ type: 'queryAllLink' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
-    * multiDeleteLink({ payload }, { call, put }) {
-      const data = yield call(multiDeleteLink, payload)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllLink', payload: {} })
+    * submitLink({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.link)
+      if (modalType === 'create') {
+        yield put({ type: 'saveLink', payload })
       } else {
-        throw data
+        yield put({ type: 'updateLink', payload })
       }
+
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
+    },
+
+    * cancelLink({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.link)
+      if (modalType === 'create') {
+        yield put({ type: 'cancelNewLink', payload })
+      } else {
+        yield put({ type: 'cancelUpdateLink', payload })
+      }
+    },
+
+    * invokeNewLink({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
+    },
+
+    * cancelNewLink({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
+    },
+
+    * invokeUpdateLink({ payload }, { put }) {
+      yield put({ type: 'queryLink', payload })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
+    },
+
+    * cancelUpdateLink({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
     },
   },
 
   reducers: {
-    showModal(state, { payload }) {
-      return { ...state, ...payload, modalVisible: true }
-    },
-
-    hideModal(state) {
-      return { ...state, currentItem: { id: -1, name: '', description: '', url: '', logo: '', catalog: [] }, modalVisible: false }
+    updateItemState(state, { payload }) {
+      return { ...state, ...payload }
     },
   },
 

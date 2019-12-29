@@ -1,14 +1,14 @@
 import modelExtend from 'dva-model-extend'
-import { routerRedux } from 'dva/router'
 import qs from 'qs'
-import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog, multiDeleteCatalog } from 'services/content/catalog'
+import { notification } from 'antd'
+import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog } from 'services/content/catalog'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
   namespace: 'catalog',
 
   state: {
-    currentItem: { id: -1, name: '', descrption: '', catalog: [] },
+    currentItem: {},
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -29,7 +29,6 @@ export default modelExtend(pageModel, {
   },
 
   effects: {
-
     * queryAllCatalog({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       const { pageNum } = payload
@@ -37,89 +36,137 @@ export default modelExtend(pageModel, {
         payload = { ...payload, pageNum: 1, pageSize: 10 }
       }
 
-      const data = yield call(queryAllCatalog, { ...payload, authToken })
-      if (data) {
-        const { total, catalog } = data
-
-        yield put({
-          type: 'queryAllSuccess',
-          payload: {
-            list: catalog,
-            pagination: {
-              current: Number(payload.pageNum) || 1,
-              pageSize: Number(payload.pageSize) || 10,
-              total: Number(total) || 0,
+      const result = yield call(queryAllCatalog, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, total, catalogs } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'queryAllSuccess',
+            payload: {
+              list: catalogs,
+              pagination: {
+                current: Number(payload.pageNum) || 1,
+                pageSize: Number(payload.pageSize) || 10,
+                total: Number(total) || 0,
+              },
             },
-          },
-        })
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * queryCatalog({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryCatalog, { id: payload, authToken })
-      const { selectedRowKeys } = yield select(_ => _.catalog)
-      if (result.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllCatalog', payload: {} })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryCatalog, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, catalog } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateItemState', payload: { currentItem: catalog } })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * updateCatalog({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const result = yield call(queryCatalog, { id: payload, authToken })
-      if (result.success) {
-        const { catalog } = result
-        yield put({ type: 'showModal', payload: { modalType: 'update', currentItem: catalog } })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(updateCatalog, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllCatalog' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw result
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * saveCatalog({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const { action, data } = payload
-      const result = yield call(action === 'create' ? createCatalog : updateCatalog, { authToken, ...data })
-      if (result.success) {
-        yield put({ type: 'hideModal' })
-        yield put(routerRedux.push('/content/catalog'))
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(createCatalog, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'queryAllCatalog' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
     * deleteCatalog({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteCatalog, { id: payload, authToken })
+      const { sessionInfo } = yield select(_ => _.app)
       const { selectedRowKeys } = yield select(_ => _.catalog)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-        yield put({ type: 'queryAllCatalog', payload: {} })
+      const result = yield call(deleteCatalog, { id: payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
+          yield put({ type: 'queryAllCatalog' })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw data
+        notification.error({ message: '错误信息', description: message })
       }
     },
 
-    * multiDeleteCatalog({ payload }, { call, put }) {
-      const data = yield call(multiDeleteCatalog, payload)
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllCatalog', payload: {} })
+    * submitCatalog({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.catalog)
+      if (modalType === 'create') {
+        yield put({ type: 'saveCatalog', payload })
       } else {
-        throw data
+        yield put({ type: 'updateCatalog', payload })
       }
+
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false } })
+    },
+
+    * cancelCatalog({ payload }, { put, select }) {
+      const { modalType } = yield select(_ => _.catalog)
+      if (modalType === 'create') {
+        yield put({ type: 'cancelNewCatalog', payload })
+      } else {
+        yield put({ type: 'cancelUpdateCatalog', payload })
+      }
+    },
+
+    * invokeNewCatalog({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
+    },
+
+    * cancelNewCatalog({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'create' } })
+    },
+
+    * invokeUpdateCatalog({ payload }, { put }) {
+      yield put({ type: 'queryCatalog', payload })
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
+    },
+
+    * cancelUpdateCatalog({ payload }, { put }) {
+      yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
     },
   },
 
   reducers: {
-    showModal(state, { payload }) {
-      return { ...state, ...payload, modalVisible: true }
-    },
-
-    hideModal(state) {
-      return { ...state, currentItem: { id: -1, name: '', descrption: '', catalog: [] }, modalVisible: false }
+    updateItemState(state, { payload }) {
+      return { ...state, ...payload }
     },
   },
 

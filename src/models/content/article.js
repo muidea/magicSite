@@ -1,7 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import qs from 'qs'
 import { notification } from 'antd'
-import { queryAllArticle, deleteArticle, multiDeleteArticle } from 'services/content/article'
+import { queryAllArticle, deleteArticle } from 'services/content/article'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -35,9 +35,9 @@ export default modelExtend(pageModel, {
       }
 
       const result = yield call(queryAllArticle, { ...payload, ...sessionInfo })
-      const {success,message, data} = result
+      const { success, message, data } = result
       if (success) {
-        const { errorCode,reason, total, articles } = data
+        const { errorCode, reason, total, articles } = data
         if (errorCode === 0) {
           yield put({
             type: 'queryAllSuccess',
@@ -59,8 +59,8 @@ export default modelExtend(pageModel, {
     },
 
     * deleteArticle({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(deleteArticle, { id: payload, authToken })
+      const { sessionInfo } = yield select(_ => _.app)
+      const data = yield call(deleteArticle, { id: payload, ...sessionInfo })
       const { selectedRowKeys } = yield select(_ => _.article)
       if (data.success) {
         yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
@@ -70,16 +70,6 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * multiDeleteArticle({ payload }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const data = yield call(multiDeleteArticle, { authToken, ...payload })
-      if (data.success) {
-        yield put({ type: 'updateModelState', payload: { selectedRowKeys: [] } })
-        yield put({ type: 'queryAllArticle', payload: {} })
-      } else {
-        throw data
-      }
-    },
   },
 
   reducers: { },

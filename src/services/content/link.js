@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllLinkUrl, queryLinkUrl,filterLinkUrl,deleteLinkUrl,createLinkUrl,updateLinkUrl } = api
+const { queryAllLinkUrl, queryLinkUrl, filterLinkUrl, deleteLinkUrl, createLinkUrl, updateLinkUrl } = api
 
 export async function queryAllLink(params) {
   return request({
@@ -38,14 +38,6 @@ export async function createLink(params) {
 export async function deleteLink(params) {
   return request({
     url: deleteLinkUrl,
-    method: 'delete',
-    data: params,
-  })
-}
-
-export async function multiDeleteLink(params) {
-  return request({
-    url: articles,
     method: 'delete',
     data: params,
   })

@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllMediaUrl, queryMediaUrl,filterMediaUrl,deleteMediaUrl,createMediaUrl,updateMediaUrl } = api
+const { queryAllMediaUrl, queryMediaUrl, filterMediaUrl, deleteMediaUrl, createMediaUrl, updateMediaUrl } = api
 
 export async function queryAllMedia(params) {
   return request({
@@ -38,14 +38,6 @@ export async function createMedia(params) {
 export async function deleteMedia(params) {
   return request({
     url: deleteMediaUrl,
-    method: 'delete',
-    data: params,
-  })
-}
-
-export async function multiDeleteMedia(params) {
-  return request({
-    url: articles,
     method: 'delete',
     data: params,
   })

@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllCatalogUrl, queryCatalogUrl,filterCatalogUrl,deleteCatalogUrl,createCatalogUrl,updateCatalogUrl } = api
+const { queryAllCatalogUrl, queryCatalogUrl, filterCatalogUrl, deleteCatalogUrl, createCatalogUrl, updateCatalogUrl } = api
 
 export async function queryAllCatalog(params) {
   return request({
@@ -38,14 +38,6 @@ export async function createCatalog(params) {
 export async function deleteCatalog(params) {
   return request({
     url: deleteCatalogUrl,
-    method: 'delete',
-    data: params,
-  })
-}
-
-export async function multiDeleteCatalog(params) {
-  return request({
-    url: articles,
     method: 'delete',
     data: params,
   })

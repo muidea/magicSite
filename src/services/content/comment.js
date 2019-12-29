@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllCommentUrl, queryCommentUrl,filterCommentUrl,deleteCommentUrl,createCommentUrl,updateCommentUrl } = api
+const { queryAllCommentUrl, queryCommentUrl, filterCommentUrl, deleteCommentUrl, createCommentUrl, updateCommentUrl } = api
 
 export async function queryAllComment(params) {
   return request({
@@ -38,14 +38,6 @@ export async function createComment(params) {
 export async function deleteComment(params) {
   return request({
     url: deleteCommentUrl,
-    method: 'delete',
-    data: params,
-  })
-}
-
-export async function multiDeleteComment(params) {
-  return request({
-    url: articles,
     method: 'delete',
     data: params,
   })
