@@ -61,10 +61,6 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/authority/account')],
       component: () => import('./routes/authority/account/'),
     }, {
-      path: '/authority/account/view/:id',
-      models: () => [import('./models/authority/account/detail')],
-      component: () => import('./routes/authority/account/detail/'),
-    }, {
       path: '/authority/private',
       models: () => [import('./models/authority/private')],
       component: () => import('./routes/authority/private/'),
