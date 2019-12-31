@@ -1,14 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Divider } from 'antd'
 import { DescriptionList, EditableTagGroup } from 'components'
-import { SummaryListView } from '../../common'
 
 const { Description } = DescriptionList
 
 const Detail = ({ catalogDetail }) => {
-  const { name, description, catalog, creater, createDate, summaryList } = catalogDetail
+  const { name, description, catalog, creater, createDate } = catalogDetail
 
   return (
     <div className="content-inner">
@@ -19,11 +17,6 @@ const Detail = ({ catalogDetail }) => {
         <Description term="创建时间">{createDate}</Description>
         <Description term="创建人">{creater.name}</Description>
       </DescriptionList>
-      <Divider style={{ marginBottom: 32 }} />
-      <div>
-        <h3>分类内容</h3>
-        <SummaryListView summaryList={summaryList} />
-      </div>
     </div>)
 }
 

@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Row, Col } from 'antd'
 import { RichView, EditableTagGroup } from 'components'
-import { SimpleListView } from '../../common'
 import styles from './index.less'
 
 const Detail = ({ articleDetail }) => {
   const {
-    title, content, catalog, creater, createDate, summaryList,
+    title, content, catalog, creater, createDate,
   } = articleDetail
 
   return (
@@ -20,9 +19,6 @@ const Detail = ({ articleDetail }) => {
             <Row gutter={24} type="flex" justify="center"><span>作者：{creater.name}</span> 分类：<EditableTagGroup readOnly value={catalog} /> <span>创建时间：{createDate}</span></Row>
             <Row gutter={24}><RichView value={content} /> </Row>
           </div>
-        </Col>
-        <Col span={6}>
-          <SimpleListView summaryList={summaryList} />
         </Col>
       </Row>
     </div>)
