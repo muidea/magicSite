@@ -37,10 +37,6 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/content/catalog')],
       component: () => import('./routes/content/catalog/'),
     }, {
-      path: '/content/catalog/view/:id',
-      models: () => [import('./models/content/catalog/detail')],
-      component: () => import('./routes/content/catalog/detail/'),
-    }, {
       path: '/content/link',
       models: () => [import('./models/content/link')],
       component: () => import('./routes/content/link/'),
