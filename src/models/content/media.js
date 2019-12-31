@@ -31,9 +31,12 @@ export default modelExtend(pageModel, {
   effects: {
     * queryAllMedia({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
+      let { pagination } = yield select(_ => _.media)
       const { pageNum } = payload
-      if (!pageNum) {
-        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      if (pageNum) {
+        pagination = { ...pagination, current: pageNum }
+
+        payload = { ...payload, pageNum, pageSize: pagination.pageSize }
       }
 
       const result = yield call(queryAllMedia, { ...payload, ...sessionInfo })
@@ -46,8 +49,7 @@ export default modelExtend(pageModel, {
             payload: {
               list: medias,
               pagination: {
-                current: Number(payload.pageNum) || 1,
-                pageSize: Number(payload.pageSize) || 10,
+                ...pagination,
                 total: Number(total) || 0,
               },
             },

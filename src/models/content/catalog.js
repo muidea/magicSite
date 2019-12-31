@@ -31,9 +31,12 @@ export default modelExtend(pageModel, {
   effects: {
     * queryAllCatalog({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
+      let { pagination } = yield select(_ => _.catalog)
       const { pageNum } = payload
-      if (!pageNum) {
-        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      if (pageNum) {
+        pagination = { ...pagination, current: pageNum }
+
+        payload = { ...payload, pageNum, pageSize: pagination.pageSize }
       }
 
       const result = yield call(queryAllCatalog, { ...payload, ...sessionInfo })
@@ -46,8 +49,7 @@ export default modelExtend(pageModel, {
             payload: {
               list: catalogs,
               pagination: {
-                current: Number(payload.pageNum) || 1,
-                pageSize: Number(payload.pageSize) || 10,
+                ...pagination,
                 total: Number(total) || 0,
               },
             },
@@ -83,7 +85,7 @@ export default modelExtend(pageModel, {
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllCatalog' })
+          yield put({ type: 'queryAllCatalog', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -99,7 +101,7 @@ export default modelExtend(pageModel, {
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllCatalog' })
+          yield put({ type: 'queryAllCatalog', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -117,7 +119,7 @@ export default modelExtend(pageModel, {
         const { errorCode, reason } = data
         if (errorCode === 0) {
           yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-          yield put({ type: 'queryAllCatalog' })
+          yield put({ type: 'queryAllCatalog', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }

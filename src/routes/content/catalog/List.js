@@ -26,6 +26,10 @@ const List = ({ onDeleteItem, onUpdateItem, ...tableProps }) => {
       dataIndex: 'name',
       key: 'name',
     }, {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
+    }, {
       title: '父类',
       dataIndex: 'catalog',
       key: 'catalog',

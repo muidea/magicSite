@@ -31,9 +31,12 @@ export default modelExtend(pageModel, {
   effects: {
     * queryAllLink({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
+      let { pagination } = yield select(_ => _.link)
       const { pageNum } = payload
-      if (!pageNum) {
-        payload = { ...payload, pageNum: 1, pageSize: 10 }
+      if (pageNum) {
+        pagination = { ...pagination, current: pageNum }
+
+        payload = { ...payload, pageNum, pageSize: pagination.pageSize }
       }
 
       const result = yield call(queryAllLink, { ...payload, ...sessionInfo })
@@ -46,8 +49,7 @@ export default modelExtend(pageModel, {
             payload: {
               list: links,
               pagination: {
-                current: Number(payload.pageNum) || 1,
-                pageSize: Number(payload.pageSize) || 10,
+                ...pagination,
                 total: Number(total) || 0,
               },
             },
