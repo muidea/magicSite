@@ -64,7 +64,6 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
 List.propTypes = {
   onDeleteItem: PropTypes.func,
   onEditItem: PropTypes.func,
-  location: PropTypes.object,
 }
 
 export default List

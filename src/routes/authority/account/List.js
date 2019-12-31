@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'dva/router'
 import { Table, Modal, Tag } from 'antd'
 import { DropOption, Status } from '../../../components'
 

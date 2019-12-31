@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'dva/router'
-import { Table, Modal } from 'antd'
-import { DropOption, EditableTagGroup } from '../../../components'
+import { Table, Tag, Modal } from 'antd'
+import { DropOption } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
+const List = ({ onDeleteItem, onUpdateItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
-      onEditItem(record.id)
+      onUpdateItem(record.id)
     } else if (e.key === '2') {
       confirm({
         title: '确认删除分类?',
@@ -20,26 +19,31 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
     }
   }
 
+
   const columns = [
     {
       title: '分类名',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => {
-        return <Link to={`/content/catalog/view/${record.id}`}>{text}</Link>
-      },
     }, {
       title: '父类',
       dataIndex: 'catalog',
       key: 'catalog',
       render: (text, record) => {
-        return <EditableTagGroup readOnly value={record.catalog} />
+        let tag = { name: '-' }
+        if (record.catalog) {
+          tag = record.catalog
+        }
+
+        return <Tag> {tag.name} </Tag>
       },
     }, {
       title: '创建人',
       dataIndex: 'creater',
       key: 'creater',
-      render: (text, record) => <span>{record.creater.name}</span>,
+      render: (text, record) => {
+        return <span>{record.creater.account}</span>
+      },
     }, {
       title: '操作',
       key: 'operation',
@@ -65,7 +69,7 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
 
 List.propTypes = {
   onDeleteItem: PropTypes.func,
-  onEditItem: PropTypes.func,
+  onUpdateItem: PropTypes.func,
 }
 
 export default List
