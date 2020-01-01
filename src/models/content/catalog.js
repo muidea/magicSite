@@ -39,7 +39,7 @@ export default modelExtend(pageModel, {
         payload = { ...payload, pageNum, pageSize: pagination.pageSize }
       }
 
-      const result = yield call(queryAllCatalog, { ...payload, ...sessionInfo })
+      const result = yield call(queryAllCatalog, { ...sessionInfo, ...payload })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason, total, catalogs } = data

@@ -115,7 +115,7 @@ export default {
         if (redirectUrl !== locationPathname) {
           yield put(routerRedux.push({
             pathname: redirectUrl,
-            search: qs.stringify({ from: locationPathname }),
+            search: qs.stringify({ from: locationPathname, ...sessionInfo }),
           }))
         }
       } else {
