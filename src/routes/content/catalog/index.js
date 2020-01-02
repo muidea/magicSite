@@ -8,11 +8,12 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Catalog = ({ location, dispatch, catalog, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = catalog
+  const { list, selectedRowKeys, pagination, currentItem, catalogTree, modalVisible, modalType } = catalog
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
+    catalogTree,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['catalog/submitCatalog'],
@@ -26,6 +27,9 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
     },
     onCancel() {
       dispatch({ type: 'catalog/cancelCatalog' })
+    },
+    onLoadData(id) {
+      dispatch({ type: 'catalog/queryCatalogTree', payload: { catalog: id } })
     },
   }
 

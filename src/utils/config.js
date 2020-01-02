@@ -34,6 +34,7 @@ module.exports = {
     createArticleUrl: `${ContentApi}/article/create/`,
     updateArticleUrl: `${ContentApi}/article/update/:id`,
 
+    queryCatalogTreeUrl: `${ContentApi}/catalog/query/tree/`,
     queryAllCatalogUrl: `${ContentApi}/catalog/query/all/`,
     queryCatalogUrl: `${ContentApi}/catalog/query/:id`,
     filterCatalogUrl: `${ContentApi}/catalog/query/`,

@@ -7,13 +7,10 @@ export default class CatalogTree extends React.Component {
     super(props)
 
     let treeData = [
-      { id: 1, pId: 0, value: '1', title: 'Expand to load' },
-      { id: 2, pId: 0, value: '2', title: 'Expand to load' },
-      { id: 3, pId: 0, value: '3', title: 'Tree Node', isLeaf: true },
     ]
 
-    if (props.value) {
-      treeData = props.value
+    if (props.treeData) {
+      treeData = props.treeData
     }
 
     this.state = {
@@ -22,44 +19,55 @@ export default class CatalogTree extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value) {
-      this.setState({ treeData: nextProps.value })
-    }
-  }
-
-  onGenTreeNode = (parentId, isLeaf = false) => {
-    const random = Math.random()
-      .toString(36)
-      .substring(2, 6)
-    return {
-      id: random,
-      pId: parentId,
-      value: random,
-      title: isLeaf ? 'Tree Node' : 'Expand to load',
-      isLeaf,
+    if (nextProps.treeData) {
+      this.setState({ treeData: nextProps.treeData })
     }
   }
 
   onLoadData = treeNode =>
   new Promise((resolve) => {
     const { id } = treeNode.props
-    setTimeout(() => {
-      this.setState({
-        treeData: this.state.treeData.concat([
-          this.onGenTreeNode(id, false),
-          this.onGenTreeNode(id, true),
-        ]),
-      })
-      resolve()
-    }, 300)
+    if (this.props.onLoadData) {
+      this.props.onLoadData(id)
+    }
+
+    resolve()
   })
 
   onChange = (value) => {
     this.setState({ value })
   }
 
+  convertData = (tree, pid) => {
+    let ret = []
+
+    if (tree instanceof Array) {
+      tree.forEach(((val) => {
+        ret = ret.concat(this.convertData(val, pid))
+      }))
+
+      return ret
+    }
+
+    const { id, name, subs } = tree
+    let childs = []
+    if (subs) {
+      for (let idx = 0; idx < subs.length; idx += 1) {
+        const sub = subs[idx]
+        const subRet = this.convertData(sub, id)
+        childs = childs.concat(subRet)
+      }
+    }
+
+    ret.push({ title: name, value: id.toString(), id, pId: pid, isLeaf: childs.length === 0 })
+
+    return ret.concat(childs)
+  }
+
   render() {
     const { treeData } = this.state
+    const treeVal = this.convertData(treeData, 0)
+
     return (
       <TreeSelect
         treeDataSimpleMode
@@ -69,12 +77,13 @@ export default class CatalogTree extends React.Component {
         placeholder="请选择分类"
         onChange={this.onChange}
         loadData={this.onLoadData}
-        treeData={treeData}
+        treeData={treeVal}
       />
     )
   }
 }
 
 CatalogTree.propTypes = {
-  value: PropTypes.object,
+  treeData: PropTypes.array,
+  onLoadData: PropTypes.func,
 }

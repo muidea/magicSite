@@ -13,6 +13,8 @@ const formItemLayout = {
 
 const modal = ({
   item,
+  catalogTree,
+  onLoadData,
   onOk,
   form: {
     getFieldDecorator,
@@ -48,7 +50,7 @@ const modal = ({
         </FormItem>
         <FormItem label="父分类" {...formItemLayout}>
           {getFieldDecorator('catalog', { initialValue: item.catalog })(
-            <CatalogTree />,
+            <CatalogTree treeData={catalogTree} onLoadData={onLoadData} />,
           )}
         </FormItem>
       </Form>

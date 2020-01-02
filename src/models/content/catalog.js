@@ -1,7 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import qs from 'qs'
 import { notification } from 'antd'
-import { queryAllCatalog, queryCatalog, createCatalog, updateCatalog, deleteCatalog } from 'services/content/catalog'
+import { queryAllCatalog, queryCatalogTree, queryCatalog, createCatalog, updateCatalog, deleteCatalog } from 'services/content/catalog'
 import { pageModel } from '../common'
 
 export default modelExtend(pageModel, {
@@ -9,6 +9,7 @@ export default modelExtend(pageModel, {
 
   state: {
     currentItem: {},
+    catalogTree: [],
     selectedRowKeys: [],
     modalVisible: false,
     modalType: 'create',
@@ -128,6 +129,22 @@ export default modelExtend(pageModel, {
       }
     },
 
+    * queryCatalogTree({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryCatalogTree, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, catalogs } = data
+        if (errorCode === 0) {
+          yield put({ type: 'updateModelState', payload: { catalogTree: catalogs } })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
+      } else {
+        notification.error({ message: '错误信息', description: message })
+      }
+    },
+
     * submitCatalog({ payload }, { put, select }) {
       const { modalType } = yield select(_ => _.catalog)
       if (modalType === 'create') {
@@ -149,6 +166,8 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewCatalog({ payload }, { put }) {
+      yield put({ type: 'queryCatalogTree', payload })
+
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
     },
 

@@ -1,7 +1,15 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { queryAllCatalogUrl, queryCatalogUrl, filterCatalogUrl, deleteCatalogUrl, createCatalogUrl, updateCatalogUrl } = api
+const { queryCatalogTreeUrl, queryAllCatalogUrl, queryCatalogUrl, filterCatalogUrl, deleteCatalogUrl, createCatalogUrl, updateCatalogUrl } = api
+
+export async function queryCatalogTree(params) {
+  return request({
+    url: queryCatalogTreeUrl,
+    method: 'get',
+    data: params,
+  })
+}
 
 export async function queryAllCatalog(params) {
   return request({
