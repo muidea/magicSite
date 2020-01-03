@@ -187,7 +187,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewCatalog({ payload }, { put }) {
-      yield put({ type: 'queryCatalogTree', payload: {} })
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'catalog' } })
 
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
     },
@@ -198,7 +198,7 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateCatalog({ payload }, { put }) {
       yield put({ type: 'queryCatalog', payload })
-      yield put({ type: 'queryCatalogTree', payload: {} })
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'catalog' } })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
     },
 

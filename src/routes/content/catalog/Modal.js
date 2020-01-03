@@ -69,8 +69,9 @@ const modal = ({
 
 modal.propTypes = {
   form: PropTypes.object.isRequired,
-  type: PropTypes.string,
   item: PropTypes.object,
+  catalogTree: PropTypes.array,
+  onLoadData: PropTypes.func,
   onOk: PropTypes.func,
 }
 

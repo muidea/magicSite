@@ -8,11 +8,12 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Media = ({ location, dispatch, media, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = media
+  const { list, selectedRowKeys, pagination, currentItem, catalogTree, modalVisible, modalType } = media
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
+    catalogTree,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['media/submitMedia'],
@@ -26,6 +27,9 @@ const Media = ({ location, dispatch, media, loading }) => {
     },
     onCancel() {
       dispatch({ type: 'media/cancelMedia' })
+    },
+    onLoadData(id) {
+      dispatch({ type: 'media/queryCatalogTree', payload: { namespace: 'media', catalog: id, loadData: true } })
     },
   }
 

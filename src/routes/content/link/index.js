@@ -7,12 +7,14 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
+
 const Link = ({ location, dispatch, link, loading }) => {
-  const { list, selectedRowKeys, pagination, currentItem, modalVisible, modalType } = link
+  const { list, selectedRowKeys, pagination, currentItem, catalogTree, modalVisible, modalType } = link
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
+    catalogTree,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['link/submitLink'],
@@ -26,6 +28,9 @@ const Link = ({ location, dispatch, link, loading }) => {
     },
     onCancel() {
       dispatch({ type: 'link/cancelLink' })
+    },
+    onLoadData(id) {
+      dispatch({ type: 'link/queryCatalogTree', payload: { namespace: 'link', catalog: id, loadData: true } })
     },
   }
 

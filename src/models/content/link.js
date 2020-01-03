@@ -2,9 +2,9 @@ import modelExtend from 'dva-model-extend'
 import qs from 'qs'
 import { notification } from 'antd'
 import { queryAllLink, queryLink, createLink, updateLink, deleteLink } from 'services/content/link'
-import { pageModel } from '../common'
+import { commonModel } from './common'
 
-export default modelExtend(pageModel, {
+export default modelExtend(commonModel, {
   namespace: 'link',
 
   state: {
@@ -149,6 +149,8 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewLink({ payload }, { put }) {
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'link' } })
+
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
     },
 
@@ -158,17 +160,12 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateLink({ payload }, { put }) {
       yield put({ type: 'queryLink', payload })
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'link' } })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
     },
 
     * cancelUpdateLink({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
-    },
-  },
-
-  reducers: {
-    updateItemState(state, { payload }) {
-      return { ...state, ...payload }
     },
   },
 

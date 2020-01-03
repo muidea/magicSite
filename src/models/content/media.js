@@ -2,9 +2,9 @@ import modelExtend from 'dva-model-extend'
 import qs from 'qs'
 import { notification } from 'antd'
 import { queryAllMedia, queryMedia, createMedia, updateMedia, deleteMedia } from 'services/content/media'
-import { pageModel } from '../common'
+import { commonModel } from './common'
 
-export default modelExtend(pageModel, {
+export default modelExtend(commonModel, {
   namespace: 'media',
 
   state: {
@@ -149,6 +149,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewMedia({ payload }, { put }) {
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'media' } })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
     },
 
@@ -158,17 +159,12 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateMedia({ payload }, { put }) {
       yield put({ type: 'queryMedia', payload })
+      yield put({ type: 'queryCatalogTree', payload: { namespace: 'media' } })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
     },
 
     * cancelUpdateMedia({ payload }, { put }) {
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: false, modalType: 'update' } })
-    },
-  },
-
-  reducers: {
-    updateItemState(state, { payload }) {
-      return { ...state, ...payload }
     },
   },
 
