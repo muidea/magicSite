@@ -13,14 +13,26 @@ export default class CatalogTree extends React.Component {
       treeData = props.treeData
     }
 
+    let value
+    if (props.value) {
+      value = props.value.id
+    }
+
     this.state = {
       treeData,
+      value,
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    let { value } = this.state
+
+    if (nextProps.value) {
+      value = nextProps.value.id
+    }
+
     if (nextProps.treeData) {
-      this.setState({ treeData: nextProps.treeData })
+      this.setState({ treeData: nextProps.treeData, value })
     }
   }
 
@@ -35,7 +47,14 @@ export default class CatalogTree extends React.Component {
   })
 
   onChange = (value) => {
-    this.setState({ value })
+    if (value) {
+      this.setState({ value })
+      if (this.props.onChange) {
+        this.props.onChange({ id: Number(value) })
+      }
+    } else if (this.props.onChange) {
+      this.props.onChange({ })
+    }
   }
 
   convertData = (tree) => {
@@ -67,6 +86,7 @@ export default class CatalogTree extends React.Component {
     const treeVal = this.convertData(treeData)
     return (
       <TreeSelect
+        allowClear
         treeDataSimpleMode
         style={{ width: '100%' }}
         value={this.state.value}
