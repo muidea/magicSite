@@ -4,6 +4,20 @@ import { notification } from 'antd'
 import { queryAllCatalog, queryCatalogTree, queryCatalog, createCatalog, updateCatalog, deleteCatalog } from 'services/content/catalog'
 import { pageModel } from '../common'
 
+const mergeTree = (cVal, nVal) => {
+  nVal.forEach((nv) => {
+    const idx = cVal.findIndex((cv) => {
+      return nv.id === cv.id
+    })
+
+    if (idx === -1) {
+      cVal.push(nv)
+    }
+  })
+
+  return cVal
+}
+
 export default modelExtend(pageModel, {
   namespace: 'catalog',
 
@@ -131,12 +145,19 @@ export default modelExtend(pageModel, {
 
     * queryCatalogTree({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(queryCatalogTree, { ...payload, ...sessionInfo })
+      let { catalogTree } = yield select(_ => _.catalog)
+      const result = yield call(queryCatalogTree, { ...payload, level: 1, ...sessionInfo })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason, catalogs } = data
         if (errorCode === 0) {
-          yield put({ type: 'updateModelState', payload: { catalogTree: catalogs } })
+          if (payload.loadData) {
+            catalogTree = mergeTree(catalogTree, catalogs)
+          } else {
+            catalogTree = catalogs
+          }
+
+          yield put({ type: 'updateModelState', payload: { catalogTree } })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -166,7 +187,7 @@ export default modelExtend(pageModel, {
     },
 
     * invokeNewCatalog({ payload }, { put }) {
-      yield put({ type: 'queryCatalogTree', payload })
+      yield put({ type: 'queryCatalogTree', payload: {} })
 
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'create' } })
     },
@@ -177,6 +198,7 @@ export default modelExtend(pageModel, {
 
     * invokeUpdateCatalog({ payload }, { put }) {
       yield put({ type: 'queryCatalog', payload })
+      yield put({ type: 'queryCatalogTree', payload: {} })
       yield put({ type: 'updateItemState', payload: { currentItem: {}, modalVisible: true, modalType: 'update' } })
     },
 

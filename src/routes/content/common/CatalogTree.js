@@ -38,36 +38,33 @@ export default class CatalogTree extends React.Component {
     this.setState({ value })
   }
 
-  convertData = (tree, pid) => {
+  convertData = (tree) => {
     let ret = []
 
     if (tree instanceof Array) {
       tree.forEach(((val) => {
-        ret = ret.concat(this.convertData(val, pid))
+        ret = ret.concat(this.convertData(val))
       }))
 
       return ret
     }
 
-    const { id, name, subs } = tree
+    const { id, pid, name, subs, isLeaf } = tree
     let childs = []
     if (subs) {
-      for (let idx = 0; idx < subs.length; idx += 1) {
-        const sub = subs[idx]
-        const subRet = this.convertData(sub, id)
-        childs = childs.concat(subRet)
-      }
+      subs.forEach((sub) => {
+        childs = childs.concat(this.convertData(sub))
+      })
     }
 
-    ret.push({ title: name, value: id.toString(), id, pId: pid, isLeaf: childs.length === 0 })
+    ret.push({ title: name, value: id.toString(), id, pId: pid, isLeaf })
 
     return ret.concat(childs)
   }
 
   render() {
     const { treeData } = this.state
-    const treeVal = this.convertData(treeData, 0)
-
+    const treeVal = this.convertData(treeData)
     return (
       <TreeSelect
         treeDataSimpleMode
