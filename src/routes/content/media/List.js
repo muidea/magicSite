@@ -27,6 +27,18 @@ const List = ({ onDeleteItem, ...tableProps }) => {
         return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
       },
     }, {
+      title: 'URL',
+      dataIndex: 'url',
+      key: 'url',
+    }, {
+      title: '图标',
+      dataIndex: 'logo',
+      key: 'logo',
+    }, {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
+    }, {
       title: '分类',
       dataIndex: 'catalog',
       key: 'catalog',
@@ -37,7 +49,9 @@ const List = ({ onDeleteItem, ...tableProps }) => {
       title: '创建人',
       dataIndex: 'creater',
       key: 'creater',
-      render: (text, record) => <span>{record.creater.name}</span>,
+      render: (text, record) => {
+        return <span>{record.creater.account}</span>
+      },
     }, {
       title: '操作',
       key: 'operation',
@@ -63,7 +77,7 @@ const List = ({ onDeleteItem, ...tableProps }) => {
 
 List.propTypes = {
   onDeleteItem: PropTypes.func,
-  onEditItem: PropTypes.func,
+  onUpdateItem: PropTypes.func,
 }
 
 export default List

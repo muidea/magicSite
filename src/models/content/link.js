@@ -85,7 +85,7 @@ export default modelExtend(commonModel, {
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllLink' })
+          yield put({ type: 'queryAllLink', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -101,7 +101,7 @@ export default modelExtend(commonModel, {
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllLink' })
+          yield put({ type: 'queryAllLink', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }

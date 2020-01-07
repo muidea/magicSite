@@ -15,7 +15,13 @@ export default class CatalogTree extends React.Component {
 
     let value
     if (props.value) {
-      value = props.value.id
+      if (props.multiple) {
+        props.value.forEach((v) => {
+          value.push(v.id)
+        })
+      } else {
+        value = props.value.id
+      }
     }
 
     this.state = {
@@ -28,7 +34,14 @@ export default class CatalogTree extends React.Component {
     let { value } = this.state
 
     if (nextProps.value) {
-      value = nextProps.value.id
+      if (nextProps.multiple) {
+        value = []
+        nextProps.value.forEach((v) => {
+          value.push(v.id)
+        })
+      } else {
+        value = nextProps.value.id
+      }
     }
 
     if (nextProps.treeData) {
@@ -47,8 +60,21 @@ export default class CatalogTree extends React.Component {
   })
 
   onChange = (value) => {
+    this.setState({ value })
+
+    if (this.props.multiple) {
+      const vals = []
+      value.forEach((v) => {
+        vals.push({ id: Number(v) })
+      })
+
+      if (this.props.onChange) {
+        this.props.onChange(vals)
+      }
+      return
+    }
+
     if (value) {
-      this.setState({ value })
       if (this.props.onChange) {
         this.props.onChange({ id: Number(value) })
       }
@@ -95,6 +121,7 @@ export default class CatalogTree extends React.Component {
         onChange={this.onChange}
         loadData={this.onLoadData}
         treeData={treeVal}
+        multiple={this.props.multiple}
       />
     )
   }
@@ -103,4 +130,5 @@ export default class CatalogTree extends React.Component {
 CatalogTree.propTypes = {
   treeData: PropTypes.array,
   onLoadData: PropTypes.func,
+  multiple: PropTypes.bool,
 }

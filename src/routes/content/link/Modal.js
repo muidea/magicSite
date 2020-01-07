@@ -67,7 +67,7 @@ const modal = ({
             ],
           })(<TextArea rows={2} cols={3} />)}
         </FormItem>
-        <FormItem label="Logo" {...formItemLayout}>
+        <FormItem label="图标" {...formItemLayout}>
           {getFieldDecorator('logo', { initialValue: item.logo })(<TextArea rows={2} cols={3} />)}
         </FormItem>
         <FormItem label="描述" {...formItemLayout}>
@@ -80,7 +80,7 @@ const modal = ({
               { required: true },
             ],
           })(
-            <CatalogTree treeData={catalogTree} onLoadData={onLoadData} />,
+            <CatalogTree treeData={catalogTree} onLoadData={onLoadData} multiple />,
           )}
         </FormItem>
       </Form>

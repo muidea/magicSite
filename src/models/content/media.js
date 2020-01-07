@@ -101,7 +101,7 @@ export default modelExtend(commonModel, {
       if (success) {
         const { errorCode, reason } = data
         if (errorCode === 0) {
-          yield put({ type: 'queryAllMedia' })
+          yield put({ type: 'queryAllMedia', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
@@ -119,7 +119,7 @@ export default modelExtend(commonModel, {
         const { errorCode, reason } = data
         if (errorCode === 0) {
           yield put({ type: 'updateModelState', payload: { selectedRowKeys: selectedRowKeys.filter(_ => _ !== payload) } })
-          yield put({ type: 'queryAllMedia' })
+          yield put({ type: 'queryAllMedia', payload: {} })
         } else {
           notification.error({ message: '错误信息', description: reason })
         }
