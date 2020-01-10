@@ -40,7 +40,6 @@ const Media = ({ location, dispatch, app, media, loading }) => {
   }
 
   const listProps = {
-    sessionInfo,
     dataSource: list,
     loading: loading.effects['media/queryAllMedia'],
     pagination,

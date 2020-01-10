@@ -1,17 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import qs from 'qs'
 import { Link } from 'dva/router'
 import { Table, Modal } from 'antd'
-import { config } from 'utils'
 import { DropOption, EditableTagGroup } from '../../../components'
 
 const { confirm } = Modal
 
-const { api } = config
-const { viewFileUrl } = api
-
-const List = ({ onDeleteItem, sessionInfo, ...tableProps }) => {
+const List = ({ onDeleteItem, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '2') {
       confirm({
@@ -30,13 +25,6 @@ const List = ({ onDeleteItem, sessionInfo, ...tableProps }) => {
       key: 'name',
       render: (text, record) => {
         return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
-      },
-    }, {
-      title: '文件',
-      dataIndex: 'fileToken',
-      key: 'fileToken',
-      render: (text, record) => {
-        return <a href={`${viewFileUrl}`.concat('?'.concat(qs.stringify({ fileToken: record.fileToken, ...sessionInfo })))} target={'_blank'}>点击查看文件</a>
       },
     }, {
       title: '描述',
@@ -61,7 +49,7 @@ const List = ({ onDeleteItem, sessionInfo, ...tableProps }) => {
       key: 'operation',
       width: 80,
       render: (text, record) => {
-        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '2', name: '删除' }]} />
+        return <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: '下载' }, { key: '2', name: '删除' }]} />
       },
     },
   ]
