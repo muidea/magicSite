@@ -3,16 +3,22 @@ import PropTypes from 'prop-types'
 import { routerRedux } from 'dva/router'
 import { connect } from 'dva'
 import qs from 'qs'
+import { config } from 'utils'
 import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Media = ({ location, dispatch, media, loading }) => {
+const { api } = config
+const { uploadFileUrl } = api
+
+const Media = ({ location, dispatch, app, media, loading }) => {
+  const { sessionInfo } = app
   const { list, selectedRowKeys, pagination, currentItem, catalogTree, modalVisible, modalType } = media
   const { pageSize } = pagination
 
   const modalProps = {
     item: currentItem,
+    serverUrl: uploadFileUrl.concat('?'.concat(qs.stringify({ 'key-name': 'file', ...sessionInfo }))),
     catalogTree,
     visible: modalVisible,
     maskClosable: false,
@@ -34,6 +40,7 @@ const Media = ({ location, dispatch, media, loading }) => {
   }
 
   const listProps = {
+    sessionInfo,
     dataSource: list,
     loading: loading.effects['media/queryAllMedia'],
     pagination,
@@ -117,10 +124,11 @@ const Media = ({ location, dispatch, media, loading }) => {
 }
 
 Media.propTypes = {
+  app: PropTypes.object,
   media: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ media, loading }) => ({ media, loading }))(Media)
+export default connect(({ app, media, loading }) => ({ app, media, loading }))(Media)

@@ -11,30 +11,27 @@ export default class MultiUpload extends Component {
 
   handleChange = (info) => {
     let newFileList = []
-    const fileList = info.fileList
-    for (let offset = 0; offset < fileList.length; offset += 1) {
-      const cur = fileList[offset]
-      let existFlag = false
-      for (let idx = 0; idx < newFileList.length; idx += 1) {
-        const ext = newFileList[idx]
-        if (cur.name === ext.name && cur.lastModified === ext.lastModified && cur.size === ext.size) {
-          existFlag = true
-          break
-        }
-      }
+    info.fileList.forEach((val) => {
+      const existFlag = newFileList.some((v) => {
+        return val.name === v.name && val.lastModified === v.lastModified && val.size === v.size
+      })
 
       if (!existFlag) {
-        newFileList.push(fileList[offset])
+        if (this.props.multiple) {
+          newFileList.push(val)
+        } else {
+          newFileList = [val]
+        }
       }
-    }
+    })
 
     if (info.file.status !== 'uploading') {
       const valList = []
-
-      newFileList = newFileList.filter((file) => {
-        if (file.response) {
-          if (file.response.errorCode === 0) {
-            valList.push({ name: file.name, fileToken: file.response.fileToken })
+      newFileList = newFileList.filter((val) => {
+        if (val.response) {
+          if (val.response.errorCode === 0) {
+            const { file } = val.response
+            valList.push({ name: file.fileName, fileToken: file.fileToken })
             return true
           }
         }
@@ -42,9 +39,13 @@ export default class MultiUpload extends Component {
         return true
       })
 
-      const { onChange } = this.props
+      const { onChange, multiple } = this.props
       if (onChange) {
-        onChange(valList)
+        if (multiple) {
+          onChange(valList)
+        } else if (valList.length > 0) {
+          onChange(valList[0])
+        }
       }
     }
 
@@ -52,15 +53,11 @@ export default class MultiUpload extends Component {
   }
 
   beforeUpload = (file) => {
-    let existFlag = false
     const { fileList } = this.state
-    for (const item of fileList) {
-      if (item.name === file.name) {
-        existFlag = true
-      }
-    }
 
-    return !existFlag
+    return !fileList.some((val) => {
+      return val.name === file.name
+    })
   }
 
   render() {
@@ -85,4 +82,6 @@ export default class MultiUpload extends Component {
 
 MultiUpload.propTypes = {
   onChange: PropTypes.func,
+  serverUrl: PropTypes.string,
+  multiple: PropTypes.bool,
 }

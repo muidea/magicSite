@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, Modal } from 'antd'
+import { Form, Input, InputNumber, Modal } from 'antd'
+import { MultiUpload } from 'components'
 import { CatalogTree } from '../common'
 
 
@@ -14,6 +15,7 @@ const formItemLayout = {
 
 const modal = ({
   item,
+  serverUrl,
   catalogTree,
   onLoadData,
   onOk,
@@ -39,7 +41,10 @@ const modal = ({
           return
         }
       }
-      onOk({ ...data })
+      const { name, description, file } = data
+      const { fileToken } = file
+
+      onOk({ name, description, catalog, fileToken })
     })
   }
 
@@ -51,7 +56,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分类名" hasFeedback {...formItemLayout}>
+        <FormItem label="名称" hasFeedback {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -69,8 +74,22 @@ const modal = ({
               { required: true },
             ],
           })(
-            <CatalogTree treeData={catalogTree} onLoadData={onLoadData} />,
+            <CatalogTree treeData={catalogTree} onLoadData={onLoadData} multiple />,
           )}
+        </FormItem>
+        <FormItem label="文件" {...formItemLayout}>
+          {getFieldDecorator('file', {
+            rules: [{
+              required: true, message: '文件不能为空',
+            }],
+          })(<MultiUpload serverUrl={serverUrl} />)}
+        </FormItem>
+        <FormItem label="有效期" {...formItemLayout}>
+          {getFieldDecorator('expiration', {
+            rules: [{
+              required: true, message: '文件不能为空',
+            }],
+          })(<div><InputNumber defaultValue={0} /><span>&nbsp;天, 0表示永久有效</span></div>)}
         </FormItem>
       </Form>
     </Modal>

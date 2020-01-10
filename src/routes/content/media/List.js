@@ -1,12 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import qs from 'qs'
 import { Link } from 'dva/router'
 import { Table, Modal } from 'antd'
+import { config } from 'utils'
 import { DropOption, EditableTagGroup } from '../../../components'
 
 const { confirm } = Modal
 
-const List = ({ onDeleteItem, ...tableProps }) => {
+const { api } = config
+const { viewFileUrl } = api
+
+const List = ({ onDeleteItem, sessionInfo, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '2') {
       confirm({
@@ -27,13 +32,12 @@ const List = ({ onDeleteItem, ...tableProps }) => {
         return <Link to={`/content/media/view/${record.id}`}>{text}</Link>
       },
     }, {
-      title: 'URL',
-      dataIndex: 'url',
-      key: 'url',
-    }, {
-      title: '图标',
-      dataIndex: 'logo',
-      key: 'logo',
+      title: '文件',
+      dataIndex: 'fileToken',
+      key: 'fileToken',
+      render: (text, record) => {
+        return <a href={`${viewFileUrl}`.concat('?'.concat(qs.stringify({ fileToken: record.fileToken, ...sessionInfo })))} target={'_blank'}>点击查看文件</a>
+      },
     }, {
       title: '描述',
       dataIndex: 'description',
@@ -77,7 +81,6 @@ const List = ({ onDeleteItem, ...tableProps }) => {
 
 List.propTypes = {
   onDeleteItem: PropTypes.func,
-  onUpdateItem: PropTypes.func,
 }
 
 export default List

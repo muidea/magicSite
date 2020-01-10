@@ -6,7 +6,6 @@ const ContentApi = '/api/v1'
 const AccountApi = '/api/v1/account'
 const PrivateApi = '/api/v1/private'
 
-const FileRegistryApi = '/api/v1/fileregistry'
 const APIV1 = '/api/v1'
 
 module.exports = {
@@ -74,7 +73,7 @@ module.exports = {
     savePrivateUrl: `${PrivateApi}/save/`,
     destoryPrivateUrl: `${PrivateApi}/destory/`,
 
-    systemInfo: `${SystemInfoApi}/config/`,
-    fileRegistry: `${FileRegistryApi}/file/`,
+    uploadFileUrl: `${APIV1}/file/upload/`,
+    viewFileUrl: `${APIV1}/file/view/`,
   },
 }
