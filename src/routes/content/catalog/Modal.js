@@ -51,7 +51,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="分类名" hasFeedback {...formItemLayout}>
+        <FormItem label="分类名" {...formItemLayout}>
           {getFieldDecorator('name', { initialValue: item.name, rules: [{ required: true }] })(<Input />)}
         </FormItem>
         <FormItem label="描述" {...formItemLayout}>

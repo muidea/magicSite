@@ -56,7 +56,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="名称" hasFeedback {...formItemLayout}>
+        <FormItem label="名称" {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: item.name,
             rules: [
@@ -86,9 +86,6 @@ const modal = ({
         </FormItem>
         <FormItem label="有效期" {...formItemLayout}>
           {getFieldDecorator('expiration', {
-            rules: [{
-              required: true, message: '文件不能为空',
-            }],
           })(<div><InputNumber defaultValue={0} /><span>&nbsp;天, 0表示永久有效</span></div>)}
         </FormItem>
       </Form>
