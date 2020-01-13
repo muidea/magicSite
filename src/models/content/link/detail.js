@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
+import { notification } from 'antd'
 import { queryLink } from 'services/content/link'
 
 export default {
@@ -7,6 +8,7 @@ export default {
 
   state: {
     name: '',
+    description: '',
     url: '',
     logo: '',
     catalog: [],
@@ -29,35 +31,33 @@ export default {
     * queryLink({
       payload,
     }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const linkResult = yield call(queryLink, { authToken, ...payload })
-      const { success, ...other } = linkResult
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryLink, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
       if (success) {
-        const { link } = other
-        const { id } = link
-        const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'link' })
-        const { summary } = summaryResult
-        yield put({
-          type: 'queryLinkSuccess',
-          payload: {
-            ...other,
-            summary,
-          },
-        })
+        const { errorCode, reason, link } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'queryLinkSuccess',
+            payload: {
+              link,
+            },
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw linkResult
+        notification.error({ message: '错误信息', description: message })
       }
     },
   },
 
   reducers: {
     queryLinkSuccess(state, { payload }) {
-      const { link, summary } = payload
-
+      const { link } = payload
       return {
         ...state,
         ...link,
-        summaryList: summary,
       }
     },
   },

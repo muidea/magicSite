@@ -5,7 +5,7 @@ import styles from './index.less'
 import { EditableTagGroup } from '../../../../components'
 
 const Detail = ({ linkDetail }) => {
-  const { name, url, logo, catalog, createDate, creater } = linkDetail
+  const { name, url, logo, description, catalog, createDate, creater } = linkDetail
 
   return (<div className="content-inner">
     <div className={styles.content}>
@@ -22,8 +22,12 @@ const Detail = ({ linkDetail }) => {
         <div>{url}</div>
       </div>
       <div className={styles.item}>
-        <div>Logo</div>
+        <div>图标</div>
         <div>{logo}</div>
+      </div>
+      <div className={styles.item}>
+        <div>描述</div>
+        <div>{description}</div>
       </div>
       <div className={styles.item}>
         <div>创建时间</div>
@@ -31,7 +35,7 @@ const Detail = ({ linkDetail }) => {
       </div>
       <div className={styles.item}>
         <div>创建人</div>
-        <div>{creater.name}</div>
+        <div>{creater.account}</div>
       </div>
     </div>
   </div>)
