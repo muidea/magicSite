@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
-import qs from 'qs'
-import { queryMedia, downloadMedia } from 'services/content/media'
+import { notification } from 'antd'
+import { queryMedia } from 'services/content/media'
 
 export default {
 
@@ -9,11 +9,11 @@ export default {
   state: {
     name: '',
     description: '',
-    catalog: [],
-    createDate: '',
-    creater: {},
     fileUrl: '',
     expiration: 0,
+    catalog: [],
+    creater: {},
+    createDate: '',
   },
 
   subscriptions: {
@@ -28,36 +28,36 @@ export default {
   },
 
   effects: {
-    /* eslint no-shadow: ["error", { "allow": ["data", "errorCode"] }]*/
     * queryMedia({
       payload,
     }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const mediaResult = yield call(queryMedia, { authToken, ...payload })
-      const { errorCode, media } = mediaResult
-      if (errorCode === 0) {
-        const { id, name, description, catalog, createDate, creater, fileToken, expiration } = media
-        const downloadResult = yield call(downloadMedia, { fileToken, authToken })
-        const { errorCode, redirectUrl } = downloadResult
-        const param = qs.stringify({ authToken })
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryMedia, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
+      if (success) {
+        const { errorCode, reason, media } = data
         if (errorCode === 0) {
-          const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'media' })
-          const { summary } = summaryResult
-          yield put({ type: 'queryMediaSuccess', payload: { name, description, catalog, createDate, creater, expiration, fileUrl: `${redirectUrl}?${param}`, summary } })
+          yield put({
+            type: 'queryMediaSuccess',
+            payload: {
+              media,
+            },
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
         }
       } else {
-        throw mediaResult
+        notification.error({ message: '错误信息', description: message })
       }
     },
   },
 
   reducers: {
     queryMediaSuccess(state, { payload }) {
-      const { summary, ...other } = payload
+      const { media } = payload
       return {
         ...state,
-        ...other,
-        summaryList: summary,
+        ...media,
       }
     },
   },
