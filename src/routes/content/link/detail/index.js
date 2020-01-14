@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'dva/router'
+import { Button } from 'antd'
 import { connect } from 'dva'
 import styles from './index.less'
 import { EditableTagGroup } from '../../../../components'
@@ -36,6 +38,9 @@ const Detail = ({ linkDetail }) => {
       <div className={styles.item}>
         <div>创建人</div>
         <div>{creater.account}</div>
+      </div>
+      <div className={styles.item}>
+        <Link to={'/content/link/'} style={{ width: '100%' }}><Button type="dashed" style={{ width: '100%', marginBottom: 8 }} >返回</Button></Link>
       </div>
     </div>
   </div>)
