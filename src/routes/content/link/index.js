@@ -45,7 +45,7 @@ const Link = ({ location, dispatch, link, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -83,7 +83,7 @@ const Link = ({ location, dispatch, link, loading }) => {
         pathname: location.pathname,
         query: {
           ...value,
-          page: 1,
+          pageNum: 1,
           pageSize,
         },
       }))

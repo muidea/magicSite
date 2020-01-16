@@ -57,6 +57,7 @@ const Article = ({ location, dispatch, article, loading }) => {
         pathname: location.pathname,
         search: qs.stringify({
           ...value,
+          pageNum: 1,
           pageSize,
         }),
       }))

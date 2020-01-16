@@ -44,7 +44,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         pathname,
         search: qs.stringify({
           ...query,
-          page: page.current,
+          pageNum: page.current,
           pageSize: page.pageSize,
         }),
       }))
@@ -82,7 +82,7 @@ const Catalog = ({ location, dispatch, catalog, loading }) => {
         pathname: location.pathname,
         query: {
           ...value,
-          page: 1,
+          pageNum: 1,
           pageSize,
         },
       }))
