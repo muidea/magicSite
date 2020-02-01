@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { RichEditor, EditableTagGroup } from 'components'
 import { Form, Input, Button } from 'antd'
+import { RichEditor } from 'components'
+import { CatalogTree } from '../../common'
 import styles from './index.less'
 
 const FormItem = Form.Item
@@ -34,7 +35,7 @@ const ArticleEditor = ({
     getFieldsValue,
   },
 }) => {
-  const { article, actionType } = articleEditor
+  const { article, actionType, catalogTree } = articleEditor
   const { id, title, content, catalog } = article
 
   const onHandleSummit = () => {
@@ -52,6 +53,10 @@ const ArticleEditor = ({
         },
       })
     })
+  }
+
+  const onLoadData = (catalogID) => {
+    dispatch({ type: 'link/queryCatalogTree', payload: { namespace: 'link', catalog: catalogID, loadData: true } })
   }
 
   return (
@@ -86,7 +91,7 @@ const ArticleEditor = ({
                   message: '分类必须选择',
                 },
               ],
-            })(<EditableTagGroup readOnly={false} />)}
+            })(<CatalogTree treeData={catalogTree} onLoadData={onLoadData} />)}
           </FormItem>
           <FormItem {...tailFormItemLayout}>
             <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>

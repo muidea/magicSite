@@ -127,6 +127,22 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
   return result
 }
 
+
+const mergeTree = (cVal, nVal) => {
+  nVal.forEach((nv) => {
+    const idx = cVal.findIndex((cv) => {
+      return nv.id === cv.id
+    })
+
+    if (idx === -1) {
+      cVal.push(nv)
+    }
+  })
+
+  return cVal
+}
+
+
 module.exports = {
   config,
   request,
@@ -138,4 +154,5 @@ module.exports = {
   queryArray,
   stripArray,
   arrayToTree,
+  mergeTree,
 }

@@ -2,20 +2,7 @@ import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
 import { queryCatalogTree } from 'services/content/catalog'
 import { pageModel } from '../common'
-
-const mergeTree = (cVal, nVal) => {
-  nVal.forEach((nv) => {
-    const idx = cVal.findIndex((cv) => {
-      return nv.id === cv.id
-    })
-
-    if (idx === -1) {
-      cVal.push(nv)
-    }
-  })
-
-  return cVal
-}
+import { mergeTree } from '../../utils'
 
 const commonModel = modelExtend(pageModel, {
   state: {
