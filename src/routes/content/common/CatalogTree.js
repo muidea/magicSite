@@ -13,7 +13,7 @@ export default class CatalogTree extends React.Component {
       treeData = props.treeData
     }
 
-    let value
+    let value = []
     if (props.value) {
       if (props.multiple) {
         props.value.forEach((v) => {

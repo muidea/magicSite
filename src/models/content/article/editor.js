@@ -20,7 +20,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname.includes('/content/article/')) {
-          dispatch({ type: 'queryCatalogTree', payload: { namespace: 'article' } })
+          dispatch({ type: 'queryCatalogTree', payload: { namespace: 'articleEditor' } })
 
           const match = pathToRegexp('/content/article/edit/:id').exec(location.pathname)
           if (match) {
@@ -45,6 +45,7 @@ export default {
             type: 'updateState',
             payload: {
               article,
+              actionType: 'update',
             },
           })
         } else {

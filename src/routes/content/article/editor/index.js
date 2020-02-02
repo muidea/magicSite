@@ -56,7 +56,7 @@ const ArticleEditor = ({
   }
 
   const onLoadData = (catalogID) => {
-    dispatch({ type: 'link/queryCatalogTree', payload: { namespace: 'link', catalog: catalogID, loadData: true } })
+    dispatch({ type: 'articleEditor/queryCatalogTree', payload: { namespace: 'articleEditor', catalog: catalogID, loadData: true } })
   }
 
   return (
