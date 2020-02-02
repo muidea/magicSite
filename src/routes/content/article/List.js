@@ -23,8 +23,8 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
   const columns = [
     {
       title: '标题',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'title',
+      key: 'title',
       render: (text, record) => <Link to={`/content/article/view/${record.id}`}>{text}</Link>,
     }, {
       title: '分类',
@@ -37,7 +37,9 @@ const List = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       title: '作者',
       dataIndex: 'creater',
       key: 'creater',
-      render: (text, record) => <span>{record.creater.name}</span>,
+      render: (text, record) => {
+        return <span>{record.creater.account}</span>
+      },
     }, {
       title: '操作',
       key: 'operation',

@@ -23,7 +23,6 @@ const modal = ({
     getFieldDecorator,
     validateFields,
     getFieldsValue,
-    setFields,
   },
   ...modalProps
 }) => {
@@ -34,17 +33,10 @@ const modal = ({
       }
 
       const data = { ...getFieldsValue() }
-      const { catalog } = data
-      if (catalog && item.id) {
-        if (catalog.id === item.id) {
-          setFields({ catalog: { value: catalog, errors: [new Error('父分类不能为当前分类')] } })
-          return
-        }
-      }
       const { name, description, file } = data
       const { fileToken } = file
 
-      onOk({ name, description, catalog, fileToken })
+      onOk({ name, description, fileToken })
     })
   }
 

@@ -34,22 +34,24 @@ export default {
   },
 
   effects: {
-    * queryArticle({
-      payload,
-    }, { call, put, select }) {
+    * queryArticle({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const articleData = yield call(queryArticle, { ...payload, ...sessionInfo })
-      const { success, article } = articleData
-
+      const result = yield call(queryArticle, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
       if (success) {
-        yield put({
-          type: 'updateState',
-          payload: {
-            article,
-          },
-        })
+        const { errorCode, reason, article } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              article,
+            },
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw articleData
+        notification.error({ message: '错误信息', description: message })
       }
     },
 

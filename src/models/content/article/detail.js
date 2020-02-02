@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
+import { notification } from 'antd'
 import { queryArticle } from 'services/content/article'
 
 export default {
@@ -6,11 +7,7 @@ export default {
   namespace: 'articleDetail',
 
   state: {
-    title: '',
-    content: '',
-    catalog: [],
-    creater: {},
-    createDate: '',
+    article: {},
   },
 
   subscriptions: {
@@ -25,43 +22,33 @@ export default {
   },
 
   effects: {
-    * queryArticle({
-      payload,
-    }, { call, put, select }) {
-      const { authToken } = yield select(_ => _.app)
-      const articleResult = yield call(queryArticle, { authToken, ...payload })
-      const { success, ...other } = articleResult
+    * queryArticle({ payload }, { call, put, select }) {
+      const { sessionInfo } = yield select(_ => _.app)
+      const result = yield call(queryArticle, { ...payload, ...sessionInfo })
+      const { success, message, data } = result
       if (success) {
-        const { article } = other
-        const { id } = article
-        const summaryResult = yield call(getSummaryDetail, { authToken, id, type: 'article' })
-        const { summary } = summaryResult
-        yield put({
-          type: 'queryArticleSuccess',
-          payload: {
-            ...other,
-            summary,
-          },
-        })
+        const { errorCode, reason, article } = data
+        if (errorCode === 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              article,
+            },
+          })
+        } else {
+          notification.error({ message: '错误信息', description: reason })
+        }
       } else {
-        throw articleResult
+        notification.error({ message: '错误信息', description: message })
       }
     },
   },
 
   reducers: {
-    queryArticleSuccess(state, { payload }) {
-      const { article, summary } = payload
-      const { title, content, catalog, creater, createDate } = article
-
+    updateState(state, { payload }) {
       return {
         ...state,
-        title,
-        content,
-        catalog,
-        creater,
-        createDate,
-        summaryList: summary,
+        ...payload,
       }
     },
   },

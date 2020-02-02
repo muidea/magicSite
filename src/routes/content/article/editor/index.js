@@ -91,7 +91,7 @@ const ArticleEditor = ({
                   message: '分类必须选择',
                 },
               ],
-            })(<CatalogTree treeData={catalogTree} onLoadData={onLoadData} />)}
+            })(<CatalogTree multiple treeData={catalogTree} onLoadData={onLoadData} />)}
           </FormItem>
           <FormItem {...tailFormItemLayout}>
             <Button type="default" style={{ marginRight: 16 }} htmlType="submit">重填</Button>
