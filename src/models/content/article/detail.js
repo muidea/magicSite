@@ -7,7 +7,7 @@ export default {
   namespace: 'articleDetail',
 
   state: {
-    article: {},
+    article: { creater: {} },
   },
 
   subscriptions: {
