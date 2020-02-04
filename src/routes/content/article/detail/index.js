@@ -13,7 +13,7 @@ const Detail = ({ articleDetail }) => {
   return (
     <div className="content-inner">
       <Row>
-        <Col span={18}>
+        <Col>
           <div className={styles.content}>
             <Row gutter={24} type="flex" justify="center"><Col><h1>{title}</h1></Col></Row>
             <Row gutter={24} type="flex" justify="center"><span>作者：{creater.account}</span> 分类：<EditableTagGroup readOnly value={catalog} /> <span>创建时间：{createDate}</span></Row>
