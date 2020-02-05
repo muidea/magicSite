@@ -13,6 +13,10 @@ const Routers = ({ history, app }) => {
   })
   const routes = [
     {
+      path: '/index',
+      models: () => [import('./models/view')],
+      component: () => import('./routes/view/'),
+    }, {
       path: '/dashboard',
       models: () => [import('./models/dashboard')],
       component: () => import('./routes/dashboard/'),
