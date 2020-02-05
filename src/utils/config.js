@@ -26,6 +26,8 @@ module.exports = {
     casLogoutUrl: `${CasInfoApi}/logout/`,
     casStatusUrl: `${CasInfoApi}/status/`,
 
+    queryViewUrl: `${ContentApi}/view/`,
+
     queryAllArticleUrl: `${ContentApi}/article/query/all/`,
     queryArticleUrl: `${ContentApi}/article/query/:id`,
     filterArticleUrl: `${ContentApi}/article/query/`,

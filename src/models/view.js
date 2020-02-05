@@ -1,35 +1,32 @@
 import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
-import { queryDashboard } from 'services/app'
+import { queryView } from 'services/content/view'
 import { model } from 'models/common'
 
 export default modelExtend(model, {
+
   namespace: 'view',
-  state: {
-    systemSummary: [],
-    lastContent: [],
-    lastAccount: [],
-  },
+
+  state: { },
+
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
-        if (pathname === '/index') {
-          dispatch({ type: 'queryDashboard' })
+        if (pathname === '/view') {
+          dispatch({ type: 'queryView' })
         }
       })
     },
-
   },
+
   effects: {
-    * queryDashboard({
-      payload,
-    }, { call, put, select }) {
+    * queryView({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
       if (sessionInfo) {
         payload = { ...payload, ...sessionInfo }
       }
 
-      const result = yield call(queryDashboard, { ...payload })
+      const result = yield call(queryView, { ...payload })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason, ...other } = data
@@ -46,4 +43,5 @@ export default modelExtend(model, {
       }
     },
   },
+
 })
