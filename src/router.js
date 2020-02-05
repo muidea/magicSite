@@ -78,7 +78,7 @@ const Routers = ({ history, app }) => {
     <ConnectedRouter history={history}>
       <App>
         <Switch>
-          <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} />
+          <Route exact path="/" render={() => (<Redirect to="/index" />)} />
           {
             routes.map(({ path, ...dynamics }, key) => (
               <Route
