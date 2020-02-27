@@ -80,15 +80,15 @@ export default {
       const { sessionInfo } = yield select(_ => _.app)
       let { catalogTree } = yield select(_ => _.articleEditor)
 
-      const result = yield call(queryCatalogTree, { ...payload, level: 1, ...sessionInfo })
+      const result = yield call(queryCatalogTree, { ...payload, deepVal: 1, ...sessionInfo })
       const { success, message, data } = result
       if (success) {
-        const { errorCode, reason, catalogs } = data
+        const { errorCode, reason, catalog } = data
         if (errorCode === 0) {
           if (payload.loadData) {
-            catalogTree = mergeTree(catalogTree, catalogs)
+            catalogTree = mergeTree(catalogTree, catalog.subs)
           } else {
-            catalogTree = catalogs
+            catalogTree = catalog.subs
           }
 
           yield put({ type: 'updateState', payload: { catalogTree } })
