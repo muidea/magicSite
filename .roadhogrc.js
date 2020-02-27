@@ -15,7 +15,7 @@ export default {
     "/api/v1/": {
       "target": "http://localhost:8880/",
       "changeOrigin": true,
-      "pathRewrite": { "^/api/v1/": "/" }
+      "pathRewrite": { "^/api/v1/": "/api/v1/" }
     },
   },
   env: {
