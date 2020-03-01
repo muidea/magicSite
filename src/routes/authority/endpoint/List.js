@@ -23,7 +23,7 @@ const List = ({ onUpdateItem, onDeleteItem, ...tableProps }) => {
 
   const columns = [
     {
-      title: '终端',
+      title: '终端名',
       dataIndex: 'endpoint',
       key: 'endpoint',
     }, {

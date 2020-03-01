@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
 
 const FormItem = Form.Item
+const { TextArea } = Input
 
 const formItemLayout = {
   labelCol: { span: 6 },
@@ -15,8 +16,6 @@ const modal = ({
   form: {
     getFieldDecorator,
     validateFields,
-    getFieldValue,
-    setFields,
     getFieldsValue,
   },
   ...modalProps
@@ -24,13 +23,6 @@ const modal = ({
   const handleOk = () => {
     validateFields((errors) => {
       if (errors) {
-        return
-      }
-
-      const password = getFieldValue('password')
-      const repassword = getFieldValue('repassword')
-      if (password !== repassword) {
-        setFields({ repassword: { value: repassword, errors: [new Error('两次密码输入不一致')] } })
         return
       }
 
@@ -47,7 +39,7 @@ const modal = ({
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
-        <FormItem label="终端" hasFeedback {...formItemLayout}>
+        <FormItem label="终端名" hasFeedback {...formItemLayout}>
           {getFieldDecorator('endpoint', {
             initialValue: item.endpoint,
             rules: [
@@ -55,21 +47,24 @@ const modal = ({
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="密码" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('password', {
-            initialValue: item.password,
+        <FormItem label="标识ID" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('identifyID', {
+            initialValue: item.identifyID,
             rules: [
               { required: true },
             ],
-          })(<Input type="password" />)}
+          })(<Input />)}
         </FormItem>
-        <FormItem label="确认密码" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('repassword', {
-            initialValue: item.repassword,
+        <FormItem label="权限码" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('authToken', {
+            initialValue: item.authToken,
             rules: [
               { required: true },
             ],
-          })(<Input type="password" />)}
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="描述" {...formItemLayout}>
+          {getFieldDecorator('description', { initialValue: item.description })(<TextArea rows={3} cols={3} />)}
         </FormItem>
       </Form>
     </Modal>
