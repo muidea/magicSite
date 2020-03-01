@@ -4,6 +4,7 @@ const SystemInfoApi = '/api/v1/system'
 const CasInfoApi = '/api/v1/account'
 const ContentApi = '/api/v1'
 const AccountApi = '/api/v1/account'
+const EndpointApi = '/api/v1/endpoint'
 const PrivateApi = '/api/v1/private'
 
 const APIV1 = '/api/v1'
@@ -69,6 +70,12 @@ module.exports = {
     createAccountUrl: `${AccountApi}/create/`,
     deleteAccountUrl: `${AccountApi}/delete/:id`,
     updateAccountUrl: `${AccountApi}/update/:id`,
+
+    queryAllEndpointUrl: `${EndpointApi}/query/all/`,
+    queryEndpointUrl: `${EndpointApi}/query/:id`,
+    createEndpointUrl: `${EndpointApi}/create/`,
+    deleteEndpointUrl: `${EndpointApi}/delete/:id`,
+    updateEndpointUrl: `${EndpointApi}/update/:id`,
 
     enumInitPrivateUrl: `${APIV1}/_/internal/private/enum/`,
     queryAllPrivateUrl: `${PrivateApi}/query/`,
