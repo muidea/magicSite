@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { systemInfoUrl, systemDashBoardUrl, sessionVerifyUrl, casLogoutUrl, casLoginUrl } = api
+const { systemInfoUrl, systemDashBoardUrl, casStatusUrl, casLogoutUrl, casLoginUrl } = api
 
 export async function systemInfo(params) {
   return request({
@@ -36,9 +36,9 @@ export async function userLogout(params) {
   })
 }
 
-export async function sessionVerify(params) {
+export async function userStatus(params) {
   return request({
-    url: sessionVerifyUrl,
+    url: casStatusUrl,
     method: 'get',
     data: params,
   })
