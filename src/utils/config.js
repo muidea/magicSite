@@ -1,6 +1,7 @@
 
 const SystemInfoApi = '/api/v1/system'
 
+const SessionInfoApi = '/api/v1/session'
 const CasInfoApi = '/api/v1/account'
 const ContentApi = '/api/v1'
 const AccountApi = '/api/v1/account'
@@ -23,9 +24,10 @@ module.exports = {
     systemInfoUrl: `${SystemInfoApi}/info/`,
     systemDashBoardUrl: `${SystemInfoApi}/dashboard/`,
 
+    sessionVerifyUrl: `${SessionInfoApi}/verify/`,
+
     casLoginUrl: `${CasInfoApi}/login/`,
     casLogoutUrl: `${CasInfoApi}/logout/`,
-    casStatusUrl: `${CasInfoApi}/status/`,
 
     queryViewUrl: `${ContentApi}/view/`,
 

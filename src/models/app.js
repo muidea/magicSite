@@ -5,7 +5,7 @@ import { routerRedux } from 'dva/router'
 import qs from 'qs'
 import { notification } from 'antd'
 import config from 'config'
-import { systemInfo, userStatus, userLogin, userLogout } from 'services/app'
+import { systemInfo, sessionVerify, userLogin, userLogout } from 'services/app'
 
 const { prefix } = config
 
@@ -72,7 +72,7 @@ export default {
       const { sessionInfo } = yield select(_ => _.app)
 
       payload = { ...payload, ...sessionInfo }
-      const result = yield call(userStatus, { ...payload })
+      const result = yield call(sessionVerify, { ...payload })
       const { success, message, data } = result
       if (success) {
         const { from } = locationQuery
@@ -81,13 +81,12 @@ export default {
           redirectUrl = from
         }
 
-        const { errorCode, account } = data
+        const { errorCode } = data
         if (errorCode === 0) {
           yield put({
             type: 'saveSession',
             payload: {
               sessionInfo: data.sessionInfo,
-              onlineUser: account,
               locationPathname,
               locationQuery,
             },
