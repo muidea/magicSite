@@ -71,8 +71,7 @@ export default {
       const { locationPathname, locationQuery } = payload
       const { sessionInfo } = yield select(_ => _.app)
 
-      payload = { ...payload, ...sessionInfo }
-      const result = yield call(userStatus, { ...payload })
+      const result = yield call(userStatus, { ...sessionInfo })
       const { success, message, data } = result
       if (success) {
         const { from } = locationQuery
