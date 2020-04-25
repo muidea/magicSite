@@ -29,7 +29,7 @@ const Detail = ({ mediaDetail }) => {
       </div>
       <div className={styles.item}>
         <div>创建人</div>
-        <div>{creater.account}</div>
+        <div>{creater.name}</div>
       </div>
       <div className={styles.item}>
         <div>有效期(天)</div>

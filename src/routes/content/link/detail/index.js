@@ -37,7 +37,7 @@ const Detail = ({ linkDetail }) => {
       </div>
       <div className={styles.item}>
         <div>创建人</div>
-        <div>{creater.account}</div>
+        <div>{creater.name}</div>
       </div>
       <div className={styles.item}>
         <Link to={'/content/link/'} style={{ width: '100%' }}><Button type="dashed" style={{ width: '100%', marginBottom: 8 }} >返回</Button></Link>

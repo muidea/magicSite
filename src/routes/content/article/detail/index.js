@@ -16,7 +16,7 @@ const Detail = ({ articleDetail }) => {
         <Col>
           <div className={styles.content}>
             <Row gutter={24} type="flex" justify="center"><Col><h1>{title}</h1></Col></Row>
-            <Row gutter={24} type="flex" justify="center"><span>作者：{creater.account}</span> 分类：<EditableTagGroup readOnly value={catalog} /> <span>创建时间：{createDate}</span></Row>
+            <Row gutter={24} type="flex" justify="center"><span>作者：{creater.name}</span> 分类：<EditableTagGroup readOnly value={catalog} /> <span>创建时间：{createDate}</span></Row>
             <Row gutter={24}><RichView value={content} /> </Row>
           </div>
           <div className={styles.item}>

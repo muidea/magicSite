@@ -42,7 +42,7 @@ const List = ({ onDeleteItem, ...tableProps }) => {
       dataIndex: 'creater',
       key: 'creater',
       render: (text, record) => {
-        return <span>{record.creater.account}</span>
+        return <span>{record.creater.name}</span>
       },
     }, {
       title: '操作',
