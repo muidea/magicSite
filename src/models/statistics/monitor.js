@@ -4,7 +4,7 @@ import { queryDashboard } from 'services/app'
 import { model } from 'models/common'
 
 export default modelExtend(model, {
-  namespace: 'dashboard',
+  namespace: 'monitor',
   state: {
     systemSummary: [],
     lastContent: [],
@@ -13,7 +13,7 @@ export default modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
-        if (pathname === '/dashboard') {
+        if (pathname === '/statistics/monitor') {
           dispatch({ type: 'queryDashboard' })
         }
       })

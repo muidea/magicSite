@@ -17,10 +17,6 @@ const Routers = ({ history, app }) => {
       models: () => [import('./models/view')],
       component: () => import('./routes/view/'),
     }, {
-      path: '/dashboard',
-      models: () => [import('./models/dashboard')],
-      component: () => import('./routes/dashboard/'),
-    }, {
       path: '/content/article',
       models: () => [import('./models/content/article')],
       component: () => import('./routes/content/article/'),
@@ -68,6 +64,14 @@ const Routers = ({ history, app }) => {
       path: '/authority/private',
       models: () => [import('./models/authority/private')],
       component: () => import('./routes/authority/private/'),
+    }, {
+      path: '/statistics/dashboard',
+      models: () => [import('./models/statistics/dashboard')],
+      component: () => import('./routes/statistics/dashboard/'),
+    }, {
+      path: '/statistics/monitor',
+      models: () => [import('./models/statistics/monitor')],
+      component: () => import('./routes/statistics/monitor/'),
     }, {
       path: '/system/info',
       models: () => [import('./models/system/config')],
