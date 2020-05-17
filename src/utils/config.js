@@ -22,13 +22,14 @@ module.exports = {
   APIV1: `${APIV1}`,
   api: {
     systemInfoUrl: `${SystemInfoApi}/info/`,
+    queryViewUrl: `${ContentApi}/view/`,
+
     systemDashBoardUrl: `${SystemInfoApi}/dashboard/`,
 
     casLoginUrl: `${CasInfoApi}/login/`,
     casLogoutUrl: `${CasInfoApi}/logout/`,
     casStatusUrl: `${CasStatusApi}/refresh/`,
 
-    queryViewUrl: `${ContentApi}/view/`,
 
     queryAllArticleUrl: `${ContentApi}/article/query/all/`,
     queryArticleUrl: `${ContentApi}/article/query/:id`,
