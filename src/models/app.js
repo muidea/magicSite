@@ -85,7 +85,7 @@ export default {
           yield put({
             type: 'saveSession',
             payload: {
-              onlineUser: data.account,
+              onlineUser: data.entity,
               sessionInfo: data.sessionInfo,
               locationPathname,
               locationQuery,

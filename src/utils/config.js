@@ -2,6 +2,7 @@
 const SystemInfoApi = '/api/v1/system'
 
 const CasInfoApi = '/api/v1/account'
+const CasStatusApi = '/api/v1/status'
 const ContentApi = '/api/v1'
 const AccountApi = '/api/v1/account'
 const EndpointApi = '/api/v1/endpoint'
@@ -25,7 +26,7 @@ module.exports = {
 
     casLoginUrl: `${CasInfoApi}/login/`,
     casLogoutUrl: `${CasInfoApi}/logout/`,
-    casStatusUrl: `${CasInfoApi}/status/verify/`,
+    casStatusUrl: `${CasStatusApi}/refresh/`,
 
     queryViewUrl: `${ContentApi}/view/`,
 
