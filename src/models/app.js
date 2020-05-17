@@ -127,7 +127,7 @@ export default {
       const result = yield call(userLogin, { ...payload })
       const { success, message, data } = result
       if (success) {
-        const { errorCode, reason, sessionInfo, account } = data
+        const { errorCode, reason, sessionInfo, entity } = data
         if (errorCode === 0) {
           let redirectUrl = '/'
           const { from } = locationQuery
@@ -135,7 +135,7 @@ export default {
             redirectUrl = from
           }
 
-          yield put({ type: 'saveSession', payload: { sessionInfo, onlineUser: account } })
+          yield put({ type: 'saveSession', payload: { sessionInfo, onlineUser: entity } })
           yield put(routerRedux.push({
             pathname: redirectUrl,
           }))
