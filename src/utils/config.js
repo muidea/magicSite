@@ -82,7 +82,7 @@ module.exports = {
     enumInitPrivateUrl: `${APIV1}/_/internal/private/enum/`,
     queryAllPrivateUrl: `${PrivateApi}/query/`,
     savePrivateUrl: `${PrivateApi}/save/`,
-    destoryPrivateUrl: `${PrivateApi}/destory/`,
+    destroyPrivateUrl: `${PrivateApi}/destroy/`,
 
     uploadFileUrl: `${APIV1}/file/upload/`,
     viewFileUrl: `${APIV1}/file/view/`,

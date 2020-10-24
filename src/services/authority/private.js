@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { enumInitPrivateUrl, queryAllPrivateUrl, savePrivateUrl, destoryPrivateUrl } = api
+const { enumInitPrivateUrl, queryAllPrivateUrl, savePrivateUrl, destroyPrivateUrl } = api
 
 export async function enumInitPrivate(params) {
   return request({
@@ -27,9 +27,9 @@ export async function savePrivate(params) {
   })
 }
 
-export async function destoryPrivate(params) {
+export async function destroyPrivate(params) {
   return request({
-    url: destoryPrivateUrl,
+    url: destroyPrivateUrl,
     method: 'get',
     data: params,
   })

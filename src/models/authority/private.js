@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { notification } from 'antd'
-import { enumInitPrivate, queryAllPrivate, savePrivate, destoryPrivate } from 'services/authority/private'
+import { enumInitPrivate, queryAllPrivate, savePrivate, destroyPrivate } from 'services/authority/private'
 
 import { pageModel } from '../common'
 
@@ -145,9 +145,9 @@ export default modelExtend(pageModel, {
       }
     },
 
-    *destoryPrivate({ payload }, { call, put, select }) {
+    *destroyPrivate({ payload }, { call, put, select }) {
       const { sessionInfo } = yield select(_ => _.app)
-      const result = yield call(destoryPrivate, { ...payload, ...sessionInfo })
+      const result = yield call(destroyPrivate, { ...payload, ...sessionInfo })
       const { success, message, data } = result
       if (success) {
         const { errorCode, reason } = data

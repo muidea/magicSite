@@ -42,7 +42,7 @@ const Private = ({ dispatch, privateGroup, loading }) => {
 
   const onDeletePrivateGroupItem = (groupName) => {
     dispatch({
-      type: 'privateGroup/destoryPrivate',
+      type: 'privateGroup/destroyPrivate',
       payload: { groupName },
     })
   }
