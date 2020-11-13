@@ -1,8 +1,8 @@
 #!/bin/bash
 
 rootPath=$GOPATH
-projectName=magicSite
-projectPath=$rootPath/src/github.com/muidea/magicSite
+projectName=magicVMI-Web
+projectPath=$rootPath/src/github.com/muidea/magicVMI/web
 binPath=$projectPath/dist
 imageID=""
 imageNamespace=muidea.ai/develop
@@ -153,7 +153,7 @@ function build()
 
     buildImage
 
-    tagImage $imageID $imageName:$imageVersion    
+    tagImage $imageID $imageName:$imageVersion
 }
 
 action='all'

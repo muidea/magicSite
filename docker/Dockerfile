@@ -1,14 +1,14 @@
 FROM nginx
 
 LABEL Author="rangh"
-LABEL Application="magicSite"
+LABEL Application="magicVMI-Web"
 
 
 RUN mkdir -p /etc/nginx/logs
 
 COPY magicSite /tmp/
 RUN cd /tmp \
- && tar -xvf magicSite -C /usr/share/nginx/html/ \
- && rm -f magicSite
+ && tar -xvf magicVMI-Web -C /usr/share/nginx/html/ \
+ && rm -f magicVMI-Web
 
 ADD nginx.conf /etc/nginx/nginx.conf

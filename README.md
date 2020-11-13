@@ -1,4 +1,4 @@
-# magicSite
+# magicVMI-Web
 
 # 基本的脚手架
 

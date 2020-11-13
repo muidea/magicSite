@@ -11,9 +11,9 @@ const PrivateApi = '/api/v1/private'
 const APIV1 = '/api/v1'
 
 module.exports = {
-  name: 'MagicCenter',
-  prefix: 'magicCenter',
-  footerText: 'magicCenter © 2017 muidea.com',
+  name: 'MagicVMI',
+  prefix: 'magicVMI',
+  footerText: 'magicVMI © 2017 muidea.com',
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
