@@ -1,8 +1,40 @@
-# magicVMI-Web
+# magicComponent
 
-# 基本的脚手架
+[![NPM version](https://img.shields.io/npm/v/magicComponent.svg?style=flat)](https://npmjs.org/package/magicComponent)
+[![NPM downloads](http://img.shields.io/npm/dm/magicComponent.svg?style=flat)](https://npmjs.org/package/magicComponent)
 
-## webpack
-Webpack is a front-end tool to build JavaScript module scripts for browsers.
+A react library developed with dumi
 
-antd 3.3.3
+## Usage
+
+TODO
+
+## Options
+
+TODO
+
+## Development
+
+```bash
+# install dependencies
+$ npm install
+
+# develop library by docs demo
+$ npm start
+
+# build library source code
+$ npm run build
+
+# build library source code in watch mode
+$ npm run build:watch
+
+# build docs
+$ npm run docs:build
+
+# check your project for potential problems
+$ npm run doctor
+```
+
+## LICENSE
+
+MIT
